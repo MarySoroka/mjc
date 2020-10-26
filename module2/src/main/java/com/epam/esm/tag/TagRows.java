@@ -1,6 +1,6 @@
 package com.epam.esm.tag;
 
-public enum TagField {
+public enum TagRows {
     ID("id"),
     TAG_NAME("name");
 
@@ -10,7 +10,7 @@ public enum TagField {
         return fieldName;
     }
 
-    TagField(String fieldName) {
+    TagRows(String fieldName) {
         this.fieldName = fieldName;
     }
 

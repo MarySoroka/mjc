@@ -1,5 +1,7 @@
 package com.epam.esm.gift_certificate;
 
 
-public interface GiftCertificatesDao {
+import com.epam.esm.dao.CRUDDao;
+
+public interface GiftCertificatesDao extends CRUDDao<GiftCertificate, Long> {
 }

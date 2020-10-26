@@ -26,6 +26,10 @@ public class GiftCertificate {
         this.certificateDuration = certificateDuration;
     }
 
+    public GiftCertificate() {
+
+    }
+
     public Long getId() {
         return id;
     }

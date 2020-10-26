@@ -8,6 +8,9 @@ public class Tag {
         return id;
     }
 
+    public Tag() {
+    }
+
     public Tag(Long id, String tagName) {
         this.id = id;
         this.tagName = tagName;

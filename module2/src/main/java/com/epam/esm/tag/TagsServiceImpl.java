@@ -33,16 +33,20 @@ public class TagsServiceImpl implements TagsService {
     }
 
     @Override
-    public void createTag(Tag tag) {
-        Long tagId = tagsDao.save(tag);
-        tag.setId(tagId);
+    public void createTag(Tag tag) throws TagServiceException {
+        try {
+            Long tagId = tagsDao.save(tag);
+            tag.setId(tagId);
+        } catch (TagSaveException e) {
+            throw new TagServiceException("Couldn't create tag: ", e);
+        }
     }
 
     @Override
-    public void deleteTag(Long tagId) throws TagDeleteException {
+    public void deleteTag(Long tagId) throws TagServiceException {
         boolean isDeleted = tagsDao.delete(tagId);
         if (!isDeleted) {
-            throw new TagDeleteException("Couldn't delete tag by id: " + tagId);
+            throw new TagServiceException("Couldn't delete tag by id: " + tagId);
         }
     }
 

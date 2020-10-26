@@ -7,6 +7,8 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ViewResolverRegistry;
@@ -16,21 +18,20 @@ import org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver;
 import org.thymeleaf.spring5.view.ThymeleafViewResolver;
 
 import javax.sql.DataSource;
-import java.io.IOException;
-import java.util.Properties;
 
 @Configuration
+@PropertySource("classpath:database.properties")
 @ComponentScan("com.epam.esm")
 @EnableWebMvc
 public class SpringConfig implements WebMvcConfigurer {
 
     private final ApplicationContext applicationContext;
-    private final ConfigUtils configUtils;
+    private final Environment environment;
 
     @Autowired
-    public SpringConfig(ApplicationContext applicationContext, ConfigUtils configUtils) {
+    public SpringConfig(ApplicationContext applicationContext, Environment environment) {
         this.applicationContext = applicationContext;
-        this.configUtils = configUtils;
+        this.environment = environment;
     }
 
     @Bean
@@ -58,13 +59,12 @@ public class SpringConfig implements WebMvcConfigurer {
     }
 
     @Bean
-    public DataSource getDataSource() throws IOException {
-        Properties jdbcConfig = configUtils.getJdbcConfig("database.properties");
+    public DataSource getDataSource() {
         HikariConfig databaseConfig = new HikariConfig();
-        databaseConfig.setDataSourceClassName(jdbcConfig.getProperty("database.className"));
-        databaseConfig.setJdbcUrl(jdbcConfig.getProperty("database.url"));
-        databaseConfig.setUsername(jdbcConfig.getProperty("database.user"));
-        databaseConfig.setPassword(jdbcConfig.getProperty("database.password"));
+        databaseConfig.setDataSourceClassName(environment.getProperty("database.className"));
+        databaseConfig.setJdbcUrl(environment.getProperty("database.url"));
+        databaseConfig.setUsername(environment.getProperty("database.user"));
+        databaseConfig.setPassword(environment.getProperty("database.password"));
         databaseConfig.addDataSourceProperty("cachePrepStmts", "true");
         databaseConfig.addDataSourceProperty("prepStmtCacheSize", "250");
         databaseConfig.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
@@ -73,7 +73,7 @@ public class SpringConfig implements WebMvcConfigurer {
     }
 
     @Bean
-    public JdbcTemplate getJdbcTemplate() throws IOException {
+    public JdbcTemplate getJdbcTemplate() {
         return new JdbcTemplate(getDataSource());
     }
 

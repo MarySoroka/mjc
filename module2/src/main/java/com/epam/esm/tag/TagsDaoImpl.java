@@ -13,12 +13,11 @@ import java.util.Optional;
 
 @Repository
 public class TagsDaoImpl implements TagsDao {
-    //check why tests didn't work without *
     private static final String INSERT_TAG_QUERY = "INSERT INTO gift_certificates.tag (`name`) values (?)";
     private static final String DELETE_TAG_QUERY = "DELETE FROM gift_certificates.tag WHERE id = ?";
-    private static final String SELECT_ALL_TAGS_QUERY = "SELECT * FROM gift_certificates.tag";
-    private static final String SELECT_TAG_BY_ID_QUERY = "SELECT * FROM gift_certificates.tag WHERE `id`=?";
-    private static final String SELECT_TAG_BY_NAME_QUERY = "SELECT (`id`, `name`) FROM gift_certificates.tag WHERE `name`=?";
+    private static final String SELECT_ALL_TAGS_QUERY = "SELECT id, name FROM gift_certificates.tag";
+    private static final String SELECT_TAG_BY_ID_QUERY = "SELECT id, name FROM gift_certificates.tag WHERE `id`=?";
+    private static final String SELECT_TAG_BY_NAME_QUERY = "SELECT id, name FROM gift_certificates.tag WHERE `name`=?";
     private final JdbcTemplate jdbcTemplate;
     private final TagRowMapper tagRowMapper;
 

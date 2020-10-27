@@ -3,7 +3,7 @@ CREATE SCHEMA gift_certificates AUTHORIZATION sa;
 -- Table `gift_certificates`.`gift_certificate`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `gift_certificates`.`gift_certificate` (
-  `id` BIGINT NOT NULL,
+  `id` BIGINT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(150) NOT NULL,
   `description` VARCHAR(1500) NOT NULL,
   `price` DECIMAL(10,0) NOT NULL,

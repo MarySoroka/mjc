@@ -1,6 +1,6 @@
 package com.epam.esm.dao;
 
-import com.epam.esm.gift_certificate.GiftCertificateSaveException;
+import com.epam.esm.exception.GiftCertificateSaveException;
 
 import java.util.List;
 import java.util.Optional;

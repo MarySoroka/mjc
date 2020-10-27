@@ -49,13 +49,10 @@ public class SpringConfig implements WebMvcConfigurer {
     @Bean
     public DataSource getDataSource() {
         HikariConfig databaseConfig = new HikariConfig();
-        databaseConfig.setDataSourceClassName(environment.getProperty("database.className"));
+        databaseConfig.setDriverClassName(environment.getProperty("database.className"));
         databaseConfig.setJdbcUrl(environment.getProperty("database.url"));
         databaseConfig.setUsername(environment.getProperty("database.user"));
         databaseConfig.setPassword(environment.getProperty("database.password"));
-        databaseConfig.addDataSourceProperty("cachePrepStmts", "true");
-        databaseConfig.addDataSourceProperty("prepStmtCacheSize", "250");
-        databaseConfig.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
         databaseConfig.setMaximumPoolSize(100);
         return new HikariDataSource(databaseConfig);
     }

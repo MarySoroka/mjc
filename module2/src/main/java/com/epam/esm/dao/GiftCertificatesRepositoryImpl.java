@@ -26,6 +26,7 @@ public class GiftCertificatesRepositoryImpl implements GiftCertificatesRepositor
     private static final String SELECT_ALL_CERTIFICATES_QUERY = "SELECT id,name,description, price, create_date, last_update_date, duration FROM gift_certificates.gift_certificate";
     private static final String SELECT_CERTIFICATE_BY_ID_QUERY = "SELECT id,name,description, price, create_date, last_update_date, duration FROM gift_certificates.gift_certificate WHERE `id`=?";
     private static final String SELECT_CERTIFICATE_BY_TAG_NAME_QUERY = "SELECT id,name,description, price, create_date, last_update_date, duration name FROM gift_certificates.gift_certificate WHERE `name`=?";
+
     private final JdbcTemplate jdbcTemplate;
     private final GiftCertificateRowMapper giftCertificateRowMapper;
 

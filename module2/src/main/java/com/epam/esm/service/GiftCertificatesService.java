@@ -9,6 +9,7 @@ import java.util.List;
 /**
  * interface that demonstrate business logic for gift certificate domain
  */
+
 public interface GiftCertificatesService {
     /**
      * @return all objects in specific db table

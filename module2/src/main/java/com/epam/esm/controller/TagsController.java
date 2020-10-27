@@ -6,10 +6,13 @@ import com.epam.esm.exception.TagNotFoundException;
 import com.epam.esm.exception.TagServiceException;
 import com.epam.esm.service.TagsService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
+@ComponentScan("com.epam.esm")
+
 @RequestMapping("/tags")
 public class TagsController {
 

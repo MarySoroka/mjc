@@ -5,13 +5,14 @@ import com.epam.esm.exception.GiftCertificateControllerException;
 import com.epam.esm.exception.GiftCertificateServiceException;
 import com.epam.esm.service.GiftCertificatesService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @Controller
-@RequestMapping("/certificates")
+@RequestMapping(value ="/certificates", produces = MediaType.APPLICATION_JSON_VALUE)
 public class GiftCertificatesController {
 
     private final GiftCertificatesService giftCertificatesService;
@@ -21,27 +22,26 @@ public class GiftCertificatesController {
         this.giftCertificatesService = giftCertificatesService;
     }
 
+
     @GetMapping()
-    public String getAllCertificates() {
-        List<GiftCertificate> allCertificates = giftCertificatesService.getAllCertificates();
-        return null;
+    public List<GiftCertificate> getAllCertificates() {
+        return giftCertificatesService.getAllCertificates();
     }
 
     @GetMapping("/{id}")
-    public String getCertificateById(@PathVariable("id") Long id) throws GiftCertificateControllerException {
+    public GiftCertificate getCertificateById(@PathVariable("id") Long id) throws GiftCertificateControllerException {
         try {
-            giftCertificatesService.getCertificateById(id);
+            return giftCertificatesService.getCertificateById(id);
         } catch (GiftCertificateServiceException e) {
             throw new GiftCertificateControllerException();
         }
-        return null;
     }
 
     @PostMapping()
     public String createGiftCertificate(@RequestBody GiftCertificate giftCertificate) throws GiftCertificateControllerException {
         try {
             giftCertificatesService.createCertificate(giftCertificate);
-            return "redirect:/people";
+            return "redirect:/certificates";
         } catch (GiftCertificateServiceException e) {
             throw new GiftCertificateControllerException();
         }
@@ -51,12 +51,12 @@ public class GiftCertificatesController {
     @PatchMapping("/{id}")
     public String update(@RequestBody GiftCertificate giftCertificate) {
         giftCertificatesService.updateCertificate(giftCertificate);
-        return "redirect:/people";
+        return "redirect:/certificates";
     }
 
     @DeleteMapping("/{id}")
     public String delete(@PathVariable("id") Long id) {
         giftCertificatesService.deleteCertificate(id);
-        return "redirect:/people";
+        return "redirect:/certificates";
     }
 }

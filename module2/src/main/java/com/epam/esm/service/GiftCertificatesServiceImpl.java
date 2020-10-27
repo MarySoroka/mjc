@@ -6,6 +6,7 @@ import com.epam.esm.exception.DaoSaveException;
 import com.epam.esm.exception.GiftCertificateServiceException;
 import com.epam.esm.entity.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

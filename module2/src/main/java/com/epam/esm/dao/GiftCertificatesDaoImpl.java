@@ -36,7 +36,6 @@ public class GiftCertificatesDaoImpl implements GiftCertificatesDao {
     }
 
 
-
     @Override
     public Optional<GiftCertificate> getById(Long id) {
         return Optional.ofNullable(
@@ -78,20 +77,32 @@ public class GiftCertificatesDaoImpl implements GiftCertificatesDao {
         return key.longValue();
 
     }
-    private static void setGiftCertificateRows(PreparedStatement preparedStatement, GiftCertificate giftCertificate) throws SQLException {
+
+    private static int setGiftCertificateRows(PreparedStatement preparedStatement, GiftCertificate giftCertificate) throws SQLException {
         int i = 0;
         preparedStatement.setString(++i, giftCertificate.getCertificateName());
         preparedStatement.setString(++i, giftCertificate.getCertificateDescription());
+        preparedStatement.setBigDecimal(++i, giftCertificate.getCertificatePrice());
         preparedStatement.setDate(++i, Date.valueOf(giftCertificate.getCertificateCreateDate()));
         preparedStatement.setDate(++i, Date.valueOf(giftCertificate.getCertificateLastUpdateDate()));
         preparedStatement.setInt(++i, giftCertificate.getCertificateDuration());
-        preparedStatement.setBigDecimal(++i, giftCertificate.getCertificatePrice());
+        return i;
 
     }
 
     @Override
     public boolean update(GiftCertificate giftCertificate) {
-        //create right update
-        return jdbcTemplate.update(UPDATE_CERTIFICATES_QUERY, new Object[]{},giftCertificate.getId()) == 1;
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        int isUpdate = jdbcTemplate.update(
+                connection -> {
+                    PreparedStatement ps =
+                            connection.prepareStatement(UPDATE_CERTIFICATES_QUERY, new String[]{"id"});
+                    int i = setGiftCertificateRows(ps, giftCertificate);
+                    ps.setLong(++i, giftCertificate.getId());
+                    return ps;
+                },
+                keyHolder);
+
+        return isUpdate > 0;
     }
 }

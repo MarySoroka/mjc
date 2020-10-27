@@ -16,13 +16,13 @@ import java.util.Optional;
 @Repository
 public class GiftCertificatesDaoImpl implements GiftCertificatesDao {
     //change tag statement to certificate with group by
-    private static final String INSERT_CERTIFICATES_QUERY = "INSERT INTO gift_certificates.tag (`name`) values (?)";
-    private static final String UPDATE_CERTIFICATES_QUERY = "UPDATE gift_certificates.tag set name=? where id =?";
+    private static final String INSERT_CERTIFICATES_QUERY = "INSERT INTO gift_certificates.tag (name,description, price, create_date, last_update_date, duration ) values (?,?,?,?,?,?)";
+    private static final String UPDATE_CERTIFICATES_QUERY = "UPDATE gift_certificates.tag set name=? ,description=?, price=?, create_date=?, last_update_date=?, duration=? where id =?";
 
     private static final String DELETE_CERTIFICATES_QUERY = "DELETE FROM gift_certificates.tag WHERE id = ?";
-    private static final String SELECT_ALL_CERTIFICATES_QUERY = "SELECT id, name FROM gift_certificates.tag";
-    private static final String SELECT_CERTIFICATE_BY_ID_QUERY = "SELECT id, name FROM gift_certificates.tag WHERE `id`=?";
-    private static final String SELECT_CERTIFICATE_BY_TAG_NAME_QUERY = "SELECT id, name FROM gift_certificates.tag WHERE `name`=?";
+    private static final String SELECT_ALL_CERTIFICATES_QUERY = "SELECT id,name,description, price, create_date, last_update_date, duration FROM gift_certificates.tag";
+    private static final String SELECT_CERTIFICATE_BY_ID_QUERY = "SELECT id,name,description, price, create_date, last_update_date, duration FROM gift_certificates.tag WHERE `id`=?";
+    private static final String SELECT_CERTIFICATE_BY_TAG_NAME_QUERY = "SELECT id,name,description, price, create_date, last_update_date, duration name FROM gift_certificates.tag WHERE `name`=?";
     private final JdbcTemplate jdbcTemplate;
     private final GiftCertificateRowMapper giftCertificateRowMapper;
 

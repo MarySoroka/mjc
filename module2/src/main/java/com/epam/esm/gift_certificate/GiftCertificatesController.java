@@ -24,15 +24,24 @@ public class GiftCertificatesController {
     }
 
     @GetMapping("/{id}")
-    public String getCertificateById(@PathVariable("id") Long id) {
-        giftCertificatesService.getCertificateById(id);
+    public String getCertificateById(@PathVariable("id") Long id) throws GiftCertificateControllerException {
+        try {
+            giftCertificatesService.getCertificateById(id);
+        } catch (GiftCertificateServiceException e) {
+            throw new GiftCertificateControllerException();
+        }
         return null;
     }
 
     @PostMapping()
-    public String createGiftCertificate(@RequestBody GiftCertificate giftCertificate) {
-        giftCertificatesService.createCertificate(giftCertificate);
-        return "redirect:/people";
+    public String createGiftCertificate(@RequestBody GiftCertificate giftCertificate) throws GiftCertificateControllerException {
+        try {
+            giftCertificatesService.createCertificate(giftCertificate);
+            return "redirect:/people";
+        } catch (GiftCertificateServiceException e) {
+            throw new GiftCertificateControllerException();
+        }
+
     }
 
     @PatchMapping("/{id}")

@@ -6,10 +6,9 @@ import java.util.List;
 
 public interface GiftCertificatesService {
     List<GiftCertificate> getAllCertificates();
-    GiftCertificate getCertificateById(Long id);
-    boolean createCertificate(GiftCertificate giftCertificate);
+    GiftCertificate getCertificateById(Long id) throws GiftCertificateServiceException;
+    boolean createCertificate(GiftCertificate giftCertificate) throws GiftCertificateServiceException;
     boolean deleteCertificate(Long certificateId);
     boolean updateCertificate(GiftCertificate giftCertificate);
-    boolean saveCertificate(GiftCertificate giftCertificate);
     List<GiftCertificate> getCertificateByTagName(Tag tag);
 }

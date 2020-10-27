@@ -1,9 +1,6 @@
 package com.epam.esm.dao;
 
-import com.epam.esm.dao.TagsDao;
-import com.epam.esm.dao.TagsDaoImpl;
 import com.epam.esm.entity.Tag;
-import com.epam.esm.exception.TagSaveException;
 import com.epam.esm.mapper.TagRowMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,12 +13,12 @@ import javax.sql.DataSource;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class TagsDaoTest {
+class TagsRepositoryTest {
     @Mock
     JdbcTemplate jdbcTemplate;
 
     DataSource dataSource;
-    TagsDao tagsDao;
+    TagsRepository tagsRepository;
 
     @BeforeEach
     public void setup() {
@@ -31,36 +28,36 @@ class TagsDaoTest {
                 .addScript("classpath:test-data.sql")
                 .build();
         jdbcTemplate = new JdbcTemplate(dataSource);
-        tagsDao = new TagsDaoImpl(jdbcTemplate,new TagRowMapper());
+        tagsRepository = new TagsRepositoryImpl(jdbcTemplate,new TagRowMapper());
     }
 
     @Test
     void whenGetByIdExistingTagFromDatabase_thenReturnCorrectTag() {
-       assertTrue(tagsDao.getById(3L).isPresent());
-       assertEquals("la3",tagsDao.getById(3L).get().getTagName());
+       assertTrue(tagsRepository.getById(3L).isPresent());
+       assertEquals("la3", tagsRepository.getById(3L).get().getTagName());
     }
     @Test
     void whenGetByIdNotExistingTagFromDatabase_thenReturnOptionalEmpty() {
-        assertFalse(tagsDao.getById(7L).isPresent());
+        assertFalse(tagsRepository.getById(7L).isPresent());
     }
 
     @Test
     void whenGetAllFromDatabase_thenReturnCorrectTagsCount() {
-        assertEquals(5, tagsDao.getAll().size());
+        assertEquals(5, tagsRepository.getAll().size());
     }
 
     @Test
     void whenDeleteExistingTag_thenReturnTrue() {
-        assertTrue(tagsDao.delete(1L));
+        assertTrue(tagsRepository.delete(1L));
     }
     @Test
     void whenDeleteNotExistingTag_thenReturnFalse() {
-        assertFalse(tagsDao.delete(8L));
+        assertFalse(tagsRepository.delete(8L));
     }
 
     @Test
     void whenSaveTagCorrect_thenReturnId() throws TagSaveException {
         Tag tag = new Tag(6L, "tag");
-        assertEquals(6L, tagsDao.save(tag));
+        assertEquals(6L, tagsRepository.save(tag));
     }
 }

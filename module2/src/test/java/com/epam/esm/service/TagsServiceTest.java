@@ -1,11 +1,10 @@
 package com.epam.esm.service;
 
 
-import com.epam.esm.dao.TagsDao;
-import com.epam.esm.dao.TagsDaoImpl;
+import com.epam.esm.dao.TagsRepository;
+import com.epam.esm.dao.TagsRepositoryImpl;
 import com.epam.esm.entity.Tag;
 import com.epam.esm.exception.TagNotFoundException;
-import com.epam.esm.exception.TagSaveException;
 import com.epam.esm.exception.TagServiceException;
 import com.epam.esm.mapper.TagRowMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -32,8 +31,8 @@ class TagsServiceTest {
                 .addScript("classpath:test-data.sql")
                 .build();
         jdbcTemplate = new JdbcTemplate(dataSource);
-        tagsDao = Mockito.spy(new TagsDaoImpl(jdbcTemplate, new TagRowMapper()));
-        tagsService = new TagsServiceImpl(tagsDao);
+        tagsRepository = Mockito.spy(new TagsRepositoryImpl(jdbcTemplate, new TagRowMapper()));
+        tagsService = new TagsServiceImpl(tagsRepository);
     }
 
     @Mock
@@ -41,34 +40,34 @@ class TagsServiceTest {
     @Mock
     DataSource dataSource;
     @Mock
-    TagsDao tagsDao;
+    TagsRepository tagsRepository;
 
     private TagsService tagsService;
 
     @Test
     void whenMockGetAllTags_thenReturnEmptyList() {
-        Mockito.when(tagsDao.getAll()).thenReturn(new LinkedList<>());
+        Mockito.when(tagsRepository.getAll()).thenReturn(new LinkedList<>());
         assertEquals(0, tagsService.getAllTags().size());
     }
 
     @Test
     void whenMockGetTagById_thenReturnTag() throws TagNotFoundException {
-        Mockito.when(tagsDao.getById(Mockito.anyLong())).thenReturn(java.util.Optional.of(new Tag()));
+        Mockito.when(tagsRepository.getById(Mockito.anyLong())).thenReturn(java.util.Optional.of(new Tag()));
         assertNotNull(tagsService.getTagById(1L));
     }
 
     @Test
     void whenMockCreateTag_thenReturnId() throws TagSaveException, TagServiceException {
         Tag tag = new Tag(1L, "name");
-        Mockito.when(tagsDao.save(tag)).thenReturn(1L);
+        Mockito.when(tagsRepository.save(tag)).thenReturn(1L);
         tagsService.createTag(tag);
         assertEquals(1L, tag.getId());
     }
 
     @Test
     void whenMockDeleteTag_thenReturnTrue() throws TagServiceException {
-        Mockito.when(tagsDao.delete(Mockito.anyLong())).thenReturn(true);
+        Mockito.when(tagsRepository.delete(Mockito.anyLong())).thenReturn(true);
         tagsService.deleteTag(1L);
-        Mockito.verify(tagsDao).delete(Mockito.anyLong());
+        Mockito.verify(tagsRepository).delete(Mockito.anyLong());
     }
 }

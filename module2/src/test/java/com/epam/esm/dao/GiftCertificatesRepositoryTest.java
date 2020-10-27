@@ -1,9 +1,7 @@
 package com.epam.esm.dao;
 
-import com.epam.esm.dao.GiftCertificatesDao;
-import com.epam.esm.dao.GiftCertificatesDaoImpl;
 import com.epam.esm.entity.GiftCertificate;
-import com.epam.esm.exception.GiftCertificateSaveException;
+import com.epam.esm.exception.DaoSaveException;
 import com.epam.esm.mapper.GiftCertificateRowMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,13 +18,13 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class GiftCertificatesDaoTest {
+class GiftCertificatesRepositoryTest {
 
     @Mock
     JdbcTemplate jdbcTemplate;
 
     DataSource dataSource;
-    GiftCertificatesDao giftCertificatesDao;
+    GiftCertificatesRepository giftCertificatesRepository;
 
     GiftCertificate giftCertificate = new GiftCertificate(1L, "lala", "desk", new BigDecimal(12), LocalDate.now(), LocalDate.now(), 13);
 
@@ -38,13 +36,13 @@ class GiftCertificatesDaoTest {
                 .addScript("classpath:test-data.sql")
                 .build();
         jdbcTemplate = new JdbcTemplate(dataSource);
-        giftCertificatesDao = new GiftCertificatesDaoImpl(jdbcTemplate, new GiftCertificateRowMapper());
+        giftCertificatesRepository = new GiftCertificatesRepositoryImpl(jdbcTemplate, new GiftCertificateRowMapper());
     }
 
     //Test date
     @Test
     void whenGetByIdExistingCertificateFromDatabase_thenReturnCorrectCertificate() {
-        Optional<GiftCertificate> giftCertificatesDaoById = giftCertificatesDao.getById(1L);
+        Optional<GiftCertificate> giftCertificatesDaoById = giftCertificatesRepository.getById(1L);
         assertTrue(giftCertificatesDaoById.isPresent());
         assertEquals("desc", giftCertificatesDaoById.get().getCertificateDescription());
         assertEquals("lala", giftCertificatesDaoById.get().getCertificateName());
@@ -53,28 +51,28 @@ class GiftCertificatesDaoTest {
 
     @Test
     void whenGetAllCertificates_thenReturnOneCertificate() {
-        List<GiftCertificate> giftCertificatesDaoAll = giftCertificatesDao.getAll();
+        List<GiftCertificate> giftCertificatesDaoAll = giftCertificatesRepository.getAll();
         assertEquals(1L, giftCertificatesDaoAll.size());
     }
 
     @Test
     void whenDeleteExistingCertificate_thenReturnTrue() {
-        assertTrue(giftCertificatesDao.delete(1L));
+        assertTrue(giftCertificatesRepository.delete(1L));
     }
 
     @Test
     void whenDeleteNotExistingCertificate_thenReturnFalse() {
-        assertFalse(giftCertificatesDao.delete(2L));
+        assertFalse(giftCertificatesRepository.delete(2L));
     }
 
     @Test
     void whenUpdateExistingCertificate_thenReturnTrue() {
-        assertTrue(giftCertificatesDao.update(giftCertificate));
+        assertTrue(giftCertificatesRepository.update(giftCertificate));
 
     }
 
     @Test
-    void whenSaveCorrectCertificateEntity_thenReturnGeneratedId() throws GiftCertificateSaveException {
-        assertTrue(giftCertificatesDao.save(giftCertificate)>0);
+    void whenSaveCorrectCertificateEntity_thenReturnGeneratedId() throws DaoSaveException {
+        assertTrue(giftCertificatesRepository.save(giftCertificate)>0);
     }
 }

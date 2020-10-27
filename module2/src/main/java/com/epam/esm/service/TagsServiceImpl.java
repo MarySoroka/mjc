@@ -1,9 +1,9 @@
 package com.epam.esm.service;
 
-import com.epam.esm.dao.TagsDao;
+import com.epam.esm.dao.TagsRepository;
 import com.epam.esm.entity.Tag;
+import com.epam.esm.exception.DaoSaveException;
 import com.epam.esm.exception.TagNotFoundException;
-import com.epam.esm.exception.TagSaveException;
 import com.epam.esm.exception.TagServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,22 +14,22 @@ import java.util.Optional;
 @Service
 public class TagsServiceImpl implements TagsService {
 
-    private final TagsDao tagsDao;
+    private final TagsRepository tagsRepository;
 
     @Autowired
-    public TagsServiceImpl(TagsDao tagsDao) {
-        this.tagsDao = tagsDao;
+    public TagsServiceImpl(TagsRepository tagsRepository) {
+        this.tagsRepository = tagsRepository;
     }
 
 
     @Override
     public List<Tag> getAllTags() {
-        return tagsDao.getAll();
+        return tagsRepository.getAll();
     }
 
     @Override
     public Tag getTagById(Long id) throws TagNotFoundException {
-        Optional<Tag> tagsDaoById = tagsDao.getById(id);
+        Optional<Tag> tagsDaoById = tagsRepository.getById(id);
         if (tagsDaoById.isPresent()) {
             return tagsDaoById.get();
         } else {
@@ -40,16 +40,16 @@ public class TagsServiceImpl implements TagsService {
     @Override
     public void createTag(Tag tag) throws TagServiceException {
         try {
-            Long tagId = tagsDao.save(tag);
+            Long tagId = tagsRepository.save(tag);
             tag.setId(tagId);
-        } catch (TagSaveException e) {
+        } catch (DaoSaveException e) {
             throw new TagServiceException("Couldn't create tag: ", e);
         }
     }
 
     @Override
     public void deleteTag(Long tagId) throws TagServiceException {
-        boolean isDeleted = tagsDao.delete(tagId);
+        boolean isDeleted = tagsRepository.delete(tagId);
         if (!isDeleted) {
             throw new TagServiceException("Couldn't delete tag by id: " + tagId);
         }

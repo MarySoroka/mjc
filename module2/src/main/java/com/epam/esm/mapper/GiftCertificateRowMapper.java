@@ -6,8 +6,17 @@ import org.springframework.stereotype.Component;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+
 @Component
 public class GiftCertificateRowMapper implements RowMapper<GiftCertificate> {
+    /**
+     * method create certificate entity from result set
+     *
+     * @param rs     result set
+     * @param rowNum amount of rows
+     * @return certificate entity
+     * @throws SQLException if we can't find such column
+     */
     @Override
     public GiftCertificate mapRow(ResultSet rs, int rowNum) throws SQLException {
         final GiftCertificate giftCertificate = new GiftCertificate();

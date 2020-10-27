@@ -1,8 +1,8 @@
 package com.epam.esm.dao;
 
 import com.epam.esm.entity.Tag;
+import com.epam.esm.exception.DaoSaveException;
 import com.epam.esm.mapper.TagRowMapper;
-import com.epam.esm.exception.TagSaveException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public class TagsDaoImpl implements TagsDao {
+public class TagsRepositoryImpl implements TagsRepository {
     private static final String INSERT_TAG_QUERY = "INSERT INTO gift_certificates.tag (`name`) values (?)";
     private static final String DELETE_TAG_QUERY = "DELETE FROM gift_certificates.tag WHERE id = ?";
     private static final String SELECT_ALL_TAGS_QUERY = "SELECT id, name FROM gift_certificates.tag";
@@ -25,7 +25,7 @@ public class TagsDaoImpl implements TagsDao {
     private final TagRowMapper tagRowMapper;
 
     @Autowired
-    public TagsDaoImpl(JdbcTemplate jdbcTemplate, TagRowMapper rowMapper) {
+    public TagsRepositoryImpl(JdbcTemplate jdbcTemplate, TagRowMapper rowMapper) {
         this.jdbcTemplate = jdbcTemplate;
         this.tagRowMapper = rowMapper;
     }
@@ -55,7 +55,7 @@ public class TagsDaoImpl implements TagsDao {
 
 
     @Override
-    public Long save(Tag tag) throws TagSaveException {
+    public Long save(Tag tag) throws DaoSaveException {
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(
                 connection -> {
@@ -67,7 +67,7 @@ public class TagsDaoImpl implements TagsDao {
                 keyHolder);
         Number key = keyHolder.getKey();
         if (key == null) {
-            throw new TagSaveException();
+            throw new DaoSaveException();
         }
         return key.longValue();
 

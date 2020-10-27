@@ -1,8 +1,8 @@
 package com.epam.esm.service;
 
-import com.epam.esm.dao.GiftCertificatesDao;
+import com.epam.esm.dao.GiftCertificatesRepository;
 import com.epam.esm.entity.GiftCertificate;
-import com.epam.esm.exception.GiftCertificateSaveException;
+import com.epam.esm.exception.DaoSaveException;
 import com.epam.esm.exception.GiftCertificateServiceException;
 import com.epam.esm.entity.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,21 +13,21 @@ import java.util.Optional;
 
 @Service
 public class GiftCertificatesServiceImpl implements GiftCertificatesService {
-    private final GiftCertificatesDao giftCertificatesDao;
+    private final GiftCertificatesRepository giftCertificatesRepository;
 
     @Autowired
-    public GiftCertificatesServiceImpl(GiftCertificatesDao giftCertificatesDao) {
-        this.giftCertificatesDao = giftCertificatesDao;
+    public GiftCertificatesServiceImpl(GiftCertificatesRepository giftCertificatesRepository) {
+        this.giftCertificatesRepository = giftCertificatesRepository;
     }
 
     @Override
     public List<GiftCertificate> getAllCertificates() {
-        return giftCertificatesDao.getAll();
+        return giftCertificatesRepository.getAll();
     }
 
     @Override
     public GiftCertificate getCertificateById(Long id) throws GiftCertificateServiceException {
-        Optional<GiftCertificate> giftCertificate = giftCertificatesDao.getById(id);
+        Optional<GiftCertificate> giftCertificate = giftCertificatesRepository.getById(id);
         if (!giftCertificate.isPresent()) {
             throw new GiftCertificateServiceException();
         }
@@ -37,20 +37,20 @@ public class GiftCertificatesServiceImpl implements GiftCertificatesService {
     @Override
     public boolean createCertificate(GiftCertificate giftCertificate) throws GiftCertificateServiceException {
         try {
-            return giftCertificatesDao.save(giftCertificate) > 0;
-        } catch (GiftCertificateSaveException e) {
+            return giftCertificatesRepository.save(giftCertificate) > 0;
+        } catch (DaoSaveException e) {
             throw new GiftCertificateServiceException("Couldn't save certificate");
         }
     }
 
     @Override
     public boolean deleteCertificate(Long certificateId) {
-        return giftCertificatesDao.delete(certificateId);
+        return giftCertificatesRepository.delete(certificateId);
     }
 
     @Override
     public boolean updateCertificate(GiftCertificate giftCertificate) {
-        return giftCertificatesDao.update(giftCertificate);
+        return giftCertificatesRepository.update(giftCertificate);
     }
 
 

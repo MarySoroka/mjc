@@ -9,7 +9,14 @@ import java.sql.SQLException;
 
 @Component
 public class TagRowMapper implements RowMapper<Tag> {
-
+    /**
+     * method create tag entity from result set
+     *
+     * @param resultSet result set
+     * @param rowNum    amount of rows
+     * @return tag entity
+     * @throws SQLException if we can't find such column
+     */
     @Override
     public Tag mapRow(ResultSet resultSet, int rowNum) throws SQLException {
         final Tag tag = new Tag();

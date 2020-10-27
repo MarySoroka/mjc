@@ -1,5 +1,8 @@
 package com.epam.esm.mapper;
 
+/**
+ * enum for keeping database columns value for gift certificate table
+ */
 public enum GiftCertificateRows {
     ID("id"),
     NAME("name"),

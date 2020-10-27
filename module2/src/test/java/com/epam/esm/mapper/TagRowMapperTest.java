@@ -1,9 +1,8 @@
 package com.epam.esm.mapper;
 
-import com.epam.esm.dao.TagsDao;
-import com.epam.esm.dao.TagsDaoImpl;
+import com.epam.esm.dao.TagsRepository;
+import com.epam.esm.dao.TagsRepositoryImpl;
 import com.epam.esm.entity.Tag;
-import com.epam.esm.mapper.TagRowMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -21,7 +20,7 @@ class TagRowMapperTest {
     @Mock
     JdbcTemplate jdbcTemplate;
     DataSource dataSource;
-    TagsDao tagsDao;
+    TagsRepository tagsRepository;
 
     @BeforeEach
     public void setup() {
@@ -31,12 +30,12 @@ class TagRowMapperTest {
                 .addScript("classpath:test-data.sql")
                 .build();
         jdbcTemplate = new JdbcTemplate(dataSource);
-        tagsDao = new TagsDaoImpl(jdbcTemplate,new TagRowMapper());
+        tagsRepository = new TagsRepositoryImpl(jdbcTemplate,new TagRowMapper());
     }
 
     @Test
     void mapRow() {
-        Optional<Tag> tagsDaoById = tagsDao.getById(1L);
+        Optional<Tag> tagsDaoById = tagsRepository.getById(1L);
         assertTrue(tagsDaoById.isPresent());
         assertEquals("name",tagsDaoById.get().getTagName());
         assertEquals(1L,tagsDaoById.get().getId());

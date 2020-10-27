@@ -2,7 +2,7 @@ package com.epam.esm.dao;
 
 import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.mapper.GiftCertificateRowMapper;
-import com.epam.esm.exception.GiftCertificateSaveException;
+import com.epam.esm.exception.DaoSaveException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public class GiftCertificatesDaoImpl implements GiftCertificatesDao {
+public class GiftCertificatesRepositoryImpl implements GiftCertificatesRepository {
     //change tag statement to certificate with group by
     private static final String INSERT_CERTIFICATES_QUERY = "INSERT INTO gift_certificates.gift_certificate (name,description, price, create_date, last_update_date, duration ) values (?,?,?,?,?,?)";
     private static final String UPDATE_CERTIFICATES_QUERY = "UPDATE gift_certificates.gift_certificate set name=? ,description=?, price=?, create_date=?, last_update_date=?, duration=? where id =?";
@@ -30,7 +30,7 @@ public class GiftCertificatesDaoImpl implements GiftCertificatesDao {
     private final GiftCertificateRowMapper giftCertificateRowMapper;
 
     @Autowired
-    public GiftCertificatesDaoImpl(JdbcTemplate jdbcTemplate, GiftCertificateRowMapper giftCertificateRowMapper) {
+    public GiftCertificatesRepositoryImpl(JdbcTemplate jdbcTemplate, GiftCertificateRowMapper giftCertificateRowMapper) {
         this.jdbcTemplate = jdbcTemplate;
         this.giftCertificateRowMapper = giftCertificateRowMapper;
     }
@@ -60,7 +60,7 @@ public class GiftCertificatesDaoImpl implements GiftCertificatesDao {
 
 
     @Override
-    public Long save(GiftCertificate giftCertificate) throws GiftCertificateSaveException {
+    public Long save(GiftCertificate giftCertificate) throws DaoSaveException {
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(
                 connection -> {
@@ -72,7 +72,7 @@ public class GiftCertificatesDaoImpl implements GiftCertificatesDao {
                 keyHolder);
         Number key = keyHolder.getKey();
         if (key == null) {
-            throw new GiftCertificateSaveException("Couldn't save gift certificate");
+            throw new DaoSaveException("Couldn't save gift certificate");
         }
         return key.longValue();
 

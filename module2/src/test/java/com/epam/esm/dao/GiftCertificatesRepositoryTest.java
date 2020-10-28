@@ -2,11 +2,10 @@ package com.epam.esm.dao;
 
 import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.exception.DaoSaveException;
-import com.epam.esm.mapper.GiftCertificateRowMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
-import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 
@@ -20,23 +19,19 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class GiftCertificatesRepositoryTest {
 
-    @Mock
-    JdbcTemplate jdbcTemplate;
+    private GiftCertificatesRepository giftCertificatesRepository;
 
-    DataSource dataSource;
-    GiftCertificatesRepository giftCertificatesRepository;
-
-    GiftCertificate giftCertificate = new GiftCertificate(1L, "lala", "desk", new BigDecimal(12), LocalDate.now(), LocalDate.now(), 13);
+    private final GiftCertificate giftCertificate = new GiftCertificate(1L, "lala", "desk", new BigDecimal(12), LocalDate.now(), LocalDate.now(), 13);
 
     @BeforeEach
     public void setup() {
-        dataSource = new EmbeddedDatabaseBuilder().setType(EmbeddedDatabaseType.H2)
+        DataSource dataSource = new EmbeddedDatabaseBuilder().setType(EmbeddedDatabaseType.H2)
                 .generateUniqueName(true)
                 .addScript("classpath:database.sql")
                 .addScript("classpath:test-data.sql")
                 .build();
-        jdbcTemplate = new JdbcTemplate(dataSource);
-        giftCertificatesRepository = new GiftCertificatesRepositoryImpl(jdbcTemplate, new GiftCertificateRowMapper());
+        NamedParameterJdbcTemplate jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
+        giftCertificatesRepository = new GiftCertificatesRepositoryImpl(jdbcTemplate);
     }
 
     //Test date
@@ -44,9 +39,9 @@ class GiftCertificatesRepositoryTest {
     void whenGetByIdExistingCertificateFromDatabase_thenReturnCorrectCertificate() {
         Optional<GiftCertificate> giftCertificatesDaoById = giftCertificatesRepository.getById(1L);
         assertTrue(giftCertificatesDaoById.isPresent());
-        assertEquals("desc", giftCertificatesDaoById.get().getCertificateDescription());
-        assertEquals("lala", giftCertificatesDaoById.get().getCertificateName());
-        assertEquals(new BigDecimal(12), giftCertificatesDaoById.get().getCertificatePrice());
+        assertEquals("desc", giftCertificatesDaoById.get().getDescription());
+        assertEquals("lala", giftCertificatesDaoById.get().getName());
+        assertEquals(new BigDecimal(12), giftCertificatesDaoById.get().getPrice());
     }
 
     @Test
@@ -73,6 +68,6 @@ class GiftCertificatesRepositoryTest {
 
     @Test
     void whenSaveCorrectCertificateEntity_thenReturnGeneratedId() throws DaoSaveException {
-        assertTrue(giftCertificatesRepository.save(giftCertificate)>0);
+        assertTrue(giftCertificatesRepository.save(giftCertificate) > 0);
     }
 }

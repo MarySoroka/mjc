@@ -1,44 +1,44 @@
 package com.epam.esm.dao;
 
 import com.epam.esm.entity.Tag;
-import com.epam.esm.mapper.TagRowMapper;
+import com.epam.esm.exception.DaoSaveException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
-import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 
 import javax.sql.DataSource;
 
+import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class TagsRepositoryTest {
-    @Mock
-    JdbcTemplate jdbcTemplate;
 
-    DataSource dataSource;
-    TagsRepository tagsRepository;
+    private TagsRepository tagsRepository;
 
     @BeforeEach
     public void setup() {
-        dataSource = new EmbeddedDatabaseBuilder().setType(EmbeddedDatabaseType.H2)
+        DataSource dataSource = new EmbeddedDatabaseBuilder().setType(EmbeddedDatabaseType.H2)
                 .generateUniqueName(true)
                 .addScript("classpath:database.sql")
                 .addScript("classpath:test-data.sql")
                 .build();
-        jdbcTemplate = new JdbcTemplate(dataSource);
-        tagsRepository = new TagsRepositoryImpl(jdbcTemplate,new TagRowMapper());
+        NamedParameterJdbcTemplate namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
+        tagsRepository = new TagsRepositoryImpl(namedParameterJdbcTemplate);
     }
 
     @Test
     void whenGetByIdExistingTagFromDatabase_thenReturnCorrectTag() {
        assertTrue(tagsRepository.getById(3L).isPresent());
-       assertEquals("la3", tagsRepository.getById(3L).get().getTagName());
+       assertEquals("la3", tagsRepository.getById(3L).get().getName());
     }
     @Test
     void whenGetByIdNotExistingTagFromDatabase_thenReturnOptionalEmpty() {
-        assertFalse(tagsRepository.getById(7L).isPresent());
+        Optional<Tag> tagsRepositoryById = tagsRepository.getById(10L);
+        assertFalse(tagsRepositoryById.isPresent());
     }
 
     @Test
@@ -56,7 +56,7 @@ class TagsRepositoryTest {
     }
 
     @Test
-    void whenSaveTagCorrect_thenReturnId() throws TagSaveException {
+    void whenSaveTagCorrect_thenReturnId() throws DaoSaveException {
         Tag tag = new Tag(6L, "tag");
         assertEquals(6L, tagsRepository.save(tag));
     }

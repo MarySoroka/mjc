@@ -2,26 +2,26 @@ package com.epam.esm.entity;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.List;
+import java.util.Set;
 
 public class GiftCertificate {
     private Long id;
-    private String certificateName;
-    private String certificateDescription;
-    private BigDecimal certificatePrice;
-    private LocalDate certificateCreateDate;
-    private LocalDate certificateLastUpdateDate;
-    private Integer certificateDuration;
-    private List<Tag> certificateTags;
+    private String name;
+    private String description;
+    private BigDecimal price;
+    private LocalDate createDate;
+    private LocalDate lastUpdateDate;
+    private Integer duration;
+    private Set<Tag> tags;
 
-    public GiftCertificate(Long id, String certificateName, String certificateDescription, BigDecimal certificatePrice, LocalDate certificateCreateDate, LocalDate certificateLastUpdateDate, Integer certificateDuration) {
+    public GiftCertificate(Long id, String name, String description, BigDecimal price, LocalDate createDate, LocalDate lastUpdateDate, Integer duration) {
         this.id = id;
-        this.certificateName = certificateName;
-        this.certificateDescription = certificateDescription;
-        this.certificatePrice = certificatePrice;
-        this.certificateCreateDate = certificateCreateDate;
-        this.certificateLastUpdateDate = certificateLastUpdateDate;
-        this.certificateDuration = certificateDuration;
+        this.name = name;
+        this.description = description;
+        this.price = price;
+        this.createDate = createDate;
+        this.lastUpdateDate = lastUpdateDate;
+        this.duration = duration;
     }
 
     public GiftCertificate() {
@@ -36,59 +36,59 @@ public class GiftCertificate {
         this.id = id;
     }
 
-    public String getCertificateName() {
-        return certificateName;
+    public String getName() {
+        return name;
     }
 
-    public void setCertificateName(String certificateName) {
-        this.certificateName = certificateName;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getCertificateDescription() {
-        return certificateDescription;
+    public String getDescription() {
+        return description;
     }
 
-    public void setCertificateDescription(String certificateDescription) {
-        this.certificateDescription = certificateDescription;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
-    public BigDecimal getCertificatePrice() {
-        return certificatePrice;
+    public BigDecimal getPrice() {
+        return price;
     }
 
-    public void setCertificatePrice(BigDecimal certificatePrice) {
-        this.certificatePrice = certificatePrice;
+    public void setPrice(BigDecimal price) {
+        this.price = price;
     }
 
-    public LocalDate getCertificateCreateDate() {
-        return certificateCreateDate;
+    public LocalDate getCreateDate() {
+        return createDate;
     }
 
-    public void setCertificateCreateDate(LocalDate certificateCreateDate) {
-        this.certificateCreateDate = certificateCreateDate;
+    public void setCreateDate(LocalDate createDate) {
+        this.createDate = createDate;
     }
 
-    public LocalDate getCertificateLastUpdateDate() {
-        return certificateLastUpdateDate;
+    public LocalDate getLastUpdateDate() {
+        return lastUpdateDate;
     }
 
-    public void setCertificateLastUpdateDate(LocalDate certificateLastUpdateDate) {
-        this.certificateLastUpdateDate = certificateLastUpdateDate;
+    public void setLastUpdateDate(LocalDate lastUpdateDate) {
+        this.lastUpdateDate = lastUpdateDate;
     }
 
-    public Integer getCertificateDuration() {
-        return certificateDuration;
+    public Integer getDuration() {
+        return duration;
     }
 
-    public void setCertificateDuration(Integer certificateDuration) {
-        this.certificateDuration = certificateDuration;
+    public void setDuration(Integer duration) {
+        this.duration = duration;
     }
 
-    public List<Tag> getCertificateTags() {
-        return certificateTags;
+    public Set<Tag> getTags() {
+        return tags;
     }
 
-    public void setCertificateTags(List<Tag> certificateTags) {
-        this.certificateTags = certificateTags;
+    public void setTags(Set<Tag> tags) {
+        this.tags = tags;
     }
 }

@@ -5,12 +5,11 @@ import com.epam.esm.dao.GiftCertificatesRepositoryImpl;
 import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.exception.DaoSaveException;
 import com.epam.esm.exception.GiftCertificateServiceException;
-import com.epam.esm.mapper.GiftCertificateRowMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 
@@ -23,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class GiftCertificatesServiceTest {
     @Mock
-    JdbcTemplate jdbcTemplate;
+    NamedParameterJdbcTemplate namedParameterJdbcTemplate;
     @Mock
     DataSource dataSource;
     @Mock
@@ -40,8 +39,8 @@ class GiftCertificatesServiceTest {
                 .addScript("classpath:database.sql")
                 .addScript("classpath:test-data.sql")
                 .build();
-        jdbcTemplate = new JdbcTemplate(dataSource);
-        giftCertificatesRepository = Mockito.spy(new GiftCertificatesRepositoryImpl(jdbcTemplate, new GiftCertificateRowMapper()));
+        namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
+        giftCertificatesRepository = Mockito.spy(new GiftCertificatesRepositoryImpl(namedParameterJdbcTemplate));
         giftCertificatesService = new GiftCertificatesServiceImpl(giftCertificatesRepository);
     }
     @Test
@@ -55,7 +54,7 @@ class GiftCertificatesServiceTest {
         Mockito.when(giftCertificatesRepository.getById(Mockito.anyLong())).thenReturn(java.util.Optional.ofNullable(giftCertificate));
         GiftCertificate certificateById = giftCertificatesService.getCertificateById(1L);
         assertEquals(1L, certificateById.getId());
-        assertEquals("lala",certificateById.getCertificateName());
+        assertEquals("lala",certificateById.getName());
 
     }
 
@@ -73,7 +72,7 @@ class GiftCertificatesServiceTest {
 
     @Test
     void whenUpdateExistingCertificate_thenReturnTrue() {
-        Mockito.when(giftCertificatesRepository.update(Mockito.any(GiftCertificate.class))).thenReturn(true);
+        Mockito.when(giftCertificatesRepository.update(giftCertificate)).thenReturn(true);
         assertTrue(giftCertificatesService.updateCertificate(giftCertificate));
     }
 

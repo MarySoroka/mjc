@@ -7,7 +7,14 @@ import com.epam.esm.service.GiftCertificatesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
+
 
 import java.util.List;
 
@@ -38,10 +45,9 @@ public class GiftCertificatesController {
     }
 
     @PostMapping()
-    public String createGiftCertificate(@RequestBody GiftCertificate giftCertificate) throws GiftCertificateControllerException {
+    public void createGiftCertificate(@RequestBody GiftCertificate giftCertificate) throws GiftCertificateControllerException {
         try {
             giftCertificatesService.createCertificate(giftCertificate);
-            return "redirect:/certificates";
         } catch (GiftCertificateServiceException e) {
             throw new GiftCertificateControllerException();
         }
@@ -49,14 +55,12 @@ public class GiftCertificatesController {
     }
 
     @PatchMapping("/{id}")
-    public String update(@RequestBody GiftCertificate giftCertificate) {
+    public void update(@RequestBody GiftCertificate giftCertificate) {
         giftCertificatesService.updateCertificate(giftCertificate);
-        return "redirect:/certificates";
     }
 
     @DeleteMapping("/{id}")
-    public String delete(@PathVariable("id") Long id) {
+    public void delete(@PathVariable("id") Long id) {
         giftCertificatesService.deleteCertificate(id);
-        return "redirect:/certificates";
     }
 }

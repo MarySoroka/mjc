@@ -4,14 +4,14 @@ package com.epam.esm.service;
 import com.epam.esm.dao.TagsRepository;
 import com.epam.esm.dao.TagsRepositoryImpl;
 import com.epam.esm.entity.Tag;
+import com.epam.esm.exception.DaoSaveException;
 import com.epam.esm.exception.TagNotFoundException;
 import com.epam.esm.exception.TagServiceException;
-import com.epam.esm.mapper.TagRowMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 
@@ -30,13 +30,13 @@ class TagsServiceTest {
                 .addScript("classpath:database.sql")
                 .addScript("classpath:test-data.sql")
                 .build();
-        jdbcTemplate = new JdbcTemplate(dataSource);
-        tagsRepository = Mockito.spy(new TagsRepositoryImpl(jdbcTemplate, new TagRowMapper()));
+        namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
+        tagsRepository = Mockito.spy(new TagsRepositoryImpl(namedParameterJdbcTemplate));
         tagsService = new TagsServiceImpl(tagsRepository);
     }
 
     @Mock
-    JdbcTemplate jdbcTemplate;
+    NamedParameterJdbcTemplate namedParameterJdbcTemplate;
     @Mock
     DataSource dataSource;
     @Mock
@@ -57,7 +57,7 @@ class TagsServiceTest {
     }
 
     @Test
-    void whenMockCreateTag_thenReturnId() throws TagSaveException, TagServiceException {
+    void whenMockCreateTag_thenReturnId() throws DaoSaveException, TagServiceException {
         Tag tag = new Tag(1L, "name");
         Mockito.when(tagsRepository.save(tag)).thenReturn(1L);
         tagsService.createTag(tag);

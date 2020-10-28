@@ -30,10 +30,9 @@ public class TagsController {
     }
 
     @GetMapping("/{id}")
-    public String getTagById(@PathVariable("id") Long id) throws TagControllerException {
+    public Tag getTagById(@PathVariable("id") Long id) throws TagControllerException {
         try {
-            tagsService.getTagById(id);
-            return "tags/";
+            return tagsService.getTagById(id);
         } catch (TagNotFoundException e) {
             throw new TagControllerException(e);
         }
@@ -42,10 +41,9 @@ public class TagsController {
 
 
     @PostMapping()
-    public String create(@RequestBody Tag tag) throws TagControllerException {
+    public void create(@RequestBody Tag tag) throws TagControllerException {
         try {
             tagsService.createTag(tag);
-            return "redirect:/people";
         } catch (TagServiceException e) {
             throw new TagControllerException(e);
         }
@@ -54,10 +52,9 @@ public class TagsController {
 
 
     @DeleteMapping("/{id}")
-    public String delete(@PathVariable("id") Long id) throws TagControllerException {
+    public void delete(@PathVariable("id") Long id) throws TagControllerException {
         try {
             tagsService.deleteTag(id);
-            return "redirect:/people";
         } catch (TagServiceException e) {
             throw new TagControllerException(e);
         }

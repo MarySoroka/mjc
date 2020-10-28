@@ -48,6 +48,6 @@ public interface CRUDDao<E, K> {
      * @return if entity has been saved return generated id
      * @throws DaoSaveException if generated id equals null
      */
-    Long save(E e) throws DaoSaveException;
+    K save(E e) throws DaoSaveException;
 
 }

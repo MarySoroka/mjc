@@ -3,18 +3,14 @@ package com.epam.esm.config;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.core.env.Environment;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.web.servlet.ViewResolver;
-import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import org.springframework.web.servlet.view.InternalResourceViewResolver;
-import org.springframework.web.servlet.view.JstlView;
 
 import javax.sql.DataSource;
 
@@ -24,42 +20,36 @@ import javax.sql.DataSource;
 @EnableWebMvc
 public class SpringConfig implements WebMvcConfigurer {
 
-    private final Environment environment;
+    private final String className;
+    private final String url;
+    private final String user;
+    private final String password;
 
     @Autowired
-    public SpringConfig(Environment environment) {
-        this.environment = environment;
-    }
-
-    @Bean
-    public ViewResolver viewResolver() {
-        InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
-        viewResolver.setViewClass(JstlView.class);
-        viewResolver.setPrefix("/WEB-INF/pages/");
-        viewResolver.setSuffix(".jsp");
-
-        return viewResolver;
-    }
-
-    @Override
-    public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
-        configurer.enable();
+    public SpringConfig(@Value("${database.className}") String className,
+                        @Value("${database.url}") String url,
+                        @Value("${database.user}") String user,
+                        @Value("${database.password}") String password) {
+        this.className = className;
+        this.url = url;
+        this.user = user;
+        this.password = password;
     }
 
     @Bean
     public DataSource getDataSource() {
         HikariConfig databaseConfig = new HikariConfig();
-        databaseConfig.setDriverClassName(environment.getProperty("database.className"));
-        databaseConfig.setJdbcUrl(environment.getProperty("database.url"));
-        databaseConfig.setUsername(environment.getProperty("database.user"));
-        databaseConfig.setPassword(environment.getProperty("database.password"));
+        databaseConfig.setDriverClassName(this.className);
+        databaseConfig.setJdbcUrl(this.url);
+        databaseConfig.setUsername(this.user);
+        databaseConfig.setPassword(this.password);
         databaseConfig.setMaximumPoolSize(100);
         return new HikariDataSource(databaseConfig);
     }
 
     @Bean
-    public JdbcTemplate getJdbcTemplate() {
-        return new JdbcTemplate(getDataSource());
+    public NamedParameterJdbcTemplate getJdbcTemplate() {
+        return new NamedParameterJdbcTemplate(getDataSource());
     }
 
 }

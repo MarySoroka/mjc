@@ -1,20 +1,18 @@
 package com.epam.esm.service;
 
 import com.epam.esm.entity.GiftCertificate;
-import com.epam.esm.entity.Tag;
 import com.epam.esm.exception.GiftCertificateServiceException;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * interface that demonstrate business logic for gift certificate domain
  */
 
 public interface GiftCertificatesService {
-    /**
-     * @return all objects in specific db table
-     */
-    List<GiftCertificate> getAllCertificates();
+
+    List<GiftCertificate> getAllCertificates(Map<String, String> queryParams);
 
     /**
      * method find entity by id parameter
@@ -49,5 +47,5 @@ public interface GiftCertificatesService {
      */
     boolean updateCertificate(GiftCertificate giftCertificate);
 
-    List<GiftCertificate> getCertificateByTagName(Tag tag);
+    List<GiftCertificate> getCertificateByTagName(String tagName);
 }

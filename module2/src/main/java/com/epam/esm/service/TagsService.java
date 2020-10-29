@@ -40,5 +40,10 @@ public interface TagsService {
      */
     void deleteTag(Long tagId) throws TagServiceException;
 
-
+    /**
+     * method find certificate tags
+     * @param certificateId certificate id
+     * @return certificate tags
+     */
+    List<Tag> getTagsByCertificateId(Long certificateId);
 }

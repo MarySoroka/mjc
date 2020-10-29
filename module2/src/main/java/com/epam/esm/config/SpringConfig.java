@@ -24,16 +24,19 @@ public class SpringConfig implements WebMvcConfigurer {
     private final String url;
     private final String user;
     private final String password;
+    private final Integer poolMaxSize;
 
     @Autowired
     public SpringConfig(@Value("${database.className}") String className,
                         @Value("${database.url}") String url,
                         @Value("${database.user}") String user,
-                        @Value("${database.password}") String password) {
+                        @Value("${database.password}") String password,
+                        @Value("${database.maxConnectionPoolSize}") Integer poolMaxSize) {
         this.className = className;
         this.url = url;
         this.user = user;
         this.password = password;
+        this.poolMaxSize = poolMaxSize;
     }
 
     @Bean
@@ -43,7 +46,7 @@ public class SpringConfig implements WebMvcConfigurer {
         databaseConfig.setJdbcUrl(this.url);
         databaseConfig.setUsername(this.user);
         databaseConfig.setPassword(this.password);
-        databaseConfig.setMaximumPoolSize(100);
+        databaseConfig.setMaximumPoolSize(this.poolMaxSize);
         return new HikariDataSource(databaseConfig);
     }
 

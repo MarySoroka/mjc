@@ -11,7 +11,6 @@ import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -19,10 +18,12 @@ import java.util.Optional;
 @Repository
 public class TagsRepositoryImpl implements TagsRepository {
     private static final String INSERT_TAG_QUERY = "INSERT INTO gift_certificates.tag (`name`) values (:name)";
+    private static final String INSERT_TAG_CERTIFICATE_QUERY = "INSERT INTO gift_certificates.certificate_tag (tag_id, certificate_id) values (:tagId, :certificateId)";
+
     private static final String DELETE_TAG_QUERY = "DELETE FROM gift_certificates.tag WHERE id = :id";
     private static final String SELECT_ALL_TAGS_QUERY = "SELECT id, name FROM gift_certificates.tag";
     private static final String SELECT_TAG_BY_ID_QUERY = "SELECT id, name FROM gift_certificates.tag WHERE id= :id";
-    private static final String SELECT_TAG_BY_NAME_QUERY = "SELECT id, name FROM gift_certificates.tag WHERE `name`=: name";
+    private static final String SELECT_TAG_BY_NAME_QUERY = "SELECT id, name FROM gift_certificates.tag WHERE `name`= :name";
     private static final String SELECT_TAG_BY_CERTIFICATE_ID_QUERY = "SELECT t.id, t.name FROM gift_certificates.tag t JOIN certificate_tag ct on t.id = ct.tag_id JOIN gift_certificate gc on gc.id = ct.certificate_id WHERE gc.id =:id";
 
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
@@ -38,7 +39,7 @@ public class TagsRepositoryImpl implements TagsRepository {
     public Optional<Tag> getById(Long id) {
         SqlParameterSource namedParameters = new MapSqlParameterSource("id", id);
         List<Tag> queryForObject = this.namedParameterJdbcTemplate.query(SELECT_TAG_BY_ID_QUERY, namedParameters, new BeanPropertyRowMapper<>(Tag.class));
-        if (queryForObject.size()!=1){
+        if (queryForObject.size() != 1) {
             return Optional.empty();
         }
         return Optional.ofNullable(queryForObject.get(0));
@@ -80,5 +81,23 @@ public class TagsRepositoryImpl implements TagsRepository {
     public List<Tag> getTagsByCertificateId(Long certificateId) {
         SqlParameterSource namedParameters = new MapSqlParameterSource("id", certificateId);
         return this.namedParameterJdbcTemplate.query(SELECT_TAG_BY_CERTIFICATE_ID_QUERY, namedParameters, new BeanPropertyRowMapper<>(Tag.class));
+    }
+
+    @Override
+    public Optional<Tag> getTagByName(String tagName) {
+        SqlParameterSource namedParameters = new MapSqlParameterSource("name", tagName);
+        List<Tag> queryForObject = this.namedParameterJdbcTemplate.query(SELECT_TAG_BY_NAME_QUERY, namedParameters, new BeanPropertyRowMapper<>(Tag.class));
+        if (queryForObject.size() != 1) {
+            return Optional.empty();
+        }
+        return Optional.ofNullable(queryForObject.get(0));
+
+    }
+
+    @Override
+    public boolean saveCertificateTag(Long tagId, Long certificateId) {
+        SqlParameterSource namedParameters = new MapSqlParameterSource("tagId", tagId).addValue("certificateId", certificateId);
+        return this.namedParameterJdbcTemplate.update(INSERT_TAG_CERTIFICATE_QUERY, namedParameters) != 0;
+
     }
 }

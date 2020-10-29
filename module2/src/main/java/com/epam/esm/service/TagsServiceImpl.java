@@ -63,5 +63,19 @@ public class TagsServiceImpl implements TagsService {
         return tagsRepository.getTagsByCertificateId(certificateId);
     }
 
+    @Override
+    public Optional<Tag> getTagByName(String tagName) {
+        return tagsRepository.getTagByName(tagName);
+    }
+
+    @Override
+    @Transactional
+    public boolean saveCertificateTag(Tag tag, Long certificateId) throws TagServiceException {
+        if (!getTagByName(tag.getName()).isPresent()) {
+            createTag(tag);
+        }
+        return tagsRepository.saveCertificateTag(tag.getId(),certificateId);
+    }
+
 
 }

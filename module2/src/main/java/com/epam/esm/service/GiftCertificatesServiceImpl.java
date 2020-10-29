@@ -2,16 +2,15 @@ package com.epam.esm.service;
 
 import com.epam.esm.dao.GiftCertificatesRepository;
 import com.epam.esm.entity.GiftCertificate;
+import com.epam.esm.entity.Tag;
 import com.epam.esm.exception.DaoSaveException;
 import com.epam.esm.exception.GiftCertificateServiceException;
+import com.epam.esm.exception.TagServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class GiftCertificatesServiceImpl implements GiftCertificatesService {
@@ -45,8 +44,15 @@ public class GiftCertificatesServiceImpl implements GiftCertificatesService {
     @Transactional
     public boolean createCertificate(GiftCertificate giftCertificate) throws GiftCertificateServiceException {
         try {
-            return giftCertificatesRepository.save(giftCertificate) > 0;
-        } catch (DaoSaveException e) {
+            Long certificateId = giftCertificatesRepository.save(giftCertificate);
+            Set<Tag> tags = giftCertificate.getTags();
+            if (!tags.isEmpty()){
+                for (Tag tag : tags) {
+                    tagsService.saveCertificateTag(tag, certificateId);
+                }
+            }
+            return certificateId > 0;
+        } catch (DaoSaveException | TagServiceException e) {
             throw new GiftCertificateServiceException("Couldn't save certificate");
         }
     }

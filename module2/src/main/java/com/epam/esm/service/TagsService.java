@@ -5,6 +5,8 @@ import com.epam.esm.exception.TagNotFoundException;
 import com.epam.esm.exception.TagServiceException;
 
 import java.util.List;
+import java.util.Optional;
+
 /**
  * interface that demonstrate business logic for tag domain
  */
@@ -46,4 +48,7 @@ public interface TagsService {
      * @return certificate tags
      */
     List<Tag> getTagsByCertificateId(Long certificateId);
+
+    Optional<Tag> getTagByName(String tagName);
+    boolean saveCertificateTag(Tag tag, Long certificateId) throws TagServiceException;
 }

@@ -16,6 +16,7 @@ import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 import javax.sql.DataSource;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.LinkedList;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -28,6 +29,7 @@ class GiftCertificatesServiceTest {
     @Mock
     GiftCertificatesRepository giftCertificatesRepository;
 
+    TagsService tagsService;
     GiftCertificatesService giftCertificatesService;
 
     GiftCertificate giftCertificate = new GiftCertificate(1L, "lala", "desk", new BigDecimal(12), LocalDate.now(), LocalDate.now(), 13);
@@ -41,12 +43,12 @@ class GiftCertificatesServiceTest {
                 .build();
         namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
         giftCertificatesRepository = Mockito.spy(new GiftCertificatesRepositoryImpl(namedParameterJdbcTemplate));
-        giftCertificatesService = new GiftCertificatesServiceImpl(giftCertificatesRepository);
+        giftCertificatesService = new GiftCertificatesServiceImpl(giftCertificatesRepository, tagsService);
     }
     @Test
     void whenGetAllExistingCertificates_thenReturnOneCertificate() {
         Mockito.when(giftCertificatesRepository.getAll()).thenReturn(new LinkedList<>());
-        assertEquals(0, giftCertificatesService.getAllCertificates().size());
+        assertEquals(0, giftCertificatesService.getAllCertificates(new HashMap<>()).size());
     }
 
     @Test

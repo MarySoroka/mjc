@@ -6,6 +6,8 @@ buildscript {
         junitVersion = '5.4.2';
         mockitoVersion = '3.5.15'
         h2DatabaseVersion = '1.4.200'
+        jacksonCoreVersion = '2.9.8'
+        jacksonDatatypeVersion = '2.11.3'
 
     }
 }
@@ -22,7 +24,7 @@ repositories {
 }
 
 dependencies {
-
+    compile 'javax.servlet:javax.servlet-api:3.1.0'
     compile "org.springframework:spring-core:${springBootVersion}"
     compile "org.springframework:spring-context:${springBootVersion}"
     compile "org.springframework:spring-web:${springBootVersion}"
@@ -30,6 +32,8 @@ dependencies {
     compile "org.springframework:spring-jdbc:${springBootVersion}"
     compile "com.zaxxer:HikariCP:${hikariCPVersion}"
     compile "mysql:mysql-connector-java:${mySqlConnectorVersion}"
+    compile "com.fasterxml.jackson.core:jackson-databind:${jacksonCoreVersion}"
+    compile "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${jacksonDatatypeVersion}"
 
     testImplementation "org.junit.jupiter:junit-jupiter:${junitVersion}"
     testImplementation "org.mockito:mockito-junit-jupiter:${mockitoVersion}"

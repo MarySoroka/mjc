@@ -28,6 +28,7 @@ public class GiftCertificate {
 
     }
 
+
     public Long getId() {
         return id;
     }

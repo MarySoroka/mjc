@@ -8,12 +8,20 @@ import com.epam.esm.service.TagsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+
+import java.util.List;
 
 @Controller
 @ComponentScan("com.epam.esm")
 
-@RequestMapping("/tags")
+@RequestMapping(value = "/tags")
 public class TagsController {
 
     private final TagsService tagsService;
@@ -24,12 +32,14 @@ public class TagsController {
     }
 
     @GetMapping()
-    public String getAllTags() {
-        tagsService.getAllTags();
-        return null;
+    @ResponseBody
+    public List<Tag> getAllTags() {
+        return tagsService.getAllTags();
+
     }
 
     @GetMapping("/{id}")
+    @ResponseBody
     public Tag getTagById(@PathVariable("id") Long id) throws TagControllerException {
         try {
             return tagsService.getTagById(id);

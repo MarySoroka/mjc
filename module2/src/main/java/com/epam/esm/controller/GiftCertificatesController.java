@@ -1,20 +1,25 @@
 package com.epam.esm.controller;
 
 import com.epam.esm.entity.GiftCertificate;
-import com.epam.esm.exception.*;
+import com.epam.esm.exception.GiftCertificateControllerException;
+import com.epam.esm.exception.GiftCertificateServiceException;
 import com.epam.esm.service.GiftCertificatesService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.ResourceBundle;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-@Controller
+@RestController
 @RequestMapping(value = "/certificates")
 public class GiftCertificatesController {
 
@@ -27,7 +32,6 @@ public class GiftCertificatesController {
 
 
     @GetMapping()
-    @ResponseBody
     public List<GiftCertificate> getAllCertificates(@RequestParam(required = false) String name,
                                                     @RequestParam(required = false) String sort,
                                                     @RequestParam(required = false) String order) {
@@ -41,7 +45,6 @@ public class GiftCertificatesController {
     }
 
     @GetMapping("/{id}")
-    @ResponseBody
     public GiftCertificate getCertificateById(@PathVariable("id") Long id) throws GiftCertificateControllerException {
         try {
             return giftCertificatesService.getCertificateById(id);
@@ -70,9 +73,5 @@ public class GiftCertificatesController {
     public void delete(@PathVariable("id") Long id) {
         giftCertificatesService.deleteCertificate(id);
     }
-    @ExceptionHandler({GiftCertificateServiceException.class, GiftCertificateControllerException.class, DaoSaveException.class, Exception.class})
-    @ResponseBody
-    public ResponseEntity<ExceptionResponse> handleException(Exception e) {
-        return new ResponseEntity<>(new ExceptionResponse(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR,HttpStatus.INTERNAL_SERVER_ERROR),HttpStatus.BAD_REQUEST);
-    }
+
 }

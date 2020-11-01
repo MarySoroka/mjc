@@ -29,5 +29,5 @@ CREATE TABLE IF NOT EXISTS `gift_certificates`.`certificate_tag` (
   `tag_id` BIGINT NOT NULL,
   `certificate_id` BIGINT NOT NULL,
   PRIMARY KEY (`tag_id`, `certificate_id`),
-  foreign key (`tag_id`) references `gift_certificates`.`tag`(`id`),
-  foreign key (`certificate_id`) references `gift_certificates`.`gift_certificate`(`id`))
+  foreign key (`tag_id`) references `gift_certificates`.`tag`(`id`) on delete cascade,
+  foreign key (`certificate_id`) references `gift_certificates`.`gift_certificate`(`id`)  on delete cascade)

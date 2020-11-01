@@ -1,73 +1,64 @@
 package com.epam.esm.service;
 
 
-import com.epam.esm.dao.TagsRepository;
-import com.epam.esm.dao.TagsRepositoryImpl;
-import com.epam.esm.entity.Tag;
-import com.epam.esm.exception.DaoSaveException;
-import com.epam.esm.exception.TagNotFoundException;
-import com.epam.esm.exception.TagServiceException;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
-
-import javax.sql.DataSource;
-import java.util.LinkedList;
-
+import static java.util.Optional.of;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
+import com.epam.esm.dao.TagsRepository;
+import com.epam.esm.entity.Tag;
+import com.epam.esm.exception.RepositoryDeleteException;
+import com.epam.esm.exception.RepositorySaveException;
+import com.epam.esm.exception.TagNotFoundException;
+import com.epam.esm.exception.TagServiceException;
+import java.util.LinkedList;
+import java.util.List;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+@ExtendWith(MockitoExtension.class)
 class TagsServiceTest {
 
-    @BeforeEach
-    public void setup() {
-        dataSource = new EmbeddedDatabaseBuilder().setType(EmbeddedDatabaseType.H2)
-                .generateUniqueName(true)
-                .addScript("classpath:database.sql")
-                .addScript("classpath:test-data.sql")
-                .build();
-        namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
-        tagsRepository = Mockito.spy(new TagsRepositoryImpl(namedParameterJdbcTemplate));
-        tagsService = new TagsServiceImpl(tagsRepository);
-    }
 
-    @Mock
-    NamedParameterJdbcTemplate namedParameterJdbcTemplate;
-    @Mock
-    DataSource dataSource;
-    @Mock
-    TagsRepository tagsRepository;
+  @Mock
+  private TagsRepository tagsRepository;
 
-    private TagsService tagsService;
+  @InjectMocks
+  private TagsServiceImpl tagsService;
 
-    @Test
-    void whenMockGetAllTags_thenReturnEmptyList() {
-        Mockito.when(tagsRepository.getAll()).thenReturn(new LinkedList<>());
-        assertEquals(0, tagsService.getAllTags().size());
-    }
+  @Test
+  void whenMockGetAllTagsThenReturnEmptyList() {
+    when(tagsRepository.getAll()).thenReturn(new LinkedList<>());
+    List<Tag> tags = tagsService.getAllTags();
+    assertEquals(0, tags.size());
+  }
 
-    @Test
-    void whenMockGetTagById_thenReturnTag() throws TagNotFoundException {
-        Mockito.when(tagsRepository.getById(Mockito.anyLong())).thenReturn(java.util.Optional.of(new Tag()));
-        assertNotNull(tagsService.getTagById(1L));
-    }
+  @Test
+  void whenMockGetTagByIdThenReturnTag() throws TagNotFoundException {
+    when(tagsRepository.getById(anyLong())).thenReturn(of(new Tag()));
+    Tag tagById = tagsService.getTagById(1L);
+    assertNotNull(tagById);
+  }
 
-    @Test
-    void whenMockCreateTag_thenReturnId() throws DaoSaveException, TagServiceException {
-        Tag tag = new Tag(1L, "name");
-        Mockito.when(tagsRepository.save(tag)).thenReturn(1L);
-        tagsService.createTag(tag);
-        assertEquals(1L, tag.getId());
-    }
+  @Test
+  void whenMockCreateTagThenReturnId() throws RepositorySaveException, TagServiceException {
+    Tag tag = new Tag(1L, "name");
+    when(tagsRepository.save(tag)).thenReturn(1L);
+    tagsService.createTag(tag);
+    assertEquals(1L, tag.getId());
+  }
 
-    @Test
-    void whenMockDeleteTag_thenReturnTrue() throws TagServiceException {
-        Mockito.when(tagsRepository.delete(Mockito.anyLong())).thenReturn(true);
-        tagsService.deleteTag(1L);
-        Mockito.verify(tagsRepository).delete(Mockito.anyLong());
-    }
+  @Test
+  void whenMockDeleteTagThenReturnTrue() throws TagServiceException, RepositoryDeleteException {
+    doNothing().when(tagsRepository).delete(anyLong());
+    tagsService.deleteTag(1L);
+    verify(tagsRepository).delete(anyLong());
+  }
 }

@@ -1,63 +1,75 @@
 package com.epam.esm.dao;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import com.epam.esm.entity.Tag;
-import com.epam.esm.exception.DaoSaveException;
-import org.junit.jupiter.api.BeforeEach;
+import com.epam.esm.exception.RepositoryDeleteException;
+import com.epam.esm.exception.RepositorySaveException;
+import com.epam.esm.exception.TagNotFoundException;
+import java.util.List;
+import java.util.Optional;
+import javax.sql.DataSource;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 
-import javax.sql.DataSource;
-
-import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.*;
-
 class TagsRepositoryTest {
 
-    private TagsRepository tagsRepository;
+  private static TagsRepository tagsRepository;
 
-    @BeforeEach
-    public void setup() {
-        DataSource dataSource = new EmbeddedDatabaseBuilder().setType(EmbeddedDatabaseType.H2)
-                .generateUniqueName(true)
-                .addScript("classpath:database.sql")
-                .addScript("classpath:test-data.sql")
-                .build();
-        NamedParameterJdbcTemplate namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
-        tagsRepository = new TagsRepositoryImpl(namedParameterJdbcTemplate);
-    }
+  @BeforeAll
+  public static void setup() {
+    DataSource dataSource = new EmbeddedDatabaseBuilder().setType(EmbeddedDatabaseType.H2)
+        .generateUniqueName(true)
+        .addScript("classpath:database.sql")
+        .addScript("classpath:test-data.sql")
+        .build();
+    NamedParameterJdbcTemplate namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(
+        dataSource);
+    tagsRepository = new TagsRepositoryImpl(namedParameterJdbcTemplate);
+  }
 
-    @Test
-    void whenGetByIdExistingTagFromDatabase_thenReturnCorrectTag() {
-       assertTrue(tagsRepository.getById(3L).isPresent());
-       assertEquals("la3", tagsRepository.getById(3L).get().getName());
-    }
-    @Test
-    void whenGetByIdNotExistingTagFromDatabase_thenReturnOptionalEmpty() {
-        Optional<Tag> tagsRepositoryById = tagsRepository.getById(10L);
-        assertFalse(tagsRepositoryById.isPresent());
-    }
+  @Test
+  void whenGetByIdExistingTagFromDatabaseThenReturnCorrectTag() {
+    assertTrue(tagsRepository.getById(3L).isPresent());
+    Optional<Tag> tagsRepositoryById = tagsRepository.getById(3L);
+    assertTrue(tagsRepositoryById.isPresent());
+    Tag tag = tagsRepositoryById.get();
+    assertEquals("la3", tag.getName());
+  }
 
-    @Test
-    void whenGetAllFromDatabase_thenReturnCorrectTagsCount() {
-        assertEquals(5, tagsRepository.getAll().size());
-    }
+  @Test
+  void whenGetByIdNotExistingTagFromDatabaseThenReturnOptionalEmpty() {
+    Optional<Tag> tagsRepositoryById = tagsRepository.getById(10L);
+    assertFalse(tagsRepositoryById.isPresent());
+  }
 
-    @Test
-    void whenDeleteExistingTag_thenReturnTrue() {
-        assertTrue(tagsRepository.delete(1L));
-    }
-    @Test
-    void whenDeleteNotExistingTag_thenReturnFalse() {
-        assertFalse(tagsRepository.delete(8L));
-    }
+  @Test
+  void whenGetAllFromDatabaseThenReturnCorrectTagsCount() {
+    List<Tag> tags = tagsRepository.getAll();
+    assertEquals(5, tags.size());
+  }
 
-    @Test
-    void whenSaveTagCorrect_thenReturnId() throws DaoSaveException {
-        Tag tag = new Tag(6L, "tag");
-        assertEquals(6L, tagsRepository.save(tag));
-    }
+  @Test
+  void whenDeleteExistingTagThenReturnTrue() throws RepositoryDeleteException {
+    tagsRepository.delete(1L);
+    assertDoesNotThrow(() -> tagsRepository.getById(1L));
+  }
+
+  @Test
+  void whenDeleteNotExistingTagThenReturnFalse() {
+    assertThrows(RepositoryDeleteException.class, () -> tagsRepository.delete(8L));
+  }
+
+  @Test
+  void whenSaveTagCorrectThenReturnId() throws RepositorySaveException {
+    Tag tag = new Tag(null, "tag");
+    assertEquals(6L, tagsRepository.save(tag));
+  }
 }

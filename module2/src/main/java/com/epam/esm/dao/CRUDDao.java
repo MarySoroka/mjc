@@ -1,7 +1,9 @@
 package com.epam.esm.dao;
 
-import com.epam.esm.exception.DaoSaveException;
+import com.epam.esm.exception.RepositoryDeleteException;
+import com.epam.esm.exception.RepositorySaveException;
 
+import com.epam.esm.exception.RepositoryUpdateException;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,9 +31,8 @@ public interface CRUDDao<E, K> {
      * delete entity by key parameter
      *
      * @param k key
-     * @return if entity has been found and deleted - true, else false
      */
-    boolean delete(K k);
+    void delete(K k) throws RepositoryDeleteException;
 
     /**
      * method update entity using new values in e
@@ -39,15 +40,15 @@ public interface CRUDDao<E, K> {
      * @param e new values for entity
      * @return if entity has been found and updated - true, else false
      */
-    boolean update(E e);
+    void update(E e) throws RepositoryUpdateException;
 
     /**
      * method save entity
      *
      * @param e entity, that should be save
      * @return if entity has been saved return generated id
-     * @throws DaoSaveException if generated id equals null
+     * @throws RepositorySaveException if generated id equals null
      */
-    K save(E e) throws DaoSaveException;
+    K save(E e) throws RepositorySaveException;
 
 }

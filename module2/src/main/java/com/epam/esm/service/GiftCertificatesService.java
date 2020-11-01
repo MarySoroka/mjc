@@ -1,6 +1,7 @@
 package com.epam.esm.service;
 
 import com.epam.esm.entity.GiftCertificate;
+import com.epam.esm.exception.GiftCertificateNotFoundException;
 import com.epam.esm.exception.GiftCertificateServiceException;
 
 import java.util.List;
@@ -20,7 +21,8 @@ public interface GiftCertificatesService {
      * @param id certificate id, which is using to find entity
      * @return entity or Optional.empty(), if entity is not found by this key
      */
-    GiftCertificate getCertificateById(Long id) throws GiftCertificateServiceException;
+    GiftCertificate getCertificateById(Long id)
+        throws  GiftCertificateNotFoundException;
 
     /**
      * method save entity
@@ -29,15 +31,14 @@ public interface GiftCertificatesService {
      * @return if entity has been saved return generated id
      * @throws GiftCertificateServiceException if generated id equals null
      */
-    boolean createCertificate(GiftCertificate giftCertificate) throws GiftCertificateServiceException;
+    Long createCertificate(GiftCertificate giftCertificate) throws GiftCertificateServiceException;
 
     /**
      * delete entity by key parameter
      *
      * @param certificateId certificate id
-     * @return if entity has been found and deleted - true, else false
      */
-    boolean deleteCertificate(Long certificateId);
+    void deleteCertificate(Long certificateId) throws GiftCertificateServiceException;
 
     /**
      * method update entity using new values in giftCertificate
@@ -45,7 +46,8 @@ public interface GiftCertificatesService {
      * @param giftCertificate new values for entity
      * @return if entity has been found and updated - true, else false
      */
-    boolean updateCertificate(GiftCertificate giftCertificate);
+    void updateCertificate(GiftCertificate giftCertificate)
+        throws GiftCertificateServiceException;
 
     List<GiftCertificate> getCertificateByTagName(String tagName);
 }

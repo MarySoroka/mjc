@@ -32,7 +32,7 @@ public interface TagsService {
      * @return if entity has been saved return generated id
      * @throws TagServiceException if generated id equals null
      */
-    void createTag(Tag tag) throws TagServiceException;
+    Long createTag(Tag tag) throws TagServiceException;
 
     /**
      * delete entity by key parameter
@@ -50,5 +50,6 @@ public interface TagsService {
     List<Tag> getTagsByCertificateId(Long certificateId);
 
     Optional<Tag> getTagByName(String tagName);
-    boolean saveCertificateTag(Tag tag, Long certificateId) throws TagServiceException;
+    void deleteTagForCertificate(Long tagId, Long certificateId) throws TagServiceException;
+    Long saveCertificateTag(Tag tag, Long certificateId) throws TagServiceException;
 }

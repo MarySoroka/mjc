@@ -39,7 +39,7 @@ public class GiftCertificatesRepositoryImpl implements GiftCertificatesRepositor
 
   @Override
   public Optional<GiftCertificate> getById(Long id) {
-    Map<String, String> namedParameters = Collections.singletonMap("id", String.valueOf(id));
+    SqlParameterSource namedParameters = new MapSqlParameterSource("id", id);
     List<GiftCertificate> queryForObject = this.namedParameterJdbcTemplate
         .query(SELECT_CERTIFICATE_BY_ID_QUERY, namedParameters,
             new BeanPropertyRowMapper<>(GiftCertificate.class));
@@ -92,7 +92,7 @@ public class GiftCertificatesRepositoryImpl implements GiftCertificatesRepositor
 
   @Override
   public List<GiftCertificate> getGiftCertificatesByTagName(String tagName) {
-    Map<String, String> namedParameters = Collections.singletonMap("name", tagName);
+    SqlParameterSource namedParameters = new MapSqlParameterSource("name", tagName);
     return this.namedParameterJdbcTemplate
         .query(SELECT_CERTIFICATE_BY_TAG_NAME_QUERY, namedParameters,
             new BeanPropertyRowMapper<>(GiftCertificate.class));

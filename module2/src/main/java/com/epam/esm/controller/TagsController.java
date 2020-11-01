@@ -31,7 +31,6 @@ public class TagsController {
     @GetMapping
     public List<Tag> getAllTags() {
         return tagsService.getAllTags();
-
     }
 
     @GetMapping("/{id}")
@@ -39,7 +38,7 @@ public class TagsController {
         try {
             return tagsService.getTagById(id);
         } catch (TagNotFoundException e) {
-            throw new TagControllerException(e);
+            throw new TagControllerException("Controller exception : Couldn't get by id tag", e);
         }
 
     }
@@ -52,7 +51,7 @@ public class TagsController {
                 "Create tag entity successfully. Id :" + tagsService.createTag(tag),
                 HttpStatus.CREATED);
         } catch (TagServiceException e) {
-            throw new TagControllerException(e);
+            throw new TagControllerException("Controller exception : Couldn't create tag", e);
         }
 
     }
@@ -65,7 +64,7 @@ public class TagsController {
             return new ResponseEntity<>("Delete tag entity successfully. Id :" + id,
                 HttpStatus.OK);
         } catch (TagServiceException e) {
-            throw new TagControllerException(e);
+            throw new TagControllerException("Controller exception : Couldn't delete tag", e);
         }
 
     }

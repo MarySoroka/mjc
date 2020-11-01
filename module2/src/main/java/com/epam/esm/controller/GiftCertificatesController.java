@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -52,7 +53,7 @@ public class GiftCertificatesController {
     try {
       return giftCertificatesService.getCertificateById(id);
     } catch (GiftCertificateNotFoundException e) {
-      throw new GiftCertificateControllerException(e.getMessage());
+      throw new GiftCertificateControllerException("Controller exception : Couldn't get by id certificate", e);
     }
   }
 
@@ -67,19 +68,20 @@ public class GiftCertificatesController {
           HttpStatus.CREATED);
 
     } catch (GiftCertificateServiceException e) {
-      throw new GiftCertificateControllerException(e.getMessage());
+      throw new GiftCertificateControllerException("Controller exception : Couldn't create certificate", e);
     }
 
   }
 
   @PatchMapping("/{id}")
-  public GiftCertificate update(@RequestBody GiftCertificate giftCertificate)
+  public ResponseEntity<String> update(@RequestBody GiftCertificate giftCertificate)
       throws GiftCertificateControllerException {
     try {
       giftCertificatesService.updateCertificate(giftCertificate);
-      return giftCertificatesService.getCertificateById(giftCertificate.getId());
-    } catch (GiftCertificateServiceException | GiftCertificateNotFoundException e) {
-      throw new GiftCertificateControllerException(e.getMessage());
+      return new ResponseEntity<>("Update gift certificate entity successfully. Id :" + giftCertificate.getId(),
+          HttpStatus.OK);
+    } catch (GiftCertificateServiceException e) {
+      throw new GiftCertificateControllerException("Controller exception : Couldn't update certificate", e);
     }
   }
 
@@ -91,9 +93,10 @@ public class GiftCertificatesController {
       return new ResponseEntity<>("Delete gift certificate entity successfully. Id :" + id,
           HttpStatus.OK);
     } catch (GiftCertificateServiceException e) {
-      throw new GiftCertificateControllerException(e.getMessage());
+      throw new GiftCertificateControllerException("Controller exception : Couldn't delete certificate",e);
     }
 
   }
+
 
 }

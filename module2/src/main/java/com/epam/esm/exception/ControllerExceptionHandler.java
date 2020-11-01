@@ -22,10 +22,22 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
     ExceptionResponse exceptionResponse = new ExceptionResponse(ex.getMessage(),"404");
     return new ResponseEntity<>(exceptionResponse, HttpStatus.NOT_FOUND);
   }
+  @ExceptionHandler(RepositoryDeleteException.class)
+  public ResponseEntity<Object> handleTagNotFoundException(
+      RepositoryDeleteException ex, WebRequest request) {
+    ExceptionResponse exceptionResponse = new ExceptionResponse(ex.getMessage(),"403");
+    return new ResponseEntity<>(exceptionResponse, HttpStatus.FORBIDDEN);
+  }
+  @ExceptionHandler(RepositoryUpdateException.class)
+  public ResponseEntity<Object> handleTagNotFoundException(
+      RepositoryUpdateException ex, WebRequest request) {
+    ExceptionResponse exceptionResponse = new ExceptionResponse(ex.getMessage(),"400");
+    return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
+  }
 
-  @ExceptionHandler(DaoSaveException.class)
+  @ExceptionHandler(RepositorySaveException.class)
   public ResponseEntity<Object> handleDaoSaveException(
-      DaoSaveException ex, WebRequest request) {
+      RepositorySaveException ex, WebRequest request) {
     ExceptionResponse exceptionResponse = new ExceptionResponse(ex.getMessage(),"414");
     return new ResponseEntity<>(exceptionResponse, HttpStatus.UNPROCESSABLE_ENTITY);
   }

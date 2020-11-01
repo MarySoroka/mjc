@@ -25,21 +25,21 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
   @ExceptionHandler(RepositoryDeleteException.class)
   public ResponseEntity<Object> handleTagNotFoundException(
       RepositoryDeleteException ex, WebRequest request) {
-    ExceptionResponse exceptionResponse = new ExceptionResponse(ex.getMessage(),"403");
-    return new ResponseEntity<>(exceptionResponse, HttpStatus.FORBIDDEN);
+    ExceptionResponse exceptionResponse = new ExceptionResponse(ex.getMessage(),"500");
+    return new ResponseEntity<>(exceptionResponse, HttpStatus.INTERNAL_SERVER_ERROR);
   }
   @ExceptionHandler(RepositoryUpdateException.class)
   public ResponseEntity<Object> handleTagNotFoundException(
       RepositoryUpdateException ex, WebRequest request) {
-    ExceptionResponse exceptionResponse = new ExceptionResponse(ex.getMessage(),"400");
-    return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
+    ExceptionResponse exceptionResponse = new ExceptionResponse(ex.getMessage(),"500");
+    return new ResponseEntity<>(exceptionResponse, HttpStatus.INTERNAL_SERVER_ERROR);
   }
 
   @ExceptionHandler(RepositorySaveException.class)
   public ResponseEntity<Object> handleDaoSaveException(
       RepositorySaveException ex, WebRequest request) {
-    ExceptionResponse exceptionResponse = new ExceptionResponse(ex.getMessage(),"414");
-    return new ResponseEntity<>(exceptionResponse, HttpStatus.UNPROCESSABLE_ENTITY);
+    ExceptionResponse exceptionResponse = new ExceptionResponse(ex.getMessage(),"500");
+    return new ResponseEntity<>(exceptionResponse, HttpStatus.INTERNAL_SERVER_ERROR);
   }
   @ExceptionHandler(Exception.class)
   public ResponseEntity<Object> handleNotWatchedException(

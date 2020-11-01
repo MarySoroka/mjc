@@ -1,19 +1,10 @@
 package com.epam.esm.exception;
 
-import org.springframework.http.HttpStatus;
+public class ExceptionResponse {
 
-public class ExceptionResponse  {
     private String message;
-    private HttpStatus errorCode;
-    private HttpStatus status;
+    private String errorCode;
 
-    public HttpStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(HttpStatus status) {
-        this.status = status;
-    }
 
     public String getMessage() {
         return message;
@@ -24,17 +15,17 @@ public class ExceptionResponse  {
     }
 
 
-    public ExceptionResponse(String message, HttpStatus errorCode, HttpStatus status) {
+    public ExceptionResponse(String message, String errorCode) {
         this.message = message;
         this.errorCode = errorCode;
-        this.status = status;
+
     }
 
-    public HttpStatus getErrorCode() {
+    public String getErrorCode() {
         return errorCode;
     }
 
-    public void setErrorCode(HttpStatus errorCode) {
+    public void setErrorCode(String errorCode) {
         this.errorCode = errorCode;
     }
 }

@@ -58,10 +58,14 @@ public class GiftCertificatesController {
 
 
   @PostMapping
-  public Long createGiftCertificate(@RequestBody GiftCertificate giftCertificate)
+  public ResponseEntity<String> createGiftCertificate(@RequestBody GiftCertificate giftCertificate)
       throws GiftCertificateControllerException {
     try {
-      return giftCertificatesService.createCertificate(giftCertificate);
+      return new ResponseEntity<>(
+          "Create gift certificate entity successfully. Id :" + giftCertificatesService
+              .createCertificate(giftCertificate),
+          HttpStatus.CREATED);
+
     } catch (GiftCertificateServiceException e) {
       throw new GiftCertificateControllerException(e.getMessage());
     }

@@ -46,9 +46,11 @@ public class TagsController {
 
 
     @PostMapping
-    public Long create(@RequestBody Tag tag) throws TagControllerException {
+    public ResponseEntity<String> create(@RequestBody Tag tag) throws TagControllerException {
         try {
-            return tagsService.createTag(tag);
+            return new ResponseEntity<>(
+                "Create tag entity successfully. Id :" + tagsService.createTag(tag),
+                HttpStatus.CREATED);
         } catch (TagServiceException e) {
             throw new TagControllerException(e);
         }

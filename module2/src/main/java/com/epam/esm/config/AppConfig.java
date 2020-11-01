@@ -23,7 +23,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @PropertySource("classpath:database.properties")
 @ComponentScan("com.epam.esm")
 @EnableWebMvc
-public class DataSourceConfig implements WebMvcConfigurer {
+public class AppConfig implements WebMvcConfigurer {
 
   @Value("${database.url}")
   private String url;

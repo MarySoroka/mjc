@@ -65,7 +65,7 @@ public class GiftCertificatesServiceImpl implements GiftCertificatesService {
       giftCertificate.setCreateDate(currentDateTime);
       Long certificateId = giftCertificatesRepository.save(giftCertificate);
       Set<Tag> tags = giftCertificate.getTags();
-      if (!tags.isEmpty()) {
+      if (tags!=null && !tags.isEmpty()) {
         for (Tag tag : tags) {
           tagsService.saveCertificateTag(tag, certificateId);
         }

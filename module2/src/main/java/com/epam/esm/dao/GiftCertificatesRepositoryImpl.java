@@ -83,7 +83,7 @@ public class GiftCertificatesRepositoryImpl implements GiftCertificatesRepositor
   public void update(GiftCertificate giftCertificate) throws RepositoryUpdateException {
     SqlParameterSource namedParameters = new BeanPropertySqlParameterSource(giftCertificate);
     int isUpdate = namedParameterJdbcTemplate.update(UPDATE_CERTIFICATES_QUERY, namedParameters);
-    if (isUpdate <= 0) {
+    if (isUpdate == 0) {
       throw new RepositoryUpdateException(
           "Repository exception: Couldn't update gift certificate with id : " + giftCertificate
               .getId());

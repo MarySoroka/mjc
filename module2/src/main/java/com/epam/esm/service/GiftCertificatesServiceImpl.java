@@ -100,11 +100,12 @@ public class GiftCertificatesServiceImpl implements GiftCertificatesService {
         updateCertificateFields(certificateById, giftCertificate);
         giftCertificatesRepository.update(giftCertificate);
       }
-      if (!giftCertificate.getTags().isEmpty()) {
+      if (giftCertificate.getTags()!=null && !giftCertificate.getTags().isEmpty()) {
         for (Tag tag : giftCertificate.getTags()) {
-          tagsService.saveCertificateTag(tag, giftCertificate.getId());
+          if(!certificateById.getTags().remove(tag)){
+            tagsService.saveCertificateTag(tag, giftCertificate.getId());
+          }
         }
-        certificateById.getTags().removeAll(giftCertificate.getTags());
         for (Tag tag : certificateById.getTags()) {
           tagsService.deleteTagForCertificate(tag.getId(), certificateById.getId());
         }
@@ -133,18 +134,18 @@ public class GiftCertificatesServiceImpl implements GiftCertificatesService {
   private void updateCertificateFields(GiftCertificate certificate,
       GiftCertificate updateCertificate) {
     updateCertificate
-        .setId(updateCertificate.getId() == null ? updateCertificate.getId() : certificate.getId());
+        .setId(updateCertificate.getId() != null ? updateCertificate.getId() : certificate.getId());
     updateCertificate.setCreateDate(
-        updateCertificate.getCreateDate() == null ? updateCertificate.getCreateDate()
+        updateCertificate.getCreateDate() != null ? updateCertificate.getCreateDate()
             : certificate.getCreateDate());
     updateCertificate.setDescription(
-        updateCertificate.getDescription() == null ? updateCertificate.getDescription()
+        updateCertificate.getDescription() != null ? updateCertificate.getDescription()
             : certificate.getDescription());
     updateCertificate.setDuration(
-        updateCertificate.getDuration() == null ? updateCertificate.getDuration()
+        updateCertificate.getDuration() != null ? updateCertificate.getDuration()
             : certificate.getDuration());
     updateCertificate.setLastUpdateDate(ServiceUtils.getCurrentDateTime());
-    updateCertificate.setPrice(updateCertificate.getPrice() == null ? updateCertificate.getPrice()
+    updateCertificate.setPrice(updateCertificate.getPrice() != null ? updateCertificate.getPrice()
         : certificate.getPrice());
   }
 }

@@ -50,7 +50,9 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
   protected ResponseEntity<Object> handleMethodArgumentTypeMismatch(
       MethodArgumentTypeMismatchException ex,
       WebRequest request) {
-    ExceptionResponse exceptionResponse = new ExceptionResponse("Entity fields type mismatch",
+    ExceptionResponse exceptionResponse = new ExceptionResponse(
+        ex.getMessage() == null ? "Entity fields type mismatch" :
+            ex.getMessage(),
         "400");
     return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
   }

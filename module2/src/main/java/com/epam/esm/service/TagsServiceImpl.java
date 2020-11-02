@@ -84,10 +84,12 @@ public class TagsServiceImpl implements TagsService {
   @Transactional
   public Long saveCertificateTag(Tag tag, Long certificateId) throws TagServiceException {
     try {
-      if (!getTagByName(tag.getName()).isPresent()) {
+      Optional<Tag> tagByName = getTagByName(tag.getName());
+      if (!tagByName.isPresent()) {
         createTag(tag);
+        return tagsRepository.saveCertificateTag(tag.getId(), certificateId);
       }
-      return tagsRepository.saveCertificateTag(tag.getId(), certificateId);
+      return tagsRepository.saveCertificateTag(tagByName.get().getId(), certificateId);
     } catch (RepositorySaveException e) {
       throw new TagServiceException(
           "Service exception : Couldn't save certificate tag. Certificate id " + certificateId);

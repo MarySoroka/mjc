@@ -12,6 +12,9 @@ public class ServiceUtils {
   private ServiceUtils() {
   }
 
+  /**
+   * @return current date in iso 8601 format
+   */
   public static LocalDateTime getCurrentDateTime() {
     TimeZone tz = TimeZone.getTimeZone("UTC");
     DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm'Z'");

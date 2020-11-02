@@ -30,11 +30,21 @@ public class TagsController {
     this.tagsService = tagsService;
   }
 
+  /**
+   * @return all tags from database
+   */
   @GetMapping
   public ResponseEntity<List<Tag>> getAllTags() {
     return new ResponseEntity<>(tagsService.getAllTags(), HttpStatus.OK);
   }
 
+  /**
+   * method find tag by id
+   *
+   * @param id tag id
+   * @return tag
+   * @throws ControllerEntityNotFoundException if tag was not found
+   */
   @GetMapping("/{id}")
   public ResponseEntity<Tag> getTagById(@PathVariable("id") Long id)
       throws ControllerEntityNotFoundException {
@@ -48,7 +58,14 @@ public class TagsController {
 
   }
 
-
+  /**
+   * create tag by ResponseBody parameters
+   *
+   * @param tag ResponseBody tag representation
+   * @return created tag
+   * @throws ControllerSaveEntityException     if tag was not created
+   * @throws ControllerEntityNotFoundException if tag was not found
+   */
   @PostMapping
   public ResponseEntity<Tag> create(@RequestBody Tag tag)
       throws ControllerSaveEntityException, ControllerEntityNotFoundException {
@@ -64,7 +81,13 @@ public class TagsController {
 
   }
 
-
+  /**
+   * method delete tag by id
+   *
+   * @param id tag id
+   * @return HTTPStatus.OK
+   * @throws ControllerEntityDeleteException if tag was not deleted
+   */
   @DeleteMapping("/{id}")
   public ResponseEntity<HttpStatus> delete(@PathVariable("id") Long id)
       throws ControllerEntityDeleteException {

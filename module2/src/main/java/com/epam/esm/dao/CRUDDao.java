@@ -38,7 +38,6 @@ public interface CRUDDao<E, K> {
      * method update entity using new values in e
      *
      * @param e new values for entity
-     * @return if entity has been found and updated - true, else false
      */
     void update(E e) throws RepositoryUpdateException;
 

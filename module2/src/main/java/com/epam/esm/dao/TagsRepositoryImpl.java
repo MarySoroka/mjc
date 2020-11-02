@@ -105,7 +105,7 @@ public class TagsRepositoryImpl implements TagsRepository {
   }
 
   @Override
-  public Long saveCertificateTag(Long tagId, Long certificateId) throws RepositorySaveException {
+  public void saveCertificateTag(Long tagId, Long certificateId) throws RepositorySaveException {
     SqlParameterSource namedParameters = new MapSqlParameterSource("tagId", tagId)
         .addValue("certificateId", certificateId);
     int update = this.namedParameterJdbcTemplate
@@ -113,7 +113,6 @@ public class TagsRepositoryImpl implements TagsRepository {
     if (update == 0){
       throw  new RepositorySaveException("Repository exception: Couldn't save certificate tag. Tag id :"+ tagId);
     }
-    return (long) update;
   }
 
   @Override

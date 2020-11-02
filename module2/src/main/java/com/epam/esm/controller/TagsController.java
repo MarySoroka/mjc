@@ -1,7 +1,9 @@
 package com.epam.esm.controller;
 
 import com.epam.esm.entity.Tag;
-import com.epam.esm.exception.TagControllerException;
+import com.epam.esm.exception.ControllerEntityDeleteException;
+import com.epam.esm.exception.ControllerEntityNotFoundException;
+import com.epam.esm.exception.ControllerSaveEntityException;
 import com.epam.esm.exception.TagNotFoundException;
 import com.epam.esm.exception.TagServiceException;
 import com.epam.esm.service.TagsService;
@@ -21,52 +23,58 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(value = "/tags")
 public class TagsController {
 
-    private final TagsService tagsService;
+  private final TagsService tagsService;
 
-    @Autowired
-    public TagsController(TagsService tagsService) {
-        this.tagsService = tagsService;
+  @Autowired
+  public TagsController(TagsService tagsService) {
+    this.tagsService = tagsService;
+  }
+
+  @GetMapping
+  public ResponseEntity<List<Tag>> getAllTags() {
+    return new ResponseEntity<>(tagsService.getAllTags(), HttpStatus.OK);
+  }
+
+  @GetMapping("/{id}")
+  public ResponseEntity<Tag> getTagById(@PathVariable("id") Long id)
+      throws ControllerEntityNotFoundException {
+    try {
+      Tag tagById = tagsService.getTagById(id);
+      return new ResponseEntity<>(tagById, HttpStatus.OK);
+    } catch (TagNotFoundException e) {
+      throw new ControllerEntityNotFoundException("Controller exception : Couldn't get by id tag",
+          e);
     }
 
-    @GetMapping
-    public List<Tag> getAllTags() {
-        return tagsService.getAllTags();
+  }
+
+
+  @PostMapping
+  public ResponseEntity<Tag> create(@RequestBody Tag tag)
+      throws ControllerSaveEntityException, ControllerEntityNotFoundException {
+    try {
+      Long tagId = tagsService.createTag(tag);
+      Tag tagById = tagsService.getTagById(tagId);
+      return new ResponseEntity<>(tagById, HttpStatus.CREATED);
+    } catch (TagServiceException e) {
+      throw new ControllerSaveEntityException("Controller exception : Couldn't create tag", e);
+    } catch (TagNotFoundException e) {
+      throw new ControllerEntityNotFoundException("Controller exception : Couldn't find tag", e);
     }
 
-    @GetMapping("/{id}")
-    public Tag getTagById(@PathVariable("id") Long id) throws TagControllerException {
-        try {
-            return tagsService.getTagById(id);
-        } catch (TagNotFoundException e) {
-            throw new TagControllerException("Controller exception : Couldn't get by id tag", e);
-        }
+  }
 
+
+  @DeleteMapping("/{id}")
+  public ResponseEntity<HttpStatus> delete(@PathVariable("id") Long id)
+      throws ControllerEntityDeleteException {
+    try {
+      tagsService.deleteTag(id);
+      return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    } catch (TagServiceException e) {
+      throw new ControllerEntityDeleteException("Controller exception : Couldn't delete tag", e);
     }
 
-
-    @PostMapping
-    public ResponseEntity<String> create(@RequestBody Tag tag) throws TagControllerException {
-        try {
-            return new ResponseEntity<>(
-                "Create tag entity successfully. Id :" + tagsService.createTag(tag),
-                HttpStatus.CREATED);
-        } catch (TagServiceException e) {
-            throw new TagControllerException("Controller exception : Couldn't create tag", e);
-        }
-
-    }
-
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<String> delete(@PathVariable("id") Long id) throws TagControllerException {
-        try {
-            tagsService.deleteTag(id);
-            return new ResponseEntity<>("Delete tag entity successfully. Id :" + id,
-                HttpStatus.OK);
-        } catch (TagServiceException e) {
-            throw new TagControllerException("Controller exception : Couldn't delete tag", e);
-        }
-
-    }
+  }
 
 }

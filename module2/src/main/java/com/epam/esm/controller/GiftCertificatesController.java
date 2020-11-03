@@ -54,9 +54,6 @@ public class GiftCertificatesController {
     queryParams.computeIfAbsent("sort", val -> sort);
     queryParams.computeIfAbsent("order", val -> order);
     List<GiftCertificate> allCertificates = giftCertificatesService.getAllCertificates(queryParams);
-    if (allCertificates.isEmpty()) {
-      return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    }
     return new ResponseEntity<>(allCertificates,
         HttpStatus.OK);
 

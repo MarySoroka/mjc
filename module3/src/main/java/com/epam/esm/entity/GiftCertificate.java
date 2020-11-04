@@ -6,14 +6,15 @@ import java.util.Objects;
 import java.util.Set;
 
 public class GiftCertificate {
-    private Long id;
-    private String name;
-    private String description;
-    private BigDecimal price;
-    private LocalDateTime createDate;
-    private LocalDateTime lastUpdateDate;
-    private Integer duration;
-    private Set<Tag> tags;
+
+  private Long id;
+  private String name;
+  private String description;
+  private BigDecimal price;
+  private LocalDateTime createDate;
+  private LocalDateTime lastUpdateDate;
+  private Integer duration;
+  private Set<Tag> tags;
 
   public GiftCertificate(Long id, String name, String description, BigDecimal price,
       LocalDateTime createDate, LocalDateTime lastUpdateDate, Integer duration) {
@@ -28,7 +29,7 @@ public class GiftCertificate {
 
   public GiftCertificate() {
 
-    }
+  }
 
   @Override
   public boolean equals(Object o) {
@@ -54,54 +55,53 @@ public class GiftCertificate {
   }
 
   public Long getId() {
-        return id;
-    }
+    return id;
+  }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+  public void setId(Long id) {
+    this.id = id;
+  }
 
-    public String getName() {
-        return name;
-    }
+  public String getName() {
+    return name;
+  }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+  public void setName(String name) {
+    this.name = name;
+  }
 
-    public String getDescription() {
-        return description;
-    }
+  public String getDescription() {
+    return description;
+  }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+  public void setDescription(String description) {
+    this.description = description;
+  }
 
-    public BigDecimal getPrice() {
-        return price;
-    }
+  public BigDecimal getPrice() {
+    return price;
+  }
 
-    public void setPrice(BigDecimal price) {
-        this.price = price;
-    }
+  public void setPrice(BigDecimal price) {
+    this.price = price;
+  }
 
 
+  public Integer getDuration() {
+    return duration;
+  }
 
-    public Integer getDuration() {
-        return duration;
-    }
+  public void setDuration(Integer duration) {
+    this.duration = duration;
+  }
 
-    public void setDuration(Integer duration) {
-        this.duration = duration;
-    }
+  public Set<Tag> getTags() {
+    return tags;
+  }
 
-    public Set<Tag> getTags() {
-        return tags;
-    }
-
-    public void setTags(Set<Tag> tags) {
-        this.tags = tags;
-    }
+  public void setTags(Set<Tag> tags) {
+    this.tags = tags;
+  }
 
   public LocalDateTime getCreateDate() {
     return createDate;

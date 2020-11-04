@@ -7,7 +7,7 @@ import com.epam.esm.exception.ControllerEntityUpdateException;
 import com.epam.esm.exception.ControllerSaveEntityException;
 import com.epam.esm.exception.GiftCertificateNotFoundException;
 import com.epam.esm.exception.GiftCertificateServiceException;
-import com.epam.esm.service.GiftCertificatesService;
+import com.epam.esm.service.GiftCertificateService;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,11 +28,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(value = "/certificates")
 public class GiftCertificatesController {
 
-  private final GiftCertificatesService giftCertificatesService;
+  private final GiftCertificateService giftCertificateService;
 
   @Autowired
-  public GiftCertificatesController(GiftCertificatesService giftCertificatesService) {
-    this.giftCertificatesService = giftCertificatesService;
+  public GiftCertificatesController(GiftCertificateService giftCertificateService) {
+    this.giftCertificateService = giftCertificateService;
   }
 
   /**
@@ -53,7 +53,7 @@ public class GiftCertificatesController {
     queryParams.computeIfAbsent("name", val -> name);
     queryParams.computeIfAbsent("sort", val -> sort);
     queryParams.computeIfAbsent("order", val -> order);
-    List<GiftCertificate> allCertificates = giftCertificatesService.getAllCertificates(queryParams);
+    List<GiftCertificate> allCertificates = giftCertificateService.getAllCertificates(queryParams);
     return new ResponseEntity<>(allCertificates,
         HttpStatus.OK);
 
@@ -70,7 +70,7 @@ public class GiftCertificatesController {
   public ResponseEntity<GiftCertificate> getCertificateById(@PathVariable("id") Long id)
       throws ControllerEntityNotFoundException {
     try {
-      return new ResponseEntity<>(giftCertificatesService.getCertificateById(id), HttpStatus.OK);
+      return new ResponseEntity<>(giftCertificateService.getCertificateById(id), HttpStatus.OK);
     } catch (GiftCertificateNotFoundException e) {
       throw new ControllerEntityNotFoundException(
           "Controller exception : Couldn't get by id certificate", e);
@@ -83,23 +83,18 @@ public class GiftCertificatesController {
    * @param giftCertificate ResponseBody that represents gift certificate entity
    * @return created gift certificate
    * @throws ControllerSaveEntityException     if entity was not created
-   * @throws ControllerEntityNotFoundException if entity was not found
    */
   @PostMapping
   public ResponseEntity<GiftCertificate> createGiftCertificate(
       @RequestBody GiftCertificate giftCertificate)
-      throws ControllerSaveEntityException, ControllerEntityNotFoundException {
+      throws ControllerSaveEntityException {
     try {
-      Long certificateId = giftCertificatesService.createCertificate(giftCertificate);
-      GiftCertificate certificateById = giftCertificatesService.getCertificateById(certificateId);
-      return new ResponseEntity<>(certificateById,
+      GiftCertificate certificate = giftCertificateService.createCertificate(giftCertificate);
+      return new ResponseEntity<>(certificate,
           HttpStatus.CREATED);
     } catch (GiftCertificateServiceException e) {
       throw new ControllerSaveEntityException(
           "Controller exception : Couldn't create certificate", e);
-    } catch (GiftCertificateNotFoundException e) {
-      throw new ControllerEntityNotFoundException(
-          "Controller exception : Couldn't find certificate", e);
     }
 
   }
@@ -119,8 +114,8 @@ public class GiftCertificatesController {
       throws ControllerEntityNotFoundException, ControllerEntityUpdateException {
     try {
       giftCertificate.setId(id);
-      giftCertificatesService.updateCertificate(giftCertificate);
-      GiftCertificate certificateById = giftCertificatesService
+      giftCertificateService.updateCertificate(giftCertificate);
+      GiftCertificate certificateById = giftCertificateService
           .getCertificateById(giftCertificate.getId());
       return new ResponseEntity<>(
           certificateById,
@@ -146,7 +141,7 @@ public class GiftCertificatesController {
   public ResponseEntity<HttpStatus> delete(@PathVariable("id") Long id)
       throws ControllerEntityDeleteException {
     try {
-      giftCertificatesService.deleteCertificate(id);
+      giftCertificateService.deleteCertificate(id);
       return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     } catch (GiftCertificateServiceException e) {
       throw new ControllerEntityDeleteException(

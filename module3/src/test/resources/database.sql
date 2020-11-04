@@ -4,7 +4,7 @@ CREATE SCHEMA gift_certificates AUTHORIZATION sa;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `gift_certificates`.`gift_certificate` (
   `id` BIGINT NOT NULL AUTO_INCREMENT,
-  `name` VARCHAR(150) NOT NULL,
+  `name` VARCHAR(150) UNIQUE NOT NULL,
   `description` VARCHAR(1500) NOT NULL,
   `price` DECIMAL(10,0) NOT NULL,
   `create_date` DATETIME NOT NULL,
@@ -18,7 +18,7 @@ CREATE TABLE IF NOT EXISTS `gift_certificates`.`gift_certificate` (
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `gift_certificates`.`tag` (
   `id` BIGINT(10) NOT NULL AUTO_INCREMENT,
-  `name` VARCHAR(150) NOT NULL,
+  `name` VARCHAR(150) UNIQUE NOT NULL,
   PRIMARY KEY (`id`));
 
 

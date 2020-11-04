@@ -1,36 +1,38 @@
-package com.epam.esm.service;
+package com.epam.esm.service.impl;
 
-import com.epam.esm.dao.TagsRepository;
+import com.epam.esm.dao.TagRepository;
 import com.epam.esm.entity.Tag;
 import com.epam.esm.exception.RepositoryDeleteException;
 import com.epam.esm.exception.RepositorySaveException;
 import com.epam.esm.exception.TagNotFoundException;
 import com.epam.esm.exception.TagServiceException;
+import com.epam.esm.service.TagService;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-public class TagsServiceImpl implements TagsService {
+public class TagServiceImpl implements TagService {
 
-  private final TagsRepository tagsRepository;
+  private final TagRepository tagRepository;
 
   @Autowired
-  public TagsServiceImpl(TagsRepository tagsRepository) {
-    this.tagsRepository = tagsRepository;
+  public TagServiceImpl(TagRepository tagRepository) {
+    this.tagRepository = tagRepository;
   }
 
 
   @Override
   public List<Tag> getAllTags() {
-    return tagsRepository.getAll();
+    return tagRepository.getAll();
   }
 
   @Override
   public Tag getTagById(Long id) throws TagNotFoundException {
-    Optional<Tag> tagsDaoById = tagsRepository.getById(id);
+    Optional<Tag> tagsDaoById = tagRepository.getById(id);
     if (tagsDaoById.isPresent()) {
       return tagsDaoById.get();
     } else {
@@ -40,12 +42,11 @@ public class TagsServiceImpl implements TagsService {
 
   @Override
   @Transactional
-  public Long createTag(Tag tag) throws TagServiceException {
+  public Tag createTag(Tag tag) throws TagServiceException {
     try {
-      Long tagId = tagsRepository.save(tag);
-      tag.setId(tagId);
-      return tagId;
-    } catch (RepositorySaveException e) {
+      Long tagId = tagRepository.save(tag);
+      return getTagById(tagId);
+    } catch (RepositorySaveException | TagNotFoundException e) {
       throw new TagServiceException("Service exception : Couldn't save tag ", e);
     }
   }
@@ -54,7 +55,7 @@ public class TagsServiceImpl implements TagsService {
   @Transactional
   public void deleteTag(Long tagId) throws TagServiceException {
     try {
-      tagsRepository.delete(tagId);
+      tagRepository.delete(tagId);
     } catch (RepositoryDeleteException e) {
       throw new TagServiceException("Service exception : Couldn't delete tag ");
     }
@@ -62,19 +63,19 @@ public class TagsServiceImpl implements TagsService {
   }
 
   @Override
-  public List<Tag> getTagsByCertificateId(Long certificateId) {
-    return tagsRepository.getTagsByCertificateId(certificateId);
+  public Set<Tag> getTagsByCertificateId(Long certificateId) {
+    return tagRepository.getTagsByCertificateId(certificateId);
   }
 
   @Override
   public Optional<Tag> getTagByName(String tagName) {
-    return tagsRepository.getTagByName(tagName);
+    return tagRepository.getTagByName(tagName);
   }
 
   @Override
   public void deleteTagForCertificate(Long tagId, Long certificateId) throws TagServiceException {
     try {
-      tagsRepository.deleteCertificateTag(tagId, certificateId);
+      tagRepository.deleteCertificateTag(tagId, certificateId);
     } catch (RepositoryDeleteException e) {
       throw new TagServiceException("Service exception : Couldn't delete certificate tag");
     }
@@ -87,9 +88,9 @@ public class TagsServiceImpl implements TagsService {
       Optional<Tag> tagByName = getTagByName(tag.getName());
       if (!tagByName.isPresent()) {
         createTag(tag);
-        tagsRepository.saveCertificateTag(tag.getId(), certificateId);
+        tagRepository.saveCertificateTag(tag.getId(), certificateId);
       } else {
-        tagsRepository.saveCertificateTag(tagByName.get().getId(), certificateId);
+        tagRepository.saveCertificateTag(tagByName.get().getId(), certificateId);
       }
     } catch (RepositorySaveException e) {
       throw new TagServiceException(

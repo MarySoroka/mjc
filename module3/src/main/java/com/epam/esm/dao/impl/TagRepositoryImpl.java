@@ -1,10 +1,13 @@
-package com.epam.esm.dao;
+package com.epam.esm.dao.impl;
 
+import com.epam.esm.dao.TagRepository;
 import com.epam.esm.entity.Tag;
 import com.epam.esm.exception.RepositoryDeleteException;
 import com.epam.esm.exception.RepositorySaveException;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
@@ -16,7 +19,7 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class TagsRepositoryImpl implements TagsRepository {
+public class TagRepositoryImpl implements TagRepository {
 
   private static final String INSERT_TAG_QUERY = "INSERT INTO gift_certificates.tag (`name`) values (:name)";
   private static final String INSERT_TAG_CERTIFICATE_QUERY = "INSERT INTO gift_certificates.certificate_tag (tag_id, certificate_id) values (:tagId, :certificateId)";
@@ -31,7 +34,7 @@ public class TagsRepositoryImpl implements TagsRepository {
   private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
   @Autowired
-  public TagsRepositoryImpl(NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
+  public TagRepositoryImpl(NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
     this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
 
   }
@@ -59,7 +62,8 @@ public class TagsRepositoryImpl implements TagsRepository {
   public void delete(Long id) throws RepositoryDeleteException {
     SqlParameterSource namedParameters = new MapSqlParameterSource("id", id);
     if (namedParameterJdbcTemplate.update(DELETE_TAG_QUERY, namedParameters) == 0) {
-      throw new RepositoryDeleteException("Repository exception: Couldn't delete tag entity with id : " + id);
+      throw new RepositoryDeleteException(
+          "Repository exception: Couldn't delete tag entity with id : " + id);
     }
 
   }
@@ -85,11 +89,11 @@ public class TagsRepositoryImpl implements TagsRepository {
   }
 
   @Override
-  public List<Tag> getTagsByCertificateId(Long certificateId) {
+  public Set<Tag> getTagsByCertificateId(Long certificateId) {
     SqlParameterSource namedParameters = new MapSqlParameterSource("id", certificateId);
-    return this.namedParameterJdbcTemplate
+    return new HashSet<>(this.namedParameterJdbcTemplate
         .query(SELECT_TAG_BY_CERTIFICATE_ID_QUERY, namedParameters,
-            new BeanPropertyRowMapper<>(Tag.class));
+            new BeanPropertyRowMapper<>(Tag.class)));
   }
 
   @Override
@@ -110,17 +114,20 @@ public class TagsRepositoryImpl implements TagsRepository {
         .addValue("certificateId", certificateId);
     int update = this.namedParameterJdbcTemplate
         .update(INSERT_TAG_CERTIFICATE_QUERY, namedParameters);
-    if (update == 0){
-      throw  new RepositorySaveException("Repository exception: Couldn't save certificate tag. Tag id :"+ tagId);
+    if (update == 0) {
+      throw new RepositorySaveException(
+          "Repository exception: Couldn't save certificate tag. Tag id :" + tagId);
     }
   }
 
   @Override
   public void deleteCertificateTag(Long tagId, Long certificateId)
       throws RepositoryDeleteException {
-    SqlParameterSource namedParameters = new MapSqlParameterSource("tagId", tagId).addValue("certificateId",certificateId);
+    SqlParameterSource namedParameters = new MapSqlParameterSource("tagId", tagId)
+        .addValue("certificateId", certificateId);
     if (namedParameterJdbcTemplate.update(DELETE_CERTIFICATE_TAG_QUERY, namedParameters) == 0) {
-      throw new RepositoryDeleteException("Repository exception: Couldn't delete certificate tag entity with id : " + tagId);
+      throw new RepositoryDeleteException(
+          "Repository exception: Couldn't delete certificate tag entity with id : " + tagId);
     }
 
   }

@@ -10,7 +10,7 @@ import java.util.Map;
  * interface that demonstrate business logic for gift certificate domain
  */
 
-public interface GiftCertificatesService {
+public interface GiftCertificateService {
 
   List<GiftCertificate> getAllCertificates(Map<String, String> queryParams);
 
@@ -30,7 +30,7 @@ public interface GiftCertificatesService {
    * @return if entity has been saved return generated id
    * @throws GiftCertificateServiceException if generated id equals null
    */
-  Long createCertificate(GiftCertificate giftCertificate) throws GiftCertificateServiceException;
+  GiftCertificate createCertificate(GiftCertificate giftCertificate) throws GiftCertificateServiceException;
 
   /**
    * delete entity by key parameter

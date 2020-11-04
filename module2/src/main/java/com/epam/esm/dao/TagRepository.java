@@ -9,7 +9,7 @@ import java.util.Optional;
 /**
  * interface with CRD operations for Tag entity
  */
-public interface TagsRepository extends CRUDDao<Tag, Long> {
+public interface TagRepository extends CRUDDao<Tag, Long> {
 
   /**
    * method find tags by certificate id

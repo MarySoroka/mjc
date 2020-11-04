@@ -10,7 +10,7 @@ import java.util.Map;
  * interface that demonstrate business logic for gift certificate domain
  */
 
-public interface GiftCertificatesService {
+public interface GiftCertificateService {
 
   List<GiftCertificate> getAllCertificates(Map<String, String> queryParams);
 

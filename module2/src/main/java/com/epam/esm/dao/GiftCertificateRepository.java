@@ -8,7 +8,7 @@ import java.util.Map;
 /**
  * interface for gift certificate repository
  */
-public interface GiftCertificatesRepository extends CRUDDao<GiftCertificate, Long> {
+public interface GiftCertificateRepository extends CRUDDao<GiftCertificate, Long> {
 
   /**
    * method gift certificates by tag name

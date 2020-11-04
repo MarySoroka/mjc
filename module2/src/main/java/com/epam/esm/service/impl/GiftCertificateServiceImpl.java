@@ -1,6 +1,6 @@
-package com.epam.esm.service;
+package com.epam.esm.service.impl;
 
-import com.epam.esm.dao.GiftCertificatesRepository;
+import com.epam.esm.dao.GiftCertificateRepository;
 import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.entity.Tag;
 import com.epam.esm.exception.GiftCertificateNotFoundException;
@@ -9,6 +9,10 @@ import com.epam.esm.exception.RepositoryDeleteException;
 import com.epam.esm.exception.RepositorySaveException;
 import com.epam.esm.exception.RepositoryUpdateException;
 import com.epam.esm.exception.TagServiceException;
+import com.epam.esm.service.GiftCertificateService;
+import com.epam.esm.service.ServiceUtils;
+import com.epam.esm.service.TagService;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
@@ -21,37 +25,38 @@ import org.springframework.transaction.annotation.Transactional;
 
 
 @Service
-public class GiftCertificatesServiceImpl implements GiftCertificatesService {
+public class GiftCertificateServiceImpl implements GiftCertificateService {
 
-  private final GiftCertificatesRepository giftCertificatesRepository;
-  private final TagsService tagsService;
+  private final GiftCertificateRepository giftCertificateRepository;
+  private final TagService tagService;
 
   @Autowired
-  public GiftCertificatesServiceImpl(GiftCertificatesRepository giftCertificatesRepository,
-      TagsService tagsService) {
-    this.giftCertificatesRepository = giftCertificatesRepository;
-    this.tagsService = tagsService;
+  public GiftCertificateServiceImpl(GiftCertificateRepository giftCertificateRepository,
+      TagService tagService) {
+    this.giftCertificateRepository = giftCertificateRepository;
+    this.tagService = tagService;
   }
 
   @Override
   public List<GiftCertificate> getAllCertificates(Map<String, String> queryParams) {
     List<GiftCertificate> giftCertificates;
-    giftCertificates = giftCertificatesRepository.getAllByQuery(queryParams);
+    giftCertificates = giftCertificateRepository.getAllByQuery(queryParams);
     giftCertificates.forEach(giftCertificate -> giftCertificate
-        .setTags(new HashSet<>(tagsService.getTagsByCertificateId(giftCertificate.getId()))));
+        .setTags(new HashSet<>(tagService.getTagsByCertificateId(giftCertificate.getId()))));
+
     return giftCertificates;
   }
 
   @Override
   public GiftCertificate getCertificateById(Long id)
       throws GiftCertificateNotFoundException {
-    Optional<GiftCertificate> giftCertificate = giftCertificatesRepository.getById(id);
+    Optional<GiftCertificate> giftCertificate = giftCertificateRepository.getById(id);
     if (!giftCertificate.isPresent()) {
       throw new GiftCertificateNotFoundException(
           "Service exception : Couldn't get certificate by id : " + id);
     }
     giftCertificate.get()
-        .setTags(new HashSet<>(tagsService.getTagsByCertificateId(giftCertificate.get().getId())));
+        .setTags(new HashSet<>(tagService.getTagsByCertificateId(giftCertificate.get().getId())));
     return giftCertificate.get();
   }
 
@@ -63,11 +68,11 @@ public class GiftCertificatesServiceImpl implements GiftCertificatesService {
       LocalDateTime currentDateTime = ServiceUtils.getCurrentDateTime();
       giftCertificate.setLastUpdateDate(currentDateTime);
       giftCertificate.setCreateDate(currentDateTime);
-      Long certificateId = giftCertificatesRepository.save(giftCertificate);
+      Long certificateId = giftCertificateRepository.save(giftCertificate);
       Set<Tag> tags = giftCertificate.getTags();
-      if (tags!=null && !tags.isEmpty()) {
+      if (tags != null && !tags.isEmpty()) {
         for (Tag tag : tags) {
-          tagsService.saveCertificateTag(tag, certificateId);
+          tagService.saveCertificateTag(tag, certificateId);
         }
       }
       return certificateId;
@@ -83,7 +88,7 @@ public class GiftCertificatesServiceImpl implements GiftCertificatesService {
   @Transactional
   public void deleteCertificate(Long certificateId) throws GiftCertificateServiceException {
     try {
-      giftCertificatesRepository.delete(certificateId);
+      giftCertificateRepository.delete(certificateId);
     } catch (RepositoryDeleteException e) {
       throw new GiftCertificateServiceException(
           "Service exception : Couldn't delete certificate " + certificateId);
@@ -98,16 +103,16 @@ public class GiftCertificatesServiceImpl implements GiftCertificatesService {
       GiftCertificate certificateById = getCertificateById(giftCertificate.getId());
       if (!giftCertificate.equals(certificateById)) {
         updateCertificateFields(certificateById, giftCertificate);
-        giftCertificatesRepository.update(giftCertificate);
+        giftCertificateRepository.update(giftCertificate);
       }
-      if (giftCertificate.getTags()!=null && !giftCertificate.getTags().isEmpty()) {
+      if (giftCertificate.getTags() != null && !giftCertificate.getTags().isEmpty()) {
         for (Tag tag : giftCertificate.getTags()) {
-          if(!certificateById.getTags().remove(tag)){
-            tagsService.saveCertificateTag(tag, giftCertificate.getId());
+          if (!certificateById.getTags().remove(tag)) {
+            tagService.saveCertificateTag(tag, giftCertificate.getId());
           }
         }
         for (Tag tag : certificateById.getTags()) {
-          tagsService.deleteTagForCertificate(tag.getId(), certificateById.getId());
+          tagService.deleteTagForCertificate(tag.getId(), certificateById.getId());
         }
       }
 
@@ -124,17 +129,15 @@ public class GiftCertificatesServiceImpl implements GiftCertificatesService {
 
   @Override
   public List<GiftCertificate> getCertificateByTagName(String tagName) {
-    List<GiftCertificate> giftCertificates = giftCertificatesRepository
+    List<GiftCertificate> giftCertificates = giftCertificateRepository
         .getGiftCertificatesByTagName(tagName);
     giftCertificates.forEach(giftCertificate -> giftCertificate
-        .setTags(new HashSet<>(tagsService.getTagsByCertificateId(giftCertificate.getId()))));
+        .setTags(new HashSet<>(tagService.getTagsByCertificateId(giftCertificate.getId()))));
     return giftCertificates;
   }
 
   private void updateCertificateFields(GiftCertificate certificate,
       GiftCertificate updateCertificate) {
-    updateCertificate
-        .setId(updateCertificate.getId() != null ? updateCertificate.getId() : certificate.getId());
     updateCertificate.setCreateDate(
         updateCertificate.getCreateDate() != null ? updateCertificate.getCreateDate()
             : certificate.getCreateDate());
@@ -142,10 +145,13 @@ public class GiftCertificatesServiceImpl implements GiftCertificatesService {
         updateCertificate.getDescription() != null ? updateCertificate.getDescription()
             : certificate.getDescription());
     updateCertificate.setDuration(
-        updateCertificate.getDuration() != null ? updateCertificate.getDuration()
+        updateCertificate.getDuration() != null && updateCertificate.getDuration() > 0
+            ? updateCertificate.getDuration()
             : certificate.getDuration());
     updateCertificate.setLastUpdateDate(ServiceUtils.getCurrentDateTime());
-    updateCertificate.setPrice(updateCertificate.getPrice() != null ? updateCertificate.getPrice()
-        : certificate.getPrice());
+    updateCertificate
+        .setPrice(updateCertificate.getPrice() != null && updateCertificate.getPrice().compareTo(
+            BigDecimal.ZERO) > 0 ? updateCertificate.getPrice()
+            : certificate.getPrice());
   }
 }

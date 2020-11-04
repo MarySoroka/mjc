@@ -9,7 +9,7 @@ import java.util.Optional;
 /**
  * interface that demonstrate business logic for tag domain
  */
-public interface TagsService {
+public interface TagService {
 
   /**
    * @return all objects in specific db table

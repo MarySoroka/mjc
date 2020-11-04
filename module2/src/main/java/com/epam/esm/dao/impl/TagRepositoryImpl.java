@@ -1,5 +1,6 @@
-package com.epam.esm.dao;
+package com.epam.esm.dao.impl;
 
+import com.epam.esm.dao.TagRepository;
 import com.epam.esm.entity.Tag;
 import com.epam.esm.exception.RepositoryDeleteException;
 import com.epam.esm.exception.RepositorySaveException;
@@ -16,7 +17,7 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class TagsRepositoryImpl implements TagsRepository {
+public class TagRepositoryImpl implements TagRepository {
 
   private static final String INSERT_TAG_QUERY = "INSERT INTO gift_certificates.tag (`name`) values (:name)";
   private static final String INSERT_TAG_CERTIFICATE_QUERY = "INSERT INTO gift_certificates.certificate_tag (tag_id, certificate_id) values (:tagId, :certificateId)";
@@ -31,7 +32,7 @@ public class TagsRepositoryImpl implements TagsRepository {
   private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
   @Autowired
-  public TagsRepositoryImpl(NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
+  public TagRepositoryImpl(NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
     this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
 
   }

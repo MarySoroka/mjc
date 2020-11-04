@@ -1,10 +1,10 @@
-package com.epam.esm.dao;
+package com.epam.esm.dao.impl;
 
+import com.epam.esm.dao.GiftCertificateRepository;
 import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.exception.RepositoryDeleteException;
 import com.epam.esm.exception.RepositorySaveException;
 import com.epam.esm.exception.RepositoryUpdateException;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -19,7 +19,7 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class GiftCertificatesRepositoryImpl implements GiftCertificatesRepository {
+public class GiftCertificateRepositoryImpl implements GiftCertificateRepository {
 
   private static final String INSERT_CERTIFICATES_QUERY = "INSERT INTO gift_certificates.gift_certificate (name,description, price, create_date, last_update_date, duration ) values (:name,:description,:price,:createDate,:lastUpdateDate,:duration)";
   private static final String UPDATE_CERTIFICATES_QUERY = "UPDATE gift_certificates.gift_certificate set name=:name ,description=:description, price=:price, create_date=:createDate, last_update_date=:lastUpdateDate, duration=:duration where id = :id";
@@ -32,7 +32,7 @@ public class GiftCertificatesRepositoryImpl implements GiftCertificatesRepositor
   private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
   @Autowired
-  public GiftCertificatesRepositoryImpl(NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
+  public GiftCertificateRepositoryImpl(NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
     this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
   }
 
@@ -58,7 +58,7 @@ public class GiftCertificatesRepositoryImpl implements GiftCertificatesRepositor
   @Override
   public void delete(Long id) throws RepositoryDeleteException {
     SqlParameterSource namedParameters = new MapSqlParameterSource("id", id);
-    if (namedParameterJdbcTemplate.update(DELETE_CERTIFICATES_QUERY, namedParameters) != 0) {
+    if (namedParameterJdbcTemplate.update(DELETE_CERTIFICATES_QUERY, namedParameters) == 0) {
       throw new RepositoryDeleteException(
           "Repository exception: Couldn't delete gift certificate entity with id : " + id);
     }

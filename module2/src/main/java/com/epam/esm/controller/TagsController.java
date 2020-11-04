@@ -6,7 +6,7 @@ import com.epam.esm.exception.ControllerEntityNotFoundException;
 import com.epam.esm.exception.ControllerSaveEntityException;
 import com.epam.esm.exception.TagNotFoundException;
 import com.epam.esm.exception.TagServiceException;
-import com.epam.esm.service.TagsService;
+import com.epam.esm.service.TagService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,11 +23,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(value = "/tags")
 public class TagsController {
 
-  private final TagsService tagsService;
+  private final TagService tagService;
 
   @Autowired
-  public TagsController(TagsService tagsService) {
-    this.tagsService = tagsService;
+  public TagsController(TagService tagService) {
+    this.tagService = tagService;
   }
 
   /**
@@ -35,7 +35,7 @@ public class TagsController {
    */
   @GetMapping
   public ResponseEntity<List<Tag>> getAllTags() {
-    return new ResponseEntity<>(tagsService.getAllTags(), HttpStatus.OK);
+    return new ResponseEntity<>(tagService.getAllTags(), HttpStatus.OK);
   }
 
   /**
@@ -49,7 +49,7 @@ public class TagsController {
   public ResponseEntity<Tag> getTagById(@PathVariable("id") Long id)
       throws ControllerEntityNotFoundException {
     try {
-      Tag tagById = tagsService.getTagById(id);
+      Tag tagById = tagService.getTagById(id);
       return new ResponseEntity<>(tagById, HttpStatus.OK);
     } catch (TagNotFoundException e) {
       throw new ControllerEntityNotFoundException("Controller exception : Couldn't get by id tag",
@@ -70,8 +70,8 @@ public class TagsController {
   public ResponseEntity<Tag> create(@RequestBody Tag tag)
       throws ControllerSaveEntityException, ControllerEntityNotFoundException {
     try {
-      Long tagId = tagsService.createTag(tag);
-      Tag tagById = tagsService.getTagById(tagId);
+      Long tagId = tagService.createTag(tag);
+      Tag tagById = tagService.getTagById(tagId);
       return new ResponseEntity<>(tagById, HttpStatus.CREATED);
     } catch (TagServiceException e) {
       throw new ControllerSaveEntityException("Controller exception : Couldn't create tag", e);
@@ -92,7 +92,7 @@ public class TagsController {
   public ResponseEntity<HttpStatus> delete(@PathVariable("id") Long id)
       throws ControllerEntityDeleteException {
     try {
-      tagsService.deleteTag(id);
+      tagService.deleteTag(id);
       return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     } catch (TagServiceException e) {
       throw new ControllerEntityDeleteException("Controller exception : Couldn't delete tag", e);

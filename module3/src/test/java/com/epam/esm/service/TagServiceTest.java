@@ -2,6 +2,7 @@ package com.epam.esm.service;
 
 
 import static java.util.Optional.of;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -43,23 +44,31 @@ class TagServiceTest {
 
   @Test
   void whenMockGetTagByIdThenReturnTag() throws TagNotFoundException {
-    when(tagRepository.getById(anyLong())).thenReturn(of(new Tag()));
-    Tag tagById = tagsService.getTagById(1L);
-    assertNotNull(tagById);
+    Tag expectedTag = new Tag(1L, "expectedTag");
+    when(tagRepository.getById(anyLong())).thenReturn(of(expectedTag));
+
+    Tag actualTag = tagsService.getTagById(1L);
+
+    assertEquals(expectedTag,actualTag);
   }
 
   @Test
   void whenMockCreateTagThenReturnId() throws RepositorySaveException, TagServiceException {
-    Tag tag = new Tag(1L, "name");
-    when(tagRepository.save(tag)).thenReturn(1L);
-    tagsService.createTag(tag);
-    assertEquals(1L, tag.getId());
+    Tag expectedTag = new Tag(null, "name");
+    when(tagRepository.save(expectedTag)).thenReturn(1L);
+    when(tagRepository.getById(1L)).thenReturn(of(expectedTag));
+
+    Tag actualTag = tagsService.createTag(expectedTag);
+
+    expectedTag.setId(1L);
+
+    assertEquals(expectedTag, actualTag);
   }
 
   @Test
-  void whenMockDeleteTagThenReturnTrue() throws TagServiceException, RepositoryDeleteException {
+  void whenMockDeleteTagThenDoesNotThrowException() throws RepositoryDeleteException {
     doNothing().when(tagRepository).delete(anyLong());
-    tagsService.deleteTag(1L);
-    verify(tagRepository).delete(anyLong());
+
+    assertDoesNotThrow(()-> tagsService.deleteTag(1L));
   }
 }

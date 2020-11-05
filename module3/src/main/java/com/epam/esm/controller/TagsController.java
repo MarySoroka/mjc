@@ -64,19 +64,15 @@ public class TagsController {
    * @param tag ResponseBody tag representation
    * @return created tag
    * @throws ControllerSaveEntityException     if tag was not created
-   * @throws ControllerEntityNotFoundException if tag was not found
    */
   @PostMapping
   public ResponseEntity<Tag> create(@RequestBody Tag tag)
-      throws ControllerSaveEntityException, ControllerEntityNotFoundException {
+      throws ControllerSaveEntityException {
     try {
-      Long tagId = tagService.createTag(tag);
-      Tag tagById = tagService.getTagById(tagId);
-      return new ResponseEntity<>(tagById, HttpStatus.CREATED);
+      Tag createdTag = tagService.createTag(tag);
+      return new ResponseEntity<>(createdTag, HttpStatus.CREATED);
     } catch (TagServiceException e) {
       throw new ControllerSaveEntityException("Controller exception : Couldn't create tag", e);
-    } catch (TagNotFoundException e) {
-      throw new ControllerEntityNotFoundException("Controller exception : Couldn't find tag", e);
     }
 
   }

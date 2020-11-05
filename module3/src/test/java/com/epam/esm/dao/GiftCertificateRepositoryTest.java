@@ -45,22 +45,23 @@ GiftCertificateRepositoryTest {
     Optional<GiftCertificate> giftCertificatesDaoById = giftCertificateRepository.getById(2L);
     assertTrue(giftCertificatesDaoById.isPresent());
     GiftCertificate certificate = giftCertificatesDaoById.get();
+    assertEquals(2L, certificate.getId());
     assertEquals("lala", certificate.getName());
   }
 
   @Test
-  void whenGetAllCertificatesThenReturnOneCertificate() {
+  void whenGetAllCertificatesThenReturnThreeCertificates() {
     List<GiftCertificate> giftCertificatesDaoAll = giftCertificateRepository.getAll();
     assertEquals(3L, giftCertificatesDaoAll.size());
   }
 
   @Test
-  void whenDeleteNotExistingCertificateThenReturnFalse() {
-    assertThrows(RepositoryDeleteException.class, () -> giftCertificateRepository.delete(5L));
+  void whenDeleteNotExistingCertificateThenThrowsRepositoryDeleteException() {
+    assertThrows(RepositoryDeleteException.class, () -> giftCertificateRepository.delete(6L));
   }
 
   @Test
-  void whenUpdateExistingCertificateThenReturnTrue() {
+  void whenUpdateExistingCertificateThenDontThrowsException() {
 
     assertDoesNotThrow(() -> giftCertificateRepository.update(giftCertificate));
 

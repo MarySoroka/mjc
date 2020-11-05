@@ -3,8 +3,8 @@ package com.epam.esm.dao;
 import com.epam.esm.entity.Tag;
 import com.epam.esm.exception.RepositoryDeleteException;
 import com.epam.esm.exception.RepositorySaveException;
-import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 /**
  * interface with CRD operations for Tag entity
@@ -17,7 +17,7 @@ public interface TagRepository extends CRUDDao<Tag, Long> {
    * @param certificateId certificate id
    * @return tags, that are in certificate with this id
    */
-  List<Tag> getTagsByCertificateId(Long certificateId);
+  Set<Tag> getTagsByCertificateId(Long certificateId);
 
   /**
    * find tag by name

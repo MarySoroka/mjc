@@ -83,25 +83,19 @@ public class GiftCertificatesController {
    * @param giftCertificate ResponseBody that represents gift certificate entity
    * @return created gift certificate
    * @throws ControllerSaveEntityException     if entity was not created
-   * @throws ControllerEntityNotFoundException if entity was not found
    */
   @PostMapping
   public ResponseEntity<GiftCertificate> createGiftCertificate(
       @RequestBody GiftCertificate giftCertificate)
-      throws ControllerSaveEntityException, ControllerEntityNotFoundException {
+      throws ControllerSaveEntityException {
     try {
-      Long certificateId = giftCertificateService.createCertificate(giftCertificate);
-      GiftCertificate certificateById = giftCertificateService.getCertificateById(certificateId);
-      return new ResponseEntity<>(certificateById,
+      GiftCertificate certificate = giftCertificateService.createCertificate(giftCertificate);
+      return new ResponseEntity<>(certificate,
           HttpStatus.CREATED);
     } catch (GiftCertificateServiceException e) {
       throw new ControllerSaveEntityException(
           "Controller exception : Couldn't create certificate", e);
-    } catch (GiftCertificateNotFoundException e) {
-      throw new ControllerEntityNotFoundException(
-          "Controller exception : Couldn't find certificate", e);
     }
-
   }
 
   /**

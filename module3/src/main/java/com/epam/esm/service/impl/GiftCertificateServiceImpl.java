@@ -56,13 +56,13 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
           "Service exception : Couldn't get certificate by id : " + id);
     }
     giftCertificate.get()
-        .setTags(new HashSet<>(tagService.getTagsByCertificateId(giftCertificate.get().getId())));
+        .setTags(tagService.getTagsByCertificateId(giftCertificate.get().getId()));
     return giftCertificate.get();
   }
 
   @Override
   @Transactional
-  public Long createCertificate(GiftCertificate giftCertificate)
+  public GiftCertificate createCertificate(GiftCertificate giftCertificate)
       throws GiftCertificateServiceException {
     try {
       LocalDateTime currentDateTime = ServiceUtils.getCurrentDateTime();
@@ -75,8 +75,8 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
           tagService.saveCertificateTag(tag, certificateId);
         }
       }
-      return certificateId;
-    } catch (RepositorySaveException e) {
+      return getCertificateById(certificateId);
+    } catch (RepositorySaveException | GiftCertificateNotFoundException e) {
       throw new GiftCertificateServiceException("Service exception : Couldn't create certificate ");
     } catch (TagServiceException e) {
       throw new GiftCertificateServiceException(

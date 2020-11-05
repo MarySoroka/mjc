@@ -30,7 +30,7 @@ public interface GiftCertificateService {
    * @return if entity has been saved return generated id
    * @throws GiftCertificateServiceException if generated id equals null
    */
-  Long createCertificate(GiftCertificate giftCertificate) throws GiftCertificateServiceException;
+  GiftCertificate createCertificate(GiftCertificate giftCertificate) throws GiftCertificateServiceException;
 
   /**
    * delete entity by key parameter

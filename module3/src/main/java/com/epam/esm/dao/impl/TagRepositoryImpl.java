@@ -4,8 +4,10 @@ import com.epam.esm.dao.TagRepository;
 import com.epam.esm.entity.Tag;
 import com.epam.esm.exception.RepositoryDeleteException;
 import com.epam.esm.exception.RepositorySaveException;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
@@ -86,11 +88,11 @@ public class TagRepositoryImpl implements TagRepository {
   }
 
   @Override
-  public List<Tag> getTagsByCertificateId(Long certificateId) {
+  public Set<Tag> getTagsByCertificateId(Long certificateId) {
     SqlParameterSource namedParameters = new MapSqlParameterSource("id", certificateId);
-    return this.namedParameterJdbcTemplate
+    return new HashSet<>(this.namedParameterJdbcTemplate
         .query(SELECT_TAG_BY_CERTIFICATE_ID_QUERY, namedParameters,
-            new BeanPropertyRowMapper<>(Tag.class));
+            new BeanPropertyRowMapper<>(Tag.class)));
   }
 
   @Override

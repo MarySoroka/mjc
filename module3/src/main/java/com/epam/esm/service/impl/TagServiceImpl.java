@@ -4,7 +4,7 @@ import com.epam.esm.dao.TagRepository;
 import com.epam.esm.entity.Tag;
 import com.epam.esm.exception.RepositoryDeleteException;
 import com.epam.esm.exception.RepositorySaveException;
-import com.epam.esm.exception.TagNotFoundException;
+import com.epam.esm.exception.EntityNotFoundException;
 import com.epam.esm.exception.TagServiceException;
 import com.epam.esm.service.TagService;
 import java.util.List;
@@ -31,12 +31,12 @@ public class TagServiceImpl implements TagService {
   }
 
   @Override
-  public Tag getTagById(Long id) throws TagNotFoundException {
+  public Tag getTagById(Long id) throws EntityNotFoundException {
     Optional<Tag> tagsDaoById = tagRepository.getById(id);
     if (tagsDaoById.isPresent()) {
       return tagsDaoById.get();
     } else {
-      throw new TagNotFoundException("Service exception : Couldn't get tag by id: " + id);
+      throw new EntityNotFoundException("Service exception : Couldn't get tag by id: " + id);
     }
   }
 
@@ -46,7 +46,7 @@ public class TagServiceImpl implements TagService {
     try {
       Long tagId = tagRepository.save(tag);
       return getTagById(tagId);
-    } catch (RepositorySaveException | TagNotFoundException e) {
+    } catch (RepositorySaveException | EntityNotFoundException e) {
       throw new TagServiceException("Service exception : Couldn't save tag ", e);
     }
   }

@@ -1,7 +1,7 @@
 package com.epam.esm.service;
 
 import com.epam.esm.entity.Tag;
-import com.epam.esm.exception.TagNotFoundException;
+import com.epam.esm.exception.EntityNotFoundException;
 import com.epam.esm.exception.TagServiceException;
 import java.util.List;
 import java.util.Optional;
@@ -23,7 +23,7 @@ public interface TagService {
    * @param id tag id, which is using to find entity
    * @return entity or Optional.empty(), if entity is not found by this key
    */
-  Tag getTagById(Long id) throws TagNotFoundException;
+  Tag getTagById(Long id) throws EntityNotFoundException;
 
   /**
    * method save entity

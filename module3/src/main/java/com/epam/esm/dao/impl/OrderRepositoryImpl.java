@@ -5,8 +5,10 @@ import com.epam.esm.entity.Order;
 import com.epam.esm.exception.RepositoryDeleteException;
 import com.epam.esm.exception.RepositorySaveException;
 import com.epam.esm.exception.RepositoryUpdateException;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
@@ -19,13 +21,14 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public class OrderRepositoryImpl implements OrderRepository {
-  private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+
   private static final String INSERT_ORDERS_QUERY = "INSERT INTO gift_certificates.order (user_id, order_timstemp, purchase, order_certificate_id) values (:userId,:orderTimestamp,:purchase,:giftCertificateId)";
   private static final String UPDATE_ORDERS_QUERY = "UPDATE gift_certificates.order set user_id=:userId, order_timstemp=:orderTimestamp, purchase=:purchase, order_certificate_id=:giftCertificateId where id = :id";
-
   private static final String DELETE_ORDER_QUERY = "DELETE FROM gift_certificates.`order` WHERE id = :id";
   private static final String SELECT_ALL_ORDERS_QUERY = "SELECT id, user_id, order_timstemp, purchase, order_certificate_id  FROM gift_certificates.`order`";
   private static final String SELECT_ORDER_BY_ID_QUERY = "SELECT id, user_id, order_timstemp, purchase, order_certificate_id  FROM gift_certificates.`order`  WHERE id = :id";
+  private static final String SELECT_ORDER_BY_USER_ID_QUERY = "SELECT id, user_id, order_timstemp, purchase, order_certificate_id  FROM gift_certificates.`order`  WHERE user_id = :userId";
+  private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
   @Autowired
   public OrderRepositoryImpl(
@@ -83,5 +86,13 @@ public class OrderRepositoryImpl implements OrderRepository {
       throw new RepositorySaveException("Repository exception: Couldn't save order");
     }
     return key.longValue();
+  }
+
+  @Override
+  public Set<Order> getAllUserOrders(Long userId) {
+    SqlParameterSource namedParameters = new MapSqlParameterSource("userId", userId);
+    return new HashSet<>(this.namedParameterJdbcTemplate
+        .query(SELECT_ORDER_BY_USER_ID_QUERY, namedParameters,
+            new BeanPropertyRowMapper<>(Order.class)));
   }
 }

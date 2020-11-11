@@ -6,6 +6,7 @@ import com.epam.esm.exception.RepositoryDeleteException;
 import com.epam.esm.exception.RepositorySaveException;
 import com.epam.esm.exception.RepositoryUpdateException;
 import java.util.List;
+import java.util.Set;
 
 public interface OrderService {
    List<Order> getAllOrders();
@@ -13,5 +14,5 @@ public interface OrderService {
    void createOrder(Order order) throws RepositorySaveException;
    void deleteOrder(Long id) throws RepositoryDeleteException;
    void updateOrder(Order order) throws RepositoryUpdateException;
-
+   Set<Order> getAllUserOrders(Long userId);
 }

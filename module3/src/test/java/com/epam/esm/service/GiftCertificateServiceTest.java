@@ -8,14 +8,12 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyMap;
 import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.epam.esm.dao.GiftCertificateRepository;
 import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.entity.Tag;
-import com.epam.esm.exception.GiftCertificateNotFoundException;
+import com.epam.esm.exception.EntityNotFoundException;
 import com.epam.esm.exception.GiftCertificateServiceException;
 import com.epam.esm.exception.RepositoryDeleteException;
 import com.epam.esm.exception.RepositorySaveException;
@@ -67,7 +65,7 @@ class GiftCertificateServiceTest {
 
   @Test
   void whenGetExistingCertificateByIdThenReturnCorrectCertificate()
-      throws GiftCertificateNotFoundException {
+      throws EntityNotFoundException {
     expectedGiftCertificate.setTags(Collections.singleton(tag));
 
     when(giftCertificateRepository.getById(anyLong()))

@@ -4,17 +4,15 @@ package com.epam.esm.service;
 import static java.util.Optional.of;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.epam.esm.dao.TagRepository;
 import com.epam.esm.entity.Tag;
+import com.epam.esm.exception.EntityNotFoundException;
 import com.epam.esm.exception.RepositoryDeleteException;
 import com.epam.esm.exception.RepositorySaveException;
-import com.epam.esm.exception.TagNotFoundException;
 import com.epam.esm.exception.TagServiceException;
 import com.epam.esm.service.impl.TagServiceImpl;
 import java.util.LinkedList;
@@ -43,13 +41,13 @@ class TagServiceTest {
   }
 
   @Test
-  void whenMockGetTagByIdThenReturnTag() throws TagNotFoundException {
+  void whenMockGetTagByIdThenReturnTag() throws EntityNotFoundException {
     Tag expectedTag = new Tag(1L, "expectedTag");
     when(tagRepository.getById(anyLong())).thenReturn(of(expectedTag));
 
     Tag actualTag = tagsService.getTagById(1L);
 
-    assertEquals(expectedTag,actualTag);
+    assertEquals(expectedTag, actualTag);
   }
 
   @Test
@@ -69,6 +67,6 @@ class TagServiceTest {
   void whenMockDeleteTagThenDoesNotThrowException() throws RepositoryDeleteException {
     doNothing().when(tagRepository).delete(anyLong());
 
-    assertDoesNotThrow(()-> tagsService.deleteTag(1L));
+    assertDoesNotThrow(() -> tagsService.deleteTag(1L));
   }
 }

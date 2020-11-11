@@ -4,7 +4,7 @@ import com.epam.esm.entity.Tag;
 import com.epam.esm.exception.ControllerEntityDeleteException;
 import com.epam.esm.exception.ControllerEntityNotFoundException;
 import com.epam.esm.exception.ControllerSaveEntityException;
-import com.epam.esm.exception.TagNotFoundException;
+import com.epam.esm.exception.EntityNotFoundException;
 import com.epam.esm.exception.TagServiceException;
 import com.epam.esm.service.TagService;
 import java.util.List;
@@ -51,7 +51,7 @@ public class TagsController {
     try {
       Tag tagById = tagService.getTagById(id);
       return new ResponseEntity<>(tagById, HttpStatus.OK);
-    } catch (TagNotFoundException e) {
+    } catch (EntityNotFoundException e) {
       throw new ControllerEntityNotFoundException("Controller exception : Couldn't get by id tag",
           e);
     }

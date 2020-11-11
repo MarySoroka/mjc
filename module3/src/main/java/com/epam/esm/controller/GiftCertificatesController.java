@@ -5,7 +5,7 @@ import com.epam.esm.exception.ControllerEntityDeleteException;
 import com.epam.esm.exception.ControllerEntityNotFoundException;
 import com.epam.esm.exception.ControllerEntityUpdateException;
 import com.epam.esm.exception.ControllerSaveEntityException;
-import com.epam.esm.exception.GiftCertificateNotFoundException;
+import com.epam.esm.exception.EntityNotFoundException;
 import com.epam.esm.exception.GiftCertificateServiceException;
 import com.epam.esm.service.GiftCertificateService;
 import java.util.HashMap;
@@ -71,7 +71,7 @@ public class GiftCertificatesController {
       throws ControllerEntityNotFoundException {
     try {
       return new ResponseEntity<>(giftCertificateService.getCertificateById(id), HttpStatus.OK);
-    } catch (GiftCertificateNotFoundException e) {
+    } catch (EntityNotFoundException e) {
       throw new ControllerEntityNotFoundException(
           "Controller exception : Couldn't get by id certificate", e);
     }
@@ -123,7 +123,7 @@ public class GiftCertificatesController {
       throw new ControllerEntityUpdateException(
           "Controller exception : Couldn't update certificate"
           , e);
-    } catch (GiftCertificateNotFoundException e) {
+    } catch (EntityNotFoundException e) {
       throw new ControllerEntityNotFoundException(
           "Controller exception : Couldn't find certificate", e);
     }

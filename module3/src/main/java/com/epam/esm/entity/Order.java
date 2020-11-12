@@ -7,16 +7,16 @@ import java.util.Objects;
 public class Order {
 
   private Long id;
-  private Long giftCertificateId;
-  private LocalDateTime orderTimestamp;
+  private Long orderCertificateId;
+  private LocalDateTime timestamp;
   private BigDecimal purchase;
   private Long userId;
 
-  public Order(Long id, Long giftCertificateId, LocalDateTime orderTimestamp,
+  public Order(Long id, Long orderCertificateId, LocalDateTime timestamp,
       BigDecimal purchase, Long userId) {
     this.id = id;
-    this.giftCertificateId = giftCertificateId;
-    this.orderTimestamp = orderTimestamp;
+    this.orderCertificateId = orderCertificateId;
+    this.timestamp = timestamp;
     this.purchase = purchase;
     this.userId = userId;
   }
@@ -34,15 +34,15 @@ public class Order {
     }
     Order order = (Order) o;
     return Objects.equals(id, order.id) &&
-        Objects.equals(giftCertificateId, order.giftCertificateId) &&
-        Objects.equals(orderTimestamp, order.orderTimestamp) &&
+        Objects.equals(orderCertificateId, order.orderCertificateId) &&
+        Objects.equals(timestamp, order.timestamp) &&
         Objects.equals(purchase, order.purchase) &&
         Objects.equals(userId, order.userId);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, giftCertificateId, orderTimestamp, purchase, userId);
+    return Objects.hash(id, orderCertificateId, timestamp, purchase, userId);
   }
 
   public Long getId() {
@@ -54,19 +54,19 @@ public class Order {
   }
 
   public Long getGiftCertificate() {
-    return giftCertificateId;
+    return orderCertificateId;
   }
 
   public void setGiftCertificate(Long giftCertificateId) {
-    this.giftCertificateId = giftCertificateId;
+    this.orderCertificateId = giftCertificateId;
   }
 
-  public LocalDateTime getOrderTimestamp() {
-    return orderTimestamp;
+  public LocalDateTime getTimestamp() {
+    return timestamp;
   }
 
-  public void setOrderTimestamp(LocalDateTime orderTimestamp) {
-    this.orderTimestamp = orderTimestamp;
+  public void setTimestamp(LocalDateTime timestamp) {
+    this.timestamp = timestamp;
   }
 
   public BigDecimal getPurchase() {

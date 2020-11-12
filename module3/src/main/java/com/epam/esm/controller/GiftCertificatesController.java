@@ -1,7 +1,6 @@
 package com.epam.esm.controller;
 
 import com.epam.esm.entity.GiftCertificate;
-import com.epam.esm.entity.Order;
 import com.epam.esm.exception.ControllerEntityDeleteException;
 import com.epam.esm.exception.ControllerEntityNotFoundException;
 import com.epam.esm.exception.ControllerEntityUpdateException;
@@ -9,7 +8,6 @@ import com.epam.esm.exception.ControllerSaveEntityException;
 import com.epam.esm.exception.EntityNotFoundException;
 import com.epam.esm.exception.GiftCertificateServiceException;
 import com.epam.esm.resource.GiftCertificateResource;
-import com.epam.esm.resource.OrderResource;
 import com.epam.esm.service.GiftCertificateService;
 import java.util.HashMap;
 import java.util.List;
@@ -82,7 +80,7 @@ public class GiftCertificatesController {
    *
    * @param giftCertificate ResponseBody that represents gift certificate entity
    * @return created gift certificate
-   * @throws ControllerSaveEntityException     if entity was not created
+   * @throws ControllerSaveEntityException if entity was not created
    */
   @PostMapping
   public ResponseEntity<GiftCertificate> createGiftCertificate(

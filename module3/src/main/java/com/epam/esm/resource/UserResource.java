@@ -13,16 +13,16 @@ public class UserResource extends RepresentationModel<UserResource> {
 
   private final User user;
 
-  public User getUser() {
-    return user;
-  }
-
   public UserResource(final User user) {
     this.user = user;
     final long id = user.getId();
     add(linkTo(UserController.class).withRel("users"));
     add(linkTo(methodOn(OrderController.class).getAllUserOrders(id)).withRel("orders"));
 
+  }
+
+  public User getUser() {
+    return user;
   }
 
   @Override

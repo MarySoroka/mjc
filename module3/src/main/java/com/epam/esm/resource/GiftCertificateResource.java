@@ -1,5 +1,10 @@
 package com.epam.esm.resource;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
+import com.epam.esm.controller.GiftCertificatesController;
+import com.epam.esm.controller.OrderController;
 import com.epam.esm.entity.GiftCertificate;
 import java.util.Objects;
 import org.springframework.hateoas.RepresentationModel;
@@ -10,6 +15,11 @@ public class GiftCertificateResource extends RepresentationModel<GiftCertificate
 
   public GiftCertificateResource(GiftCertificate giftCertificate) {
     this.giftCertificate = giftCertificate;
+    add(linkTo(GiftCertificatesController.class).withRel("certificates"));
+  }
+
+  public GiftCertificate getGiftCertificate() {
+    return giftCertificate;
   }
 
   @Override

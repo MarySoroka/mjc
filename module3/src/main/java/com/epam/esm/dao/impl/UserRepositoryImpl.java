@@ -15,8 +15,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class UserRepositoryImpl implements UserRepository {
 
-  private static final String SELECT_ALL_USERS_QUERY = "SELECT  u.id, u.user_name,u.user_surname FROM gift_certificates.user u";
-  private static final String SELECT_USER_BY_ID_QUERY = "SELECT  u.id, u.user_name,u.user_surname FROM gift_certificates.user  u WHERE u.id = :id";
+  private static final String SELECT_ALL_USERS_QUERY = "SELECT  u.id, u.name,u.surname FROM gift_certificates.user u";
+  private static final String SELECT_USER_BY_ID_QUERY = "SELECT  u.id, u.name,u.surname FROM gift_certificates.user  u WHERE u.id = :id";
   private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
   @Autowired

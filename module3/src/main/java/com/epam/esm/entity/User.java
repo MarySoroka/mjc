@@ -1,5 +1,6 @@
 package com.epam.esm.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.Objects;
 import java.util.Set;
 
@@ -8,6 +9,7 @@ public class User {
   private Long id;
   private String name;
   private String surname;
+  @JsonIgnore
   private Set<Order> orders;
 
   public User(Long id, String name, String surname) {

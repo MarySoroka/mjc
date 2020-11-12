@@ -3,7 +3,7 @@ buildscript {
         springVersion = '5.2.9.RELEASE'
         hikariCPVersion = '3.4.5'
         mySqlConnectorVersion = '8.0.22'
-        junitVersion = '5.4.2';
+        junitVersion = '5.4.2'
         mockitoVersion = '3.5.15'
         h2DatabaseVersion = '1.4.200'
 
@@ -27,8 +27,8 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-web'
-
+    compile 'org.springframework.boot:spring-boot-starter-hateoas:2.3.5.RELEASE'
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-parent', version: '2.3.5.RELEASE', ext: 'pom'
     compile "org.springframework:spring-jdbc:${springVersion}"
     compile "com.zaxxer:HikariCP:${hikariCPVersion}"
     compile "mysql:mysql-connector-java:${mySqlConnectorVersion}"

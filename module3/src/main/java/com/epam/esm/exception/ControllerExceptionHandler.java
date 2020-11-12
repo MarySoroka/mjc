@@ -16,12 +16,14 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
       ControllerEntityNotFoundException ex) {
     return new ExceptionResponse(ex.getMessage(), "40401");
   }
+
   @ExceptionHandler
   @ResponseStatus(HttpStatus.BAD_REQUEST)
   public ExceptionResponse handleResourceBuildException(
       ResourceBuildException ex) {
     return new ExceptionResponse(ex.getMessage(), "40001");
   }
+
   @ExceptionHandler
   @ResponseStatus(HttpStatus.NOT_FOUND)
   public ExceptionResponse handleControllerEntityDeleteException(
@@ -58,6 +60,7 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
     return new ExceptionResponse(ex.getMessage(), "50002");
 
   }
+
   @ExceptionHandler
   @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
   public ExceptionResponse handleNotWatchedException(
@@ -65,6 +68,7 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
     return new ExceptionResponse(ex.getMessage(), "50002");
 
   }
+
   @ExceptionHandler
   @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
   public ExceptionResponse handleNotWatchedException(
@@ -72,6 +76,7 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
     return new ExceptionResponse(ex.getMessage(), "50002");
 
   }
+
   @ExceptionHandler
   @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
   public ExceptionResponse handleNotWatchedException(
@@ -79,6 +84,7 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
     return new ExceptionResponse(ex.getMessage(), "50002");
 
   }
+
   @ExceptionHandler
   @ResponseStatus(HttpStatus.BAD_REQUEST)
   protected ExceptionResponse handleMethodArgumentTypeMismatch(

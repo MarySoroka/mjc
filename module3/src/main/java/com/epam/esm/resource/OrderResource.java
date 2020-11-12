@@ -6,7 +6,6 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 import com.epam.esm.controller.GiftCertificatesController;
 import com.epam.esm.controller.OrderController;
 import com.epam.esm.entity.Order;
-import com.epam.esm.exception.ControllerEntityNotFoundException;
 import com.epam.esm.exception.EntityNotFoundException;
 import com.epam.esm.exception.ResourceBuildException;
 import java.util.Objects;

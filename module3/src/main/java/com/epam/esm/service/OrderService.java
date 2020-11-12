@@ -11,7 +11,7 @@ import java.util.Set;
 public interface OrderService {
    List<Order> getAllOrders();
    Order getOrderById(Long id) throws EntityNotFoundException;
-   void createOrder(Order order) throws RepositorySaveException;
+   Order createOrder(Order order) throws RepositorySaveException, EntityNotFoundException;
    void deleteOrder(Long id) throws RepositoryDeleteException;
    void updateOrder(Order order) throws RepositoryUpdateException;
    Set<Order> getAllUserOrders(Long userId);

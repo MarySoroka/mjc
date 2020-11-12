@@ -38,8 +38,9 @@ public class OrderServiceImpl implements OrderService {
   }
 
   @Override
-  public void createOrder(Order order) throws RepositorySaveException {
-     orderRepository.save(order);
+  public Order createOrder(Order order) throws RepositorySaveException, EntityNotFoundException {
+    Long orderId = orderRepository.save(order);
+    return getOrderById(orderId);
   }
 
   @Override

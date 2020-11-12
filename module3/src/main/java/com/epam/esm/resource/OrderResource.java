@@ -7,6 +7,7 @@ import com.epam.esm.controller.GiftCertificatesController;
 import com.epam.esm.controller.OrderController;
 import com.epam.esm.entity.Order;
 import com.epam.esm.exception.ControllerEntityNotFoundException;
+import com.epam.esm.exception.EntityNotFoundException;
 import com.epam.esm.exception.ResourceBuildException;
 import java.util.Objects;
 import org.springframework.hateoas.RepresentationModel;
@@ -18,14 +19,17 @@ public class OrderResource extends RepresentationModel<OrderResource> {
   public OrderResource(Order order) {
     try {
       this.order = order;
-      Long giftCertificateId = order.getGiftCertificate();
+      final Long giftCertificateId = order.getGiftCertificate();
       add(linkTo(OrderController.class).withRel("orders"));
-
       add(linkTo(methodOn(GiftCertificatesController.class).getCertificateById(giftCertificateId))
-          .withRel("giftCertificates"));
-    } catch (ControllerEntityNotFoundException e) {
+          .withRel("giftCertificate"));
+    } catch (EntityNotFoundException e) {
       throw new ResourceBuildException("Resource exception : couldn't build order");
     }
+  }
+
+  public Order getOrder() {
+    return order;
   }
 
   @Override

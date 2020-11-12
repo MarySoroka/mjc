@@ -38,16 +38,6 @@ public class OrderController {
     this.orderService = orderService;
   }
 
-  @GetMapping
-  public ResponseEntity<CollectionModel<OrderResource>> getAllOrders() {
-    final List<OrderResource> orderResourceList =
-        orderService.getAllOrders().stream().map(OrderResource::new).collect(Collectors.toList());
-    final CollectionModel<OrderResource> resources = CollectionModel.of(orderResourceList);
-    final String uriString = ServletUriComponentsBuilder.fromCurrentRequest().build().toUriString();
-    resources.add(Link.of(uriString, "self"));
-    return ResponseEntity.ok(resources);
-
-  }
 
   @GetMapping
   public ResponseEntity<CollectionModel<OrderResource>> getAllUserOrders(

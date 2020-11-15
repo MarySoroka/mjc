@@ -44,4 +44,6 @@ public interface TagRepository extends CRUDDao<Tag, Long> {
    * @throws RepositoryDeleteException if tag was not deleted
    */
   void deleteCertificateTag(Long tagId, Long certificateId) throws RepositoryDeleteException;
+
+  Tag getTheMostWidelyUsedTag();
 }

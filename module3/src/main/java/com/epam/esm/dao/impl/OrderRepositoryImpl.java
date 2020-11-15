@@ -22,12 +22,12 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class OrderRepositoryImpl implements OrderRepository {
 
-  private static final String INSERT_ORDERS_QUERY = "INSERT INTO gift_certificates.order (user_id, timestamp, purchase, order_certificate_id) values (:userId,:orderTimestamp,:purchase,:giftCertificateId)";
-  private static final String UPDATE_ORDERS_QUERY = "UPDATE gift_certificates.order set user_id=:userId, timestamp=:orderTimestamp, purchase=:purchase, order_certificate_id=:giftCertificateId where id = :id";
+  private static final String INSERT_ORDERS_QUERY = "INSERT INTO gift_certificates.order (user_id, timestamp, cost, order_certificate_id) values (:userId,:orderTimestamp,:cost,:orderCertificateId)";
+  private static final String UPDATE_ORDERS_QUERY = "UPDATE gift_certificates.order set user_id=:userId, timestamp=:orderTimestamp, cost=:cost, order_certificate_id=:orderCertificateId where id = :id";
   private static final String DELETE_ORDER_QUERY = "DELETE FROM gift_certificates.`order` WHERE id = :id";
-  private static final String SELECT_ALL_ORDERS_QUERY = "SELECT id, user_id, timestamp, purchase, orderCertificateId  FROM gift_certificates.`order`";
-  private static final String SELECT_ORDER_BY_ID_QUERY = "SELECT id, user_id, timestamp, purchase, orderCertificateId  FROM gift_certificates.`order`  WHERE id = :id";
-  private static final String SELECT_ORDER_BY_USER_ID_QUERY = "SELECT id, user_id, timestamp, purchase, orderCertificateId  FROM gift_certificates.`order`  WHERE user_id = :userId";
+  private static final String SELECT_ALL_ORDERS_QUERY = "SELECT id, user_id, timestamp, cost, order_certificate_id  FROM gift_certificates.`order`";
+  private static final String SELECT_ORDER_BY_ID_QUERY = "SELECT id, user_id, timestamp, cost, order_certificate_id  FROM gift_certificates.`order`  WHERE id = :id";
+  private static final String SELECT_ORDER_BY_USER_ID_QUERY = "SELECT id, user_id, timestamp, cost, order_certificate_id  FROM gift_certificates.`order`  WHERE user_id = :userId";
   private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
   @Autowired

@@ -4,10 +4,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class  RestApiAdvancedApp {
+public class RestApiAdvancedApp {
 
   public static void main(String[] args) {
     SpringApplication.run(RestApiAdvancedApp.class, args);
-
   }
 }

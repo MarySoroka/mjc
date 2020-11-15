@@ -3,6 +3,10 @@ package com.epam.esm.service;
 import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.exception.EntityNotFoundException;
 import com.epam.esm.exception.GiftCertificateServiceException;
+import com.epam.esm.exception.RepositoryDeleteException;
+import com.epam.esm.exception.RepositorySaveException;
+import com.epam.esm.exception.RepositoryUpdateException;
+import com.epam.esm.exception.TagServiceException;
 import java.util.List;
 import java.util.Map;
 
@@ -31,14 +35,15 @@ public interface GiftCertificateService {
    * @throws GiftCertificateServiceException if generated id equals null
    */
   GiftCertificate createCertificate(GiftCertificate giftCertificate)
-      throws GiftCertificateServiceException;
+      throws TagServiceException, EntityNotFoundException, RepositorySaveException;
 
   /**
    * delete entity by key parameter
    *
    * @param certificateId certificate id
    */
-  void deleteCertificate(Long certificateId) throws GiftCertificateServiceException;
+  void deleteCertificate(Long certificateId)
+      throws  RepositoryDeleteException;
 
   /**
    * method update entity using new values in giftCertificate

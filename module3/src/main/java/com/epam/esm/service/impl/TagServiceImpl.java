@@ -2,10 +2,9 @@ package com.epam.esm.service.impl;
 
 import com.epam.esm.dao.TagRepository;
 import com.epam.esm.entity.Tag;
+import com.epam.esm.exception.EntityNotFoundException;
 import com.epam.esm.exception.RepositoryDeleteException;
 import com.epam.esm.exception.RepositorySaveException;
-import com.epam.esm.exception.EntityNotFoundException;
-import com.epam.esm.exception.TagServiceException;
 import com.epam.esm.service.TagService;
 import java.util.List;
 import java.util.Optional;
@@ -42,24 +41,17 @@ public class TagServiceImpl implements TagService {
 
   @Override
   @Transactional
-  public Tag createTag(Tag tag) throws TagServiceException {
-    try {
-      Long tagId = tagRepository.save(tag);
-      return getTagById(tagId);
-    } catch (RepositorySaveException | EntityNotFoundException e) {
-      throw new TagServiceException("Service exception : Couldn't save tag ", e);
-    }
+  public Tag createTag(Tag tag)
+      throws RepositorySaveException, EntityNotFoundException {
+    Long tagId = tagRepository.save(tag);
+    return getTagById(tagId);
+
   }
 
   @Override
   @Transactional
-  public void deleteTag(Long tagId) throws TagServiceException {
-    try {
-      tagRepository.delete(tagId);
-    } catch (RepositoryDeleteException e) {
-      throw new TagServiceException("Service exception : Couldn't delete tag ");
-    }
-
+  public void deleteTag(Long tagId) throws RepositoryDeleteException {
+    tagRepository.delete(tagId);
   }
 
   @Override
@@ -73,29 +65,27 @@ public class TagServiceImpl implements TagService {
   }
 
   @Override
-  public void deleteTagForCertificate(Long tagId, Long certificateId) throws TagServiceException {
-    try {
-      tagRepository.deleteCertificateTag(tagId, certificateId);
-    } catch (RepositoryDeleteException e) {
-      throw new TagServiceException("Service exception : Couldn't delete certificate tag");
-    }
+  public void deleteTagForCertificate(Long tagId, Long certificateId)
+      throws RepositoryDeleteException {
+    tagRepository.deleteCertificateTag(tagId, certificateId);
   }
 
   @Override
   @Transactional
-  public void saveCertificateTag(Tag tag, Long certificateId) throws TagServiceException {
-    try {
-      Optional<Tag> tagByName = getTagByName(tag.getName());
-      if (!tagByName.isPresent()) {
-        createTag(tag);
-        tagRepository.saveCertificateTag(tag.getId(), certificateId);
-      } else {
-        tagRepository.saveCertificateTag(tagByName.get().getId(), certificateId);
-      }
-    } catch (RepositorySaveException e) {
-      throw new TagServiceException(
-          "Service exception : Couldn't save certificate tag. Certificate id " + certificateId);
+  public void saveCertificateTag(Tag tag, Long certificateId)
+      throws RepositorySaveException, EntityNotFoundException {
+    Optional<Tag> tagByName = getTagByName(tag.getName());
+    if (!tagByName.isPresent()) {
+      createTag(tag);
+      tagRepository.saveCertificateTag(tag.getId(), certificateId);
+    } else {
+      tagRepository.saveCertificateTag(tagByName.get().getId(), certificateId);
     }
+  }
+
+  @Override
+  public Tag getTheMostWidelyUsedTag() {
+    return tagRepository.getTheMostWidelyUsedTag();
   }
 
 

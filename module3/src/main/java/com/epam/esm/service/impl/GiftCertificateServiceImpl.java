@@ -63,36 +63,26 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
   @Override
   @Transactional
   public GiftCertificate createCertificate(GiftCertificate giftCertificate)
-      throws GiftCertificateServiceException {
-    try {
-      LocalDateTime currentDateTime = ServiceUtils.getCurrentDateTime();
-      giftCertificate.setLastUpdateDate(currentDateTime);
-      giftCertificate.setCreateDate(currentDateTime);
-      Long certificateId = giftCertificateRepository.save(giftCertificate);
-      Set<Tag> tags = giftCertificate.getTags();
-      if (tags != null && !tags.isEmpty()) {
-        for (Tag tag : tags) {
-          tagService.saveCertificateTag(tag, certificateId);
-        }
+      throws TagServiceException, EntityNotFoundException, RepositorySaveException {
+    LocalDateTime currentDateTime = ServiceUtils.getCurrentDateTime();
+    giftCertificate.setLastUpdateDate(currentDateTime);
+    giftCertificate.setCreateDate(currentDateTime);
+    Long certificateId = giftCertificateRepository.save(giftCertificate);
+    Set<Tag> tags = giftCertificate.getTags();
+    if (tags != null && !tags.isEmpty()) {
+      for (Tag tag : tags) {
+        tagService.saveCertificateTag(tag, certificateId);
       }
-      return getCertificateById(certificateId);
-    } catch (RepositorySaveException | EntityNotFoundException e) {
-      throw new GiftCertificateServiceException("Service exception : Couldn't create certificate ");
-    } catch (TagServiceException e) {
-      throw new GiftCertificateServiceException(
-          "Service exception : Couldn't create tag certificate ");
     }
+    return getCertificateById(certificateId);
+
   }
 
   @Override
   @Transactional
-  public void deleteCertificate(Long certificateId) throws GiftCertificateServiceException {
-    try {
-      giftCertificateRepository.delete(certificateId);
-    } catch (RepositoryDeleteException e) {
-      throw new GiftCertificateServiceException(
-          "Service exception : Couldn't delete certificate " + certificateId);
-    }
+  public void deleteCertificate(Long certificateId)
+      throws RepositoryDeleteException {
+    giftCertificateRepository.delete(certificateId);
   }
 
   @Override
@@ -115,14 +105,8 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
           tagService.deleteTagForCertificate(tag.getId(), certificateById.getId());
         }
       }
-
-    } catch (RepositoryUpdateException e) {
-      throw new GiftCertificateServiceException("Service exception : Couldn't update certificate ");
-    } catch (EntityNotFoundException e) {
-      throw new GiftCertificateServiceException("Service exception : Couldn't find certificate ");
-    } catch (TagServiceException e) {
-      throw new GiftCertificateServiceException(
-          "Service exception : Couldn't update tag certificate ");
+    } catch (RepositoryDeleteException | RepositoryUpdateException | TagServiceException | EntityNotFoundException | RepositorySaveException e) {
+      throw new GiftCertificateServiceException("Service exception : couldn't update certificate ",e);
     }
   }
 

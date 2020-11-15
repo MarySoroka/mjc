@@ -4,6 +4,7 @@ import com.epam.esm.dao.TagRepository;
 import com.epam.esm.entity.Tag;
 import com.epam.esm.exception.RepositoryDeleteException;
 import com.epam.esm.exception.RepositorySaveException;
+import com.epam.esm.exception.RepositoryUpdateException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -30,6 +31,15 @@ public class TagRepositoryImpl implements TagRepository {
   private static final String SELECT_TAG_BY_ID_QUERY = "SELECT id, name FROM gift_certificates.tag WHERE id= :id";
   private static final String SELECT_TAG_BY_NAME_QUERY = "SELECT id, name FROM gift_certificates.tag WHERE `name`= :name";
   private static final String SELECT_TAG_BY_CERTIFICATE_ID_QUERY = "SELECT t.id, t.name FROM gift_certificates.tag t JOIN certificate_tag ct on t.id = ct.tag_id JOIN gift_certificate gc on gc.id = ct.certificate_id WHERE gc.id =:id";
+
+  private static final String SELECT_THE_MOST_WIDELY_USED_TAG_QUERY =
+      "SELECT t.id, t.name FROM gift_certificates.`order` o " +
+          "JOIN gift_certificate gc on o.order_certificate_id = gc.id " +
+          "JOIN certificate_tag ct on gc.id = ct.certificate_id " +
+          "JOIN tag t on t.id = ct.tag_id "+
+          "WHERE o.cost = (SELECT max(cost) FROM o) " +
+          "GROUP BY gc.id " +
+          "ORDER BY count(t.id) DESC";
 
   private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
@@ -126,5 +136,11 @@ public class TagRepositoryImpl implements TagRepository {
       throw new RepositoryDeleteException("Repository exception: Couldn't delete certificate tag entity with id : " + tagId);
     }
 
+  }
+
+  @Override
+  public Tag getTheMostWidelyUsedTag() {
+    return namedParameterJdbcTemplate
+        .query(SELECT_THE_MOST_WIDELY_USED_TAG_QUERY, new BeanPropertyRowMapper<>(Tag.class)).get(0);
   }
 }

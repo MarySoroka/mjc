@@ -9,19 +9,46 @@ public class Order {
   private Long id;
   private Long orderCertificateId;
   private LocalDateTime timestamp;
-  private BigDecimal purchase;
+  private BigDecimal cost;
   private Long userId;
 
   public Order(Long id, Long orderCertificateId, LocalDateTime timestamp,
-      BigDecimal purchase, Long userId) {
+      BigDecimal cost, Long userId) {
     this.id = id;
     this.orderCertificateId = orderCertificateId;
     this.timestamp = timestamp;
-    this.purchase = purchase;
+    this.cost = cost;
     this.userId = userId;
   }
 
+  @Override
+  public String toString() {
+    return "Order{" +
+        "id=" + id +
+        ", orderCertificateId=" + orderCertificateId +
+        ", timestamp=" + timestamp +
+        ", cost=" + cost +
+        ", userId=" + userId +
+        '}';
+  }
+
   public Order() {
+  }
+
+  public Long getOrderCertificateId() {
+    return orderCertificateId;
+  }
+
+  public void setOrderCertificateId(Long orderCertificateId) {
+    this.orderCertificateId = orderCertificateId;
+  }
+
+  public Long getUserId() {
+    return userId;
+  }
+
+  public void setUserId(Long userId) {
+    this.userId = userId;
   }
 
   @Override
@@ -36,13 +63,13 @@ public class Order {
     return Objects.equals(id, order.id) &&
         Objects.equals(orderCertificateId, order.orderCertificateId) &&
         Objects.equals(timestamp, order.timestamp) &&
-        Objects.equals(purchase, order.purchase) &&
+        Objects.equals(cost, order.cost) &&
         Objects.equals(userId, order.userId);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, orderCertificateId, timestamp, purchase, userId);
+    return Objects.hash(id, orderCertificateId, timestamp, cost, userId);
   }
 
   public Long getId() {
@@ -53,13 +80,6 @@ public class Order {
     this.id = id;
   }
 
-  public Long getGiftCertificate() {
-    return orderCertificateId;
-  }
-
-  public void setGiftCertificate(Long giftCertificateId) {
-    this.orderCertificateId = giftCertificateId;
-  }
 
   public LocalDateTime getTimestamp() {
     return timestamp;
@@ -69,11 +89,11 @@ public class Order {
     this.timestamp = timestamp;
   }
 
-  public BigDecimal getPurchase() {
-    return purchase;
+  public BigDecimal getCost() {
+    return cost;
   }
 
-  public void setPurchase(BigDecimal purchase) {
-    this.purchase = purchase;
+  public void setCost(BigDecimal cost) {
+    this.cost = cost;
   }
 }

@@ -21,6 +21,11 @@ public class User {
   public User() {
   }
 
+  public User(String name, String surname) {
+    this.name = name;
+    this.surname = surname;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {

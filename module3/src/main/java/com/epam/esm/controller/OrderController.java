@@ -8,6 +8,7 @@ import com.epam.esm.exception.RepositorySaveException;
 import com.epam.esm.exception.RepositoryUpdateException;
 import com.epam.esm.resource.OrderResource;
 import com.epam.esm.service.OrderService;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,9 +41,15 @@ public class OrderController {
 
   @GetMapping
   public ResponseEntity<CollectionModel<OrderResource>> getAllUserOrders(
-      @RequestParam Long userId) {
-    Set<OrderResource> userOrders = orderService.getAllUserOrders(userId).stream()
-        .map(OrderResource::new).collect(Collectors.toSet());
+      @RequestParam(required = false) Long userId, @RequestParam Map<String, Integer> pagination) {
+    Set<OrderResource> userOrders;
+    if (userId != null) {
+      userOrders = orderService.getAllUserOrders(userId, pagination).stream()
+          .map(OrderResource::new).collect(Collectors.toSet());
+    } else {
+      userOrders = orderService.getAllOrders(pagination).stream()
+          .map(OrderResource::new).collect(Collectors.toSet());
+    }
     CollectionModel<OrderResource> orderResources = CollectionModel.of(userOrders);
     final String uriString = ServletUriComponentsBuilder.fromCurrentRequest().build().toUriString();
     orderResources.add(Link.of(uriString, "self"));

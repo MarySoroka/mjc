@@ -5,6 +5,7 @@ import com.epam.esm.entity.User;
 import com.epam.esm.exception.EntityNotFoundException;
 import com.epam.esm.service.UserService;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,8 +21,8 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public List<User> getAllUsers() {
-    return userRepository.getAll();
+  public List<User> getAllUsers(Map<String,Integer> pagination) {
+    return userRepository.getAll(pagination);
   }
 
   @Override

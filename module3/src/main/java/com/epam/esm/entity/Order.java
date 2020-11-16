@@ -8,7 +8,17 @@ public class Order {
 
   private Long id;
   private Long orderCertificateId;
+
+  public void setTimestamp(LocalDateTime timestamp) {
+    this.timestamp = timestamp;
+  }
+
   private LocalDateTime timestamp;
+
+  public LocalDateTime getTimestamp() {
+    return timestamp;
+  }
+
   private BigDecimal cost;
   private Long userId;
 
@@ -81,13 +91,6 @@ public class Order {
   }
 
 
-  public LocalDateTime getTimestamp() {
-    return timestamp;
-  }
-
-  public void setTimestamp(LocalDateTime timestamp) {
-    this.timestamp = timestamp;
-  }
 
   public BigDecimal getCost() {
     return cost;

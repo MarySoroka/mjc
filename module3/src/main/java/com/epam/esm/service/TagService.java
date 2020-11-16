@@ -4,7 +4,6 @@ import com.epam.esm.entity.Tag;
 import com.epam.esm.exception.EntityNotFoundException;
 import com.epam.esm.exception.RepositoryDeleteException;
 import com.epam.esm.exception.RepositorySaveException;
-import com.epam.esm.exception.TagServiceException;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -34,10 +33,9 @@ public interface TagService {
    *
    * @param tag tag, that should be save
    * @return if entity has been saved return generated id
-   * @throws TagServiceException if generated id equals null
    */
   Tag createTag(Tag tag)
-      throws TagServiceException, RepositorySaveException, EntityNotFoundException;
+      throws RepositorySaveException, EntityNotFoundException;
 
   /**
    * delete entity by key parameter
@@ -45,7 +43,7 @@ public interface TagService {
    * @param tagId tag id
    * @return if entity has been found and deleted - true, else false
    */
-  void deleteTag(Long tagId) throws TagServiceException, RepositoryDeleteException;
+  void deleteTag(Long tagId) throws RepositoryDeleteException;
 
   /**
    * method find certificate tags
@@ -68,20 +66,18 @@ public interface TagService {
    *
    * @param tagId         tag id
    * @param certificateId certificate id
-   * @throws TagServiceException if tag was not deleted
    */
   void deleteTagForCertificate(Long tagId, Long certificateId)
-      throws TagServiceException, RepositoryDeleteException;
+      throws RepositoryDeleteException;
 
   /**
    * method save tag certificate
    *
    * @param tag           tag
    * @param certificateId certificate id
-   * @throws TagServiceException if tag was not save
    */
   void saveCertificateTag(Tag tag, Long certificateId)
-      throws TagServiceException, RepositorySaveException, EntityNotFoundException;
+      throws RepositorySaveException, EntityNotFoundException;
 
   Tag getTheMostWidelyUsedTag();
 }

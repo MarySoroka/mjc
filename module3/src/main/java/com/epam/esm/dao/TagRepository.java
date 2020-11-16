@@ -48,5 +48,4 @@ public interface TagRepository extends CRUDDao<Tag, Long> {
 
   Tag getTheMostWidelyUsedTag();
 
-  List<Tag> getLimitTags(Long limit, Long offset);
 }

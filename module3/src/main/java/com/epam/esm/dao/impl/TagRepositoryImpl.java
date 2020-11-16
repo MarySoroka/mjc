@@ -6,6 +6,7 @@ import com.epam.esm.exception.RepositoryDeleteException;
 import com.epam.esm.exception.RepositorySaveException;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,9 +63,14 @@ public class TagRepositoryImpl implements TagRepository {
   }
 
   @Override
-  public List<Tag> getAll() {
+  public List<Tag> getAll(Map<String,Integer> pagination) {
+
+    Integer limit = Integer.parseInt(String.valueOf(pagination.get("limit")));
+    Integer offset = Integer.parseInt(String.valueOf(pagination.get("offset")));
+    SqlParameterSource namedParameters = new MapSqlParameterSource("limit", limit).addValue("offset",
+        offset);
     return namedParameterJdbcTemplate
-        .query(SELECT_ALL_TAGS_QUERY, new BeanPropertyRowMapper<>(Tag.class));
+        .query(SELECT_ALL_TAGS_QUERY,namedParameters, new BeanPropertyRowMapper<>(Tag.class));
   }
 
   @Override
@@ -148,11 +154,4 @@ public class TagRepositoryImpl implements TagRepository {
         .get(0);
   }
 
-  @Override
-  public List<Tag> getLimitTags(Long limit, Long offset) {
-    SqlParameterSource namedParameters = new MapSqlParameterSource("limit", limit)
-        .addValue("offset", offset);
-    return namedParameterJdbcTemplate
-        .query(SELECT_ALL_TAGS_QUERY,namedParameters, new BeanPropertyRowMapper<>(Tag.class));
-  }
 }

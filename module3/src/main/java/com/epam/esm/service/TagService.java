@@ -6,6 +6,7 @@ import com.epam.esm.exception.RepositoryDeleteException;
 import com.epam.esm.exception.RepositorySaveException;
 import com.epam.esm.exception.TagServiceException;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
@@ -17,8 +18,9 @@ public interface TagService {
   /**
    * @return all objects in specific db table
    */
-  List<Tag> getAllTags();
 
+
+  List<Tag> getAllTags( Map<String,Integer> pagination);
   /**
    * method find entity by key parameter
    *

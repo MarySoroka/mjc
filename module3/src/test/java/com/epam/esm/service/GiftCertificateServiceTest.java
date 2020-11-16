@@ -77,7 +77,7 @@ class GiftCertificateServiceTest {
 
   @Test
   void whenCreateCertificateCorrectThenReturnId()
-      throws RepositorySaveException, GiftCertificateServiceException, TagServiceException {
+      throws RepositorySaveException, TagServiceException, EntityNotFoundException {
     expectedGiftCertificate.setTags(Collections.singleton(tag));
     when(giftCertificateRepository.save(any())).thenReturn(1L);
     doNothing().when(tagService).saveCertificateTag(any(Tag.class), anyLong());

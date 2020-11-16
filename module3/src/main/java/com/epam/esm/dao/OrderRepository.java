@@ -1,8 +1,9 @@
 package com.epam.esm.dao;
 
 import com.epam.esm.entity.Order;
+import java.util.Map;
 import java.util.Set;
 
 public interface OrderRepository extends CRUDDao<Order, Long>{
-   Set<Order> getAllUserOrders(Long userId);
+   Set<Order> getAllUserOrders(Long userId, Map<String,Integer> pagination);
 }

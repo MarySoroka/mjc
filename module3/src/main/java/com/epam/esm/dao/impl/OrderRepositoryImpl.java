@@ -7,6 +7,7 @@ import com.epam.esm.exception.RepositorySaveException;
 import com.epam.esm.exception.RepositoryUpdateException;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,9 +26,9 @@ public class OrderRepositoryImpl implements OrderRepository {
   private static final String INSERT_ORDERS_QUERY = "INSERT INTO gift_certificates.order (user_id, timestamp, cost, order_certificate_id) values (:userId,:orderTimestamp,:cost,:orderCertificateId)";
   private static final String UPDATE_ORDERS_QUERY = "UPDATE gift_certificates.order set user_id=:userId, timestamp=:orderTimestamp, cost=:cost, order_certificate_id=:orderCertificateId where id = :id";
   private static final String DELETE_ORDER_QUERY = "DELETE FROM gift_certificates.`order` WHERE id = :id";
-  private static final String SELECT_ALL_ORDERS_QUERY = "SELECT id, user_id, timestamp, cost, order_certificate_id  FROM gift_certificates.`order`";
+  private static final String SELECT_ALL_ORDERS_QUERY = "SELECT id, user_id, timestamp, cost, order_certificate_id  FROM gift_certificates.`order` ORDER BY id LIMIT :limit OFFSET :offset";
   private static final String SELECT_ORDER_BY_ID_QUERY = "SELECT id, user_id, timestamp, cost, order_certificate_id  FROM gift_certificates.`order`  WHERE id = :id";
-  private static final String SELECT_ORDER_BY_USER_ID_QUERY = "SELECT id, user_id, timestamp, cost, order_certificate_id  FROM gift_certificates.`order`  WHERE user_id = :userId";
+  private static final String SELECT_ORDER_BY_USER_ID_QUERY = "SELECT id, user_id, timestamp, cost, order_certificate_id  FROM gift_certificates.`order`  WHERE user_id = :userId ORDER BY id LIMIT :limit OFFSET :offset";
   private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
   @Autowired
@@ -49,9 +50,13 @@ public class OrderRepositoryImpl implements OrderRepository {
   }
 
   @Override
-  public List<Order> getAll() {
+  public List<Order> getAll(Map<String, Integer> pagination) {
+    Integer limit = Integer.parseInt(String.valueOf(pagination.get("limit")));
+    Integer offset = Integer.parseInt(String.valueOf(pagination.get("offset")));
+    SqlParameterSource namedParameters = new MapSqlParameterSource("limit", limit)
+        .addValue("offset", offset);
     return namedParameterJdbcTemplate
-        .query(SELECT_ALL_ORDERS_QUERY, new BeanPropertyRowMapper<>(Order.class));
+        .query(SELECT_ALL_ORDERS_QUERY, namedParameters, new BeanPropertyRowMapper<>(Order.class));
 
   }
 
@@ -89,8 +94,13 @@ public class OrderRepositoryImpl implements OrderRepository {
   }
 
   @Override
-  public Set<Order> getAllUserOrders(Long userId) {
-    SqlParameterSource namedParameters = new MapSqlParameterSource("userId", userId);
+  public Set<Order> getAllUserOrders(Long userId, Map<String, Integer> pagination) {
+    Integer limit = Integer.parseInt(String.valueOf(pagination.get("limit")));
+    Integer offset = Integer.parseInt(String.valueOf(pagination.get("offset")));
+    SqlParameterSource namedParameters = new MapSqlParameterSource("limit", limit)
+        .addValue("offset",
+            offset)
+        .addValue("userId", userId);
     return new HashSet<>(this.namedParameterJdbcTemplate
         .query(SELECT_ORDER_BY_USER_ID_QUERY, namedParameters,
             new BeanPropertyRowMapper<>(Order.class)));

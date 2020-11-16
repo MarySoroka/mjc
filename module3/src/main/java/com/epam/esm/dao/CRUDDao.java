@@ -5,6 +5,7 @@ import com.epam.esm.exception.RepositorySaveException;
 
 import com.epam.esm.exception.RepositoryUpdateException;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -25,7 +26,7 @@ public interface CRUDDao<E, K> {
     /**
      * @return all objects in specific db table
      */
-    List<E> getAll();
+    List<E> getAll(Map<String,Integer> pagination);
 
     /**
      * delete entity by key parameter

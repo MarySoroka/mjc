@@ -7,6 +7,7 @@ import com.epam.esm.exception.RepositoryDeleteException;
 import com.epam.esm.exception.RepositorySaveException;
 import com.epam.esm.service.TagService;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,9 +26,10 @@ public class TagServiceImpl implements TagService {
 
 
   @Override
-  public List<Tag> getAllTags() {
-    return tagRepository.getAll();
+  public List<Tag> getAllTags(Map<String,Integer> pagination) {
+    return tagRepository.getAll(pagination);
   }
+
 
   @Override
   public Tag getTagById(Long id) throws EntityNotFoundException {

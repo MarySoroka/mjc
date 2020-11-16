@@ -10,6 +10,7 @@ import com.epam.esm.exception.TagServiceException;
 import com.epam.esm.resource.TagResource;
 import com.epam.esm.service.TagService;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
@@ -41,10 +42,9 @@ public class TagsController {
 
   @GetMapping
   public ResponseEntity<CollectionModel<TagResource>> getAllTags(
-      @RequestParam Long limit,
-      @RequestParam Long offset) {
+      @RequestParam Map<String, Integer> pagination) {
     final List<TagResource> tagResources =
-        tagService.getLimitTags(limit, offset).stream().map(TagResource::new)
+        tagService.getAllTags(pagination).stream().map(TagResource::new)
             .collect(Collectors.toList());
     final CollectionModel<TagResource> resources = CollectionModel.of(tagResources);
     final String uriString = ServletUriComponentsBuilder.fromCurrentRequest().build().toUriString();

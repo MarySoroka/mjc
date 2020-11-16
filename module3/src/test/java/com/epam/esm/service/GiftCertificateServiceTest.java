@@ -48,14 +48,13 @@ class GiftCertificateServiceTest {
 
   @Test
   void whenGetAllExistingCertificatesThenReturnOneCertificate() {
-    expectedGiftCertificate.setTags(Collections.singleton(tag));
 
-    when(giftCertificateRepository.getAllByQuery(anyMap()))
+    when(giftCertificateRepository.getAllByQuery(anyMap(), anyMap()))
         .thenReturn(Collections.singletonList(expectedGiftCertificate));
     when(tagService.getTagsByCertificateId(anyLong())).thenReturn(Collections.singleton(tag));
 
     List<GiftCertificate> certificates = giftCertificatesService
-        .getAllCertificates(new HashMap<>());
+        .getAllCertificates(new HashMap<>(), new HashMap<>());
 
     assertEquals(1, certificates.size());
     GiftCertificate giftCertificate = certificates.get(0);
@@ -66,7 +65,7 @@ class GiftCertificateServiceTest {
   @Test
   void whenGetExistingCertificateByIdThenReturnCorrectCertificate()
       throws EntityNotFoundException {
-    expectedGiftCertificate.setTags(Collections.singleton(tag));
+
 
     when(giftCertificateRepository.getById(anyLong()))
         .thenReturn(ofNullable(expectedGiftCertificate));

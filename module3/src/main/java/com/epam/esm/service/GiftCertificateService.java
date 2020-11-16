@@ -5,7 +5,6 @@ import com.epam.esm.exception.EntityNotFoundException;
 import com.epam.esm.exception.GiftCertificateServiceException;
 import com.epam.esm.exception.RepositoryDeleteException;
 import com.epam.esm.exception.RepositorySaveException;
-import com.epam.esm.exception.TagServiceException;
 import java.util.List;
 import java.util.Map;
 
@@ -33,7 +32,7 @@ public interface GiftCertificateService {
    * @return if entity has been saved return generated id
    */
   GiftCertificate createCertificate(GiftCertificate giftCertificate)
-      throws TagServiceException, EntityNotFoundException, RepositorySaveException;
+      throws  EntityNotFoundException, RepositorySaveException;
 
   /**
    * delete entity by key parameter

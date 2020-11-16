@@ -7,7 +7,6 @@ import com.epam.esm.exception.EntityNotFoundException;
 import com.epam.esm.exception.GiftCertificateServiceException;
 import com.epam.esm.exception.RepositoryDeleteException;
 import com.epam.esm.exception.RepositorySaveException;
-import com.epam.esm.exception.TagServiceException;
 import com.epam.esm.resource.GiftCertificateResource;
 import com.epam.esm.service.GiftCertificateService;
 import java.util.List;
@@ -63,7 +62,7 @@ public class GiftCertificatesController {
       GiftCertificate certificate = giftCertificateService.createCertificate(giftCertificate);
       GiftCertificateResource giftCertificateResource = new GiftCertificateResource(certificate);
       return ResponseEntity.ok(giftCertificateResource);
-    } catch (TagServiceException | EntityNotFoundException | RepositorySaveException e) {
+    } catch ( EntityNotFoundException | RepositorySaveException e) {
       throw new ControllerSaveEntityException(
           "Controller exception : Couldn't create certificate", e);
     }

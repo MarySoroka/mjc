@@ -4,11 +4,11 @@ import com.epam.esm.dao.GiftCertificateRepository;
 import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.entity.Tag;
 import com.epam.esm.exception.EntityNotFoundException;
+import com.epam.esm.exception.EntityValidationException;
 import com.epam.esm.exception.GiftCertificateServiceException;
 import com.epam.esm.exception.RepositoryDeleteException;
 import com.epam.esm.exception.RepositorySaveException;
 import com.epam.esm.exception.RepositoryUpdateException;
-import com.epam.esm.exception.TagServiceException;
 import com.epam.esm.service.GiftCertificateService;
 import com.epam.esm.service.ServiceUtils;
 import com.epam.esm.service.TagService;
@@ -63,7 +63,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
   @Override
   @Transactional
   public GiftCertificate createCertificate(GiftCertificate giftCertificate)
-      throws TagServiceException, EntityNotFoundException, RepositorySaveException {
+      throws EntityNotFoundException, RepositorySaveException {
     LocalDateTime currentDateTime = ServiceUtils.getCurrentDateTime();
     giftCertificate.setLastUpdateDate(currentDateTime);
     giftCertificate.setCreateDate(currentDateTime);
@@ -94,6 +94,8 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
       if (!giftCertificate.equals(certificateById)) {
         updateCertificateFields(certificateById, giftCertificate);
         giftCertificateRepository.update(giftCertificate);
+      }else{
+        throw new EntityValidationException("Service exception: no new entity field values was found");
       }
       if (giftCertificate.getTags() != null && !giftCertificate.getTags().isEmpty()) {
         for (Tag tag : giftCertificate.getTags()) {
@@ -105,16 +107,18 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
           tagService.deleteTagForCertificate(tag.getId(), certificateById.getId());
         }
       }
-    } catch (RepositoryDeleteException | RepositoryUpdateException | TagServiceException | EntityNotFoundException | RepositorySaveException e) {
-      throw new GiftCertificateServiceException("Service exception : couldn't update certificate ",e);
+    } catch (RepositoryDeleteException | RepositoryUpdateException | EntityNotFoundException | RepositorySaveException e) {
+      throw new GiftCertificateServiceException("Service exception : couldn't update certificate ",
+          e);
     }
   }
 
 
   @Override
-  public List<GiftCertificate> getCertificateByTagName(String tagName, Map<String, Integer> pagination) {
+  public List<GiftCertificate> getCertificateByTagName(String tagName,
+      Map<String, Integer> pagination) {
     List<GiftCertificate> giftCertificates = giftCertificateRepository
-        .getGiftCertificatesByTagName(tagName,pagination);
+        .getGiftCertificatesByTagName(tagName, pagination);
     giftCertificates.forEach(giftCertificate -> giftCertificate
         .setTags(new HashSet<>(tagService.getTagsByCertificateId(giftCertificate.getId()))));
     return giftCertificates;
@@ -122,20 +126,23 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
 
   private void updateCertificateFields(GiftCertificate certificate,
       GiftCertificate updateCertificate) {
-    updateCertificate.setCreateDate(
-        updateCertificate.getCreateDate() != null ? updateCertificate.getCreateDate()
-            : certificate.getCreateDate());
-    updateCertificate.setDescription(
-        updateCertificate.getDescription() != null ? updateCertificate.getDescription()
-            : certificate.getDescription());
-    updateCertificate.setDuration(
-        updateCertificate.getDuration() != null && updateCertificate.getDuration() > 0
-            ? updateCertificate.getDuration()
-            : certificate.getDuration());
+    updateCertificate.setCreateDate(updateCertificate.getCreateDate() != null
+        ? updateCertificate.getCreateDate()
+        : certificate.getCreateDate());
+    updateCertificate.setDescription(updateCertificate.getDescription() != null
+        ? updateCertificate.getDescription()
+        : certificate.getDescription());
+    updateCertificate.setDuration(updateCertificate.getDuration() != null
+        ? updateCertificate.getDuration()
+        : certificate.getDuration());
     updateCertificate.setLastUpdateDate(ServiceUtils.getCurrentDateTime());
-    updateCertificate
-        .setPrice(updateCertificate.getPrice() != null && updateCertificate.getPrice().compareTo(
-            BigDecimal.ZERO) > 0 ? updateCertificate.getPrice()
-            : certificate.getPrice());
+    updateCertificate.setPrice(updateCertificate.getPrice() != null
+        ? updateCertificate.getPrice()
+        : certificate.getPrice());
+    BigDecimal price = updateCertificate.getPrice();
+    if (price.compareTo(BigDecimal.ZERO) < 0 || updateCertificate.getDuration() < 0) {
+      throw new EntityValidationException("Validation exception: invalid query values");
+    }
+
   }
 }

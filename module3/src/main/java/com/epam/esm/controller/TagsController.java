@@ -6,7 +6,6 @@ import com.epam.esm.exception.ControllerSaveEntityException;
 import com.epam.esm.exception.EntityNotFoundException;
 import com.epam.esm.exception.RepositoryDeleteException;
 import com.epam.esm.exception.RepositorySaveException;
-import com.epam.esm.exception.TagServiceException;
 import com.epam.esm.resource.TagResource;
 import com.epam.esm.service.TagService;
 import java.util.List;
@@ -74,7 +73,7 @@ public class TagsController {
       Tag createdTag = tagService.createTag(tag);
       TagResource tagResource = new TagResource(createdTag);
       return ResponseEntity.ok(tagResource);
-    } catch (TagServiceException | RepositorySaveException | EntityNotFoundException e) {
+    } catch ( RepositorySaveException | EntityNotFoundException e) {
       throw new ControllerSaveEntityException("Controller exception : Couldn't create tag", e);
     }
 
@@ -87,7 +86,7 @@ public class TagsController {
     try {
       tagService.deleteTag(id);
       return ResponseEntity.noContent().build();
-    } catch (TagServiceException | RepositoryDeleteException e) {
+    } catch ( RepositoryDeleteException e) {
       throw new ControllerEntityDeleteException("Controller exception : Couldn't delete tag", e);
     }
 

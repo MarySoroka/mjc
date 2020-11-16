@@ -31,12 +31,11 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 public class TagsController {
 
   private final TagService tagService;
-  private final DatabaseUtils databaseUtils;
 
   @Autowired
-  public TagsController(TagService tagService, DatabaseUtils databaseUtils) {
+  public TagsController(TagService tagService) {
     this.tagService = tagService;
-    this.databaseUtils = databaseUtils;
+
   }
 
 

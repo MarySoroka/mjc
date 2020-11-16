@@ -41,13 +41,13 @@ public class GiftCertificatesController {
   public ResponseEntity<List<GiftCertificate>> getAllCertificates(
       @RequestParam(required = false) String name,
       @RequestParam(required = false) String sort,
-      @RequestParam(required = false) String order) {
+      @RequestParam(required = false) String order, @RequestParam Map<String, Integer> pagination) {
 
     Map<String, String> queryParams = new HashMap<>();
     queryParams.computeIfAbsent("name", val -> name);
     queryParams.computeIfAbsent("sort", val -> sort);
     queryParams.computeIfAbsent("order", val -> order);
-    List<GiftCertificate> allCertificates = giftCertificateService.getAllCertificates(queryParams);
+    List<GiftCertificate> allCertificates = giftCertificateService.getAllCertificates(queryParams, pagination);
     return new ResponseEntity<>(allCertificates,
         HttpStatus.OK);
 

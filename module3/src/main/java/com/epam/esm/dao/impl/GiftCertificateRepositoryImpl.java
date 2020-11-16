@@ -25,9 +25,9 @@ public class GiftCertificateRepositoryImpl implements GiftCertificateRepository 
   private static final String UPDATE_CERTIFICATES_QUERY = "UPDATE gift_certificates.gift_certificate set name=:name ,description=:description, price=:price, create_date=:createDate, last_update_date=:lastUpdateDate, duration=:duration where id = :id";
 
   private static final String DELETE_CERTIFICATES_QUERY = "DELETE FROM gift_certificates.gift_certificate WHERE id = :id";
-  private static final String SELECT_ALL_CERTIFICATES_QUERY = "SELECT gc.id,gc.name,gc.description, gc.price, gc.create_date, gc.last_update_date, gc.duration FROM gift_certificates.gift_certificate gc JOIN gift_certificates.certificate_tag ct on gc.id = ct.certificate_id JOIN gift_certificates.tag t on t.id = ct.tag_id";
+  private static final String SELECT_ALL_CERTIFICATES_QUERY = "SELECT gc.id,gc.name,gc.description, gc.price, gc.create_date, gc.last_update_date, gc.duration FROM gift_certificates.gift_certificate gc JOIN gift_certificates.certificate_tag ct on gc.id = ct.certificate_id JOIN gift_certificates.tag t on t.id = ct.tag_id ";
   private static final String SELECT_CERTIFICATE_BY_ID_QUERY = "SELECT gc.id,gc.name,gc.description, gc.price, gc.create_date, gc.last_update_date, gc.duration FROM gift_certificates.gift_certificate gc  WHERE gc.id = :id";
-  private static final String SELECT_CERTIFICATE_BY_TAG_NAME_QUERY = "SELECT gc.id,gc.name,gc.description, gc.price, gc.create_date, gc.last_update_date, gc.duration FROM gift_certificates.gift_certificate gc JOIN gift_certificates.certificate_tag ct on gc.id = ct.certificate_id JOIN gift_certificates.tag t on t.id = ct.tag_id WHERE t.name= :name";
+  private static final String SELECT_CERTIFICATE_BY_TAG_NAME_QUERY = "SELECT gc.id,gc.name,gc.description, gc.price, gc.create_date, gc.last_update_date, gc.duration FROM gift_certificates.gift_certificate gc JOIN gift_certificates.certificate_tag ct on gc.id = ct.certificate_id JOIN gift_certificates.tag t on t.id = ct.tag_id WHERE t.name= :name ORDER BY id LIMIT :limit OFFSET :offset";
 
   private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
@@ -50,9 +50,11 @@ public class GiftCertificateRepositoryImpl implements GiftCertificateRepository 
   }
 
   @Override
-  public List<GiftCertificate> getAll() {
+  public List<GiftCertificate> getAll(Map<String, Integer> pagination) {
+    SqlParameterSource namedParameters = new MapSqlParameterSource(pagination);
     return namedParameterJdbcTemplate
-        .query(SELECT_ALL_CERTIFICATES_QUERY, new BeanPropertyRowMapper<>(GiftCertificate.class));
+        .query(SELECT_ALL_CERTIFICATES_QUERY, namedParameters,
+            new BeanPropertyRowMapper<>(GiftCertificate.class));
   }
 
   @Override
@@ -91,15 +93,17 @@ public class GiftCertificateRepositoryImpl implements GiftCertificateRepository 
   }
 
   @Override
-  public List<GiftCertificate> getGiftCertificatesByTagName(String tagName) {
-    SqlParameterSource namedParameters = new MapSqlParameterSource("name", tagName);
+  public List<GiftCertificate> getGiftCertificatesByTagName(String tagName,
+      Map<String, Integer> pagination) {
+    SqlParameterSource namedParameters = new MapSqlParameterSource(pagination)
+        .addValue("name", tagName);
     return this.namedParameterJdbcTemplate
         .query(SELECT_CERTIFICATE_BY_TAG_NAME_QUERY, namedParameters,
             new BeanPropertyRowMapper<>(GiftCertificate.class));
   }
 
   @Override
-  public List<GiftCertificate> getAllByQuery(Map<String, String> queryParam) {
+  public List<GiftCertificate> getAllByQuery(Map<String, String> queryParam, Map<String, Integer> pagination) {
     StringBuilder sql = new StringBuilder(SELECT_ALL_CERTIFICATES_QUERY);
     if (queryParam.containsKey("name")) {
       queryParam.put("partName", "%" + queryParam.get("name") + "%");
@@ -113,6 +117,8 @@ public class GiftCertificateRepositoryImpl implements GiftCertificateRepository 
         sql.append(" ").append(queryParam.get("order"));
       }
     }
+    sql.append(" LIMIT ").append(Integer.parseInt(String.valueOf(pagination.get("limit"))));
+    sql.append(" OFFSET ").append(Integer.parseInt(String.valueOf(pagination.get("offset"))));
     return this.namedParameterJdbcTemplate
         .query(sql.toString(), queryParam, new BeanPropertyRowMapper<>(GiftCertificate.class));
   }

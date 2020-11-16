@@ -5,7 +5,6 @@ import com.epam.esm.exception.EntityNotFoundException;
 import com.epam.esm.exception.GiftCertificateServiceException;
 import com.epam.esm.exception.RepositoryDeleteException;
 import com.epam.esm.exception.RepositorySaveException;
-import com.epam.esm.exception.RepositoryUpdateException;
 import com.epam.esm.exception.TagServiceException;
 import java.util.List;
 import java.util.Map;
@@ -16,7 +15,7 @@ import java.util.Map;
 
 public interface GiftCertificateService {
 
-  List<GiftCertificate> getAllCertificates(Map<String, String> queryParams,  Map<String,Integer> pagination);
+  List<GiftCertificate> getAllCertificates(Map<String, String> queryParams);
 
   /**
    * method find entity by id parameter

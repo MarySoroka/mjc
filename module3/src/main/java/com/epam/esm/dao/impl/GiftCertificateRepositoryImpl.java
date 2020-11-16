@@ -1,6 +1,7 @@
 package com.epam.esm.dao.impl;
 
 import com.epam.esm.dao.GiftCertificateRepository;
+import com.epam.esm.dao.RepositoryUtils;
 import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.exception.RepositoryDeleteException;
 import com.epam.esm.exception.RepositorySaveException;
@@ -103,22 +104,15 @@ public class GiftCertificateRepositoryImpl implements GiftCertificateRepository 
   }
 
   @Override
-  public List<GiftCertificate> getAllByQuery(Map<String, String> queryParam, Map<String, Integer> pagination) {
+  public List<GiftCertificate> getAllByQuery(Map<String, String> queryParam) {
     StringBuilder sql = new StringBuilder(SELECT_ALL_CERTIFICATES_QUERY);
-    if (queryParam.containsKey("name")) {
-      queryParam.put("partName", "%" + queryParam.get("name") + "%");
-      sql.append(
-          " WHERE t.name = :name OR gc.name like :partName OR gc.description like :partName");
-    }
     sql.append(" GROUP BY gc.id");
-    if (queryParam.containsKey("sort")) {
-      sql.append(" ORDER BY gc.").append(queryParam.get("sort"));
-      if (queryParam.containsKey("order")) {
-        sql.append(" ").append(queryParam.get("order"));
-      }
-    }
-    sql.append(" LIMIT ").append(Integer.parseInt(String.valueOf(pagination.get("limit"))));
-    sql.append(" OFFSET ").append(Integer.parseInt(String.valueOf(pagination.get("offset"))));
+    String filterStringByParams = RepositoryUtils.getFilterStringByParams(queryParam);
+    sql.append(filterStringByParams);
+    String sortStringByQuery = RepositoryUtils.getSortStringByQuery(queryParam);
+    sql.append(sortStringByQuery);
+    String limitStringByQuery = RepositoryUtils.getLimitStringByQuery(queryParam);
+    sql.append(limitStringByQuery);
     return this.namedParameterJdbcTemplate
         .query(sql.toString(), queryParam, new BeanPropertyRowMapper<>(GiftCertificate.class));
   }

@@ -24,5 +24,5 @@ public interface GiftCertificateRepository extends CRUDDao<GiftCertificate, Long
    * @param queryParam query parameters
    * @return gift certificates
    */
-  List<GiftCertificate> getAllByQuery(Map<String, String> queryParam, Map<String, Integer> pagination);
+  List<GiftCertificate> getAllByQuery(Map<String, String> queryParam);
 }

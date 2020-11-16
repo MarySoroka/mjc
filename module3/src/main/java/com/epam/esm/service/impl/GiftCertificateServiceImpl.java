@@ -38,9 +38,9 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
   }
 
   @Override
-  public List<GiftCertificate> getAllCertificates(Map<String, String> queryParams,Map<String,Integer> pagination) {
+  public List<GiftCertificate> getAllCertificates(Map<String, String> queryParams) {
     List<GiftCertificate> giftCertificates;
-    giftCertificates = giftCertificateRepository.getAllByQuery(queryParams,pagination);
+    giftCertificates = giftCertificateRepository.getAllByQuery(queryParams);
     giftCertificates.forEach(giftCertificate -> giftCertificate
         .setTags(new HashSet<>(tagService.getTagsByCertificateId(giftCertificate.getId()))));
 

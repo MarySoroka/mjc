@@ -1,8 +1,5 @@
 package com.epam.esm.exception;
 
-import com.epam.esm.resource.OrderResource;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -12,7 +9,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 @RestControllerAdvice
 public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
-  private static final Logger LOGGER = LoggerFactory.getLogger(ControllerExceptionHandler.class);
+
 
   @ExceptionHandler
   @ResponseStatus(HttpStatus.NOT_FOUND)

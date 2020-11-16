@@ -3,6 +3,7 @@ package com.epam.esm.dao;
 import com.epam.esm.entity.Tag;
 import com.epam.esm.exception.RepositoryDeleteException;
 import com.epam.esm.exception.RepositorySaveException;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -46,4 +47,6 @@ public interface TagRepository extends CRUDDao<Tag, Long> {
   void deleteCertificateTag(Long tagId, Long certificateId) throws RepositoryDeleteException;
 
   Tag getTheMostWidelyUsedTag();
+
+  List<Tag> getLimitTags(Long limit, Long offset);
 }

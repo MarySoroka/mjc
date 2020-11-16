@@ -1,6 +1,5 @@
 package com.epam.esm.controller;
 
-import com.epam.esm.dao.DatabaseUtils;
 import com.epam.esm.entity.Tag;
 import com.epam.esm.exception.ControllerEntityDeleteException;
 import com.epam.esm.exception.ControllerSaveEntityException;
@@ -23,6 +22,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -40,9 +40,12 @@ public class TagsController {
 
 
   @GetMapping
-  public ResponseEntity<CollectionModel<TagResource>> getAllTags() {
+  public ResponseEntity<CollectionModel<TagResource>> getAllTags(
+      @RequestParam Long limit,
+      @RequestParam Long offset) {
     final List<TagResource> tagResources =
-        tagService.getAllTags().stream().map(TagResource::new).collect(Collectors.toList());
+        tagService.getLimitTags(limit, offset).stream().map(TagResource::new)
+            .collect(Collectors.toList());
     final CollectionModel<TagResource> resources = CollectionModel.of(tagResources);
     final String uriString = ServletUriComponentsBuilder.fromCurrentRequest().build().toUriString();
     resources.add(Link.of(uriString, "self"));

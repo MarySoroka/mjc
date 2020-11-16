@@ -24,7 +24,12 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
       ResourceBuildException ex) {
     return new ExceptionResponse(ex.getMessage(), "40001");
   }
-
+  @ExceptionHandler
+  @ResponseStatus(HttpStatus.BAD_REQUEST)
+  public ExceptionResponse handleResourceBuildException(
+      EntityValidationException ex) {
+    return new ExceptionResponse(ex.getMessage(), "40004");
+  }
   @ExceptionHandler
   @ResponseStatus(HttpStatus.NOT_FOUND)
   public ExceptionResponse handleControllerEntityDeleteException(

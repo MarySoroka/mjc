@@ -3,6 +3,7 @@ package com.epam.esm.dao.impl;
 import com.epam.esm.dao.UserRepository;
 import com.epam.esm.entity.User;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -15,8 +16,8 @@ import org.springframework.stereotype.Repository;
 public class UserRepositoryImpl implements UserRepository {
 
 
-  private static final String SELECT_ALL_USERS_QUERY = "SELECT  u.id, u.name,u.surname FROM gift_certificates.user u";
-  private static final String SELECT_USER_BY_ID_QUERY = "SELECT  u.id, u.name,u.surname FROM gift_certificates.user  u WHERE u.id = :id";
+  private static final String SELECT_ALL_USERS_QUERY = "SELECT  u.id, u.name,u.surname FROM gift_certificates.user u ORDER BY id LIMIT :limit OFFSET :offset";
+  private static final String SELECT_USER_BY_ID_QUERY = "SELECT  u.id, u.name,u.surname FROM gift_certificates.user  u WHERE u.id = :id ";
   private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
   @Autowired
@@ -37,9 +38,13 @@ public class UserRepositoryImpl implements UserRepository {
   }
 
   @Override
-  public List<User> getAll() {
+  public List<User> getAll(Map<String,Integer> pagination) {
+    Integer limit = Integer.parseInt(String.valueOf(pagination.get("limit")));
+    Integer offset = Integer.parseInt(String.valueOf(pagination.get("offset")));
+    SqlParameterSource namedParameters = new MapSqlParameterSource("limit", limit).addValue("offset",
+        offset);
     return namedParameterJdbcTemplate
-        .query(SELECT_ALL_USERS_QUERY, new BeanPropertyRowMapper<>(User.class));
+        .query(SELECT_ALL_USERS_QUERY,namedParameters, new BeanPropertyRowMapper<>(User.class));
   }
 
   @Override

@@ -51,7 +51,8 @@ class TagServiceTest {
   }
 
   @Test
-  void whenMockCreateTagThenReturnId() throws RepositorySaveException, TagServiceException {
+  void whenMockCreateTagThenReturnId()
+      throws RepositorySaveException, TagServiceException, EntityNotFoundException {
     Tag expectedTag = new Tag(null, "name");
     when(tagRepository.save(expectedTag)).thenReturn(1L);
     when(tagRepository.getById(1L)).thenReturn(of(expectedTag));

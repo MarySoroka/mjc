@@ -1,10 +1,20 @@
 package com.epam.esm.entity;
 
 import java.util.Objects;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
+@Entity
+@Table(name = "tag")
 public class Tag {
-
+  @Id
+  @GeneratedValue(strategy = GenerationType.TABLE)
   private Long id;
+  @Column(nullable = false, unique = true)
   private String name;
 
   public Tag() {

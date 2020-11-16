@@ -3,14 +3,57 @@ package com.epam.esm.entity;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Objects;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
+@Entity
+@Table(name = "order")
 public class Order {
-
+  @Id
+  @GeneratedValue(strategy = GenerationType.TABLE)
   private Long id;
+  @Column(name = "order_certificate_id", nullable = false)
   private Long orderCertificateId;
+
+  @Column(nullable = false)
   private LocalDateTime timestamp;
+
+
+  @Column(nullable = false, columnDefinition = "decimal(10,2)")
   private BigDecimal cost;
+  @Column(name = "user_id", nullable = false)
   private Long userId;
+  @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+  @JoinColumn(name = "order_certificate_id", nullable = false)
+  public GiftCertificate getGiftCertificate() {
+    return giftCertificate;
+  }
+
+  public void setGiftCertificate(GiftCertificate giftCertificate) {
+    this.giftCertificate = giftCertificate;
+  }
+
+  public Order(Long id, Long orderCertificateId, LocalDateTime timestamp, BigDecimal cost,
+      Long userId, GiftCertificate giftCertificate) {
+    this.id = id;
+    this.orderCertificateId = orderCertificateId;
+    this.timestamp = timestamp;
+    this.cost = cost;
+    this.userId = userId;
+    this.giftCertificate = giftCertificate;
+  }
+
+  private GiftCertificate giftCertificate;
 
   public Order(Long id, Long orderCertificateId, LocalDateTime timestamp,
       BigDecimal cost, Long userId) {
@@ -20,15 +63,8 @@ public class Order {
     this.cost = cost;
     this.userId = userId;
   }
+
   public Order() {
-  }
-
-  public LocalDateTime getTimestamp() {
-    return timestamp;
-  }
-
-  public void setTimestamp(LocalDateTime timestamp) {
-    this.timestamp = timestamp;
   }
 
   @Override
@@ -40,6 +76,14 @@ public class Order {
         ", cost=" + cost +
         ", userId=" + userId +
         '}';
+  }
+
+  public LocalDateTime getTimestamp() {
+    return timestamp;
+  }
+
+  public void setTimestamp(LocalDateTime timestamp) {
+    this.timestamp = timestamp;
   }
 
   public Long getOrderCertificateId() {

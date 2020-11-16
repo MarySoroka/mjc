@@ -10,7 +10,6 @@ import com.epam.esm.exception.RepositorySaveException;
 import com.epam.esm.exception.TagServiceException;
 import com.epam.esm.resource.GiftCertificateResource;
 import com.epam.esm.service.GiftCertificateService;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,15 +38,8 @@ public class GiftCertificatesController {
 
   @GetMapping
   public ResponseEntity<List<GiftCertificate>> getAllCertificates(
-      @RequestParam(required = false) String name,
-      @RequestParam(required = false) String sort,
-      @RequestParam(required = false) String order, @RequestParam Map<String, Integer> pagination) {
-
-    Map<String, String> queryParams = new HashMap<>();
-    queryParams.computeIfAbsent("name", val -> name);
-    queryParams.computeIfAbsent("sort", val -> sort);
-    queryParams.computeIfAbsent("order", val -> order);
-    List<GiftCertificate> allCertificates = giftCertificateService.getAllCertificates(queryParams, pagination);
+      @RequestParam(required = false) Map<String, String> searchParams) {
+    List<GiftCertificate> allCertificates = giftCertificateService.getAllCertificates(searchParams);
     return new ResponseEntity<>(allCertificates,
         HttpStatus.OK);
 

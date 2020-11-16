@@ -15,6 +15,7 @@ import com.epam.esm.exception.RepositoryDeleteException;
 import com.epam.esm.exception.RepositorySaveException;
 import com.epam.esm.exception.TagServiceException;
 import com.epam.esm.service.impl.TagServiceImpl;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import org.junit.jupiter.api.Test;
@@ -35,8 +36,9 @@ class TagServiceTest {
 
   @Test
   void whenMockGetAllTagsThenReturnEmptyList() {
-    when(tagRepository.getAll()).thenReturn(new LinkedList<>());
-    List<Tag> tags = tagsService.getAllTags();
+    HashMap<String, Long> pagination = new HashMap<>();
+    when(tagRepository.getAll(pagination)).thenReturn(new LinkedList<>());
+    List<Tag> tags = tagsService.getAllTags(pagination);
     assertEquals(0, tags.size());
   }
 

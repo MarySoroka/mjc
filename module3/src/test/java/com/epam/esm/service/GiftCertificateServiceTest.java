@@ -48,12 +48,12 @@ class GiftCertificateServiceTest {
 
   @Test
   void whenGetAllExistingCertificatesThenReturnOneCertificate() {
-    when(giftCertificateRepository.getAllByQuery(anyMap()))
+    when(giftCertificateRepository.getAllByQuery(anyMap(), anyMap()))
         .thenReturn(Collections.singletonList(expectedGiftCertificate));
     when(tagService.getTagsByCertificateId(anyLong())).thenReturn(Collections.singleton(tag));
 
     List<GiftCertificate> certificates = giftCertificatesService
-        .getAllCertificates(new HashMap<>());
+        .getAllCertificates(new HashMap<>(), new HashMap<>());
 
     assertEquals(1, certificates.size());
     GiftCertificate giftCertificate = certificates.get(0);

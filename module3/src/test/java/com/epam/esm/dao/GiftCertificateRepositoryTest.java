@@ -11,6 +11,7 @@ import com.epam.esm.exception.RepositoryDeleteException;
 import com.epam.esm.exception.RepositorySaveException;
 import com.epam.esm.service.ServiceUtils;
 import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 import javax.sql.DataSource;
@@ -51,7 +52,7 @@ GiftCertificateRepositoryTest {
 
   @Test
   void whenGetAllCertificatesThenReturnThreeCertificates() {
-    List<GiftCertificate> giftCertificatesDaoAll = giftCertificateRepository.getAll();
+    List<GiftCertificate> giftCertificatesDaoAll = giftCertificateRepository.getAll(new HashMap<>());
     assertEquals(3L, giftCertificatesDaoAll.size());
   }
 

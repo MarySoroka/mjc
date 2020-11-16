@@ -9,6 +9,7 @@ import com.epam.esm.dao.impl.TagRepositoryImpl;
 import com.epam.esm.entity.Tag;
 import com.epam.esm.exception.RepositoryDeleteException;
 import com.epam.esm.exception.RepositorySaveException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 import javax.sql.DataSource;
@@ -50,7 +51,7 @@ class TagRepositoryTest {
 
   @Test
   void whenGetAllFromDatabaseThenReturnCorrectTagsCount() {
-    List<Tag> tags = tagRepository.getAll();
+    List<Tag> tags = tagRepository.getAll(new HashMap<>());
     assertEquals(5, tags.size());
   }
 

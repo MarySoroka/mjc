@@ -3,13 +3,30 @@ package com.epam.esm.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.Objects;
 import java.util.Set;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
+@Entity
+@Table(name = "user")
 public class User {
 
+  @Id
+  @GeneratedValue(strategy = GenerationType.TABLE)
   private Long id;
+  @Column(nullable = false)
   private String name;
+  @Column(nullable = false)
   private String surname;
   @JsonIgnore
+  @OneToMany(cascade = CascadeType.REMOVE)
+  @JoinColumn(name = "user_id", referencedColumnName = "id")
   private Set<Order> orders;
 
   public User(Long id, String name, String surname) {

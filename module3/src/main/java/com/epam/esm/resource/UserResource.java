@@ -6,6 +6,8 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 import com.epam.esm.controller.OrderController;
 import com.epam.esm.controller.UserController;
 import com.epam.esm.entity.User;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 import org.springframework.hateoas.RepresentationModel;
 
@@ -16,8 +18,11 @@ public class UserResource extends RepresentationModel<UserResource> {
   public UserResource(final User user) {
     this.user = user;
     final long id = user.getId();
+    Map<String, Integer> pagination = new HashMap<>();
+    pagination.put("limit", 10);
+    pagination.put("offset", 0);
     add(linkTo(UserController.class).withRel("users"));
-    add(linkTo(methodOn(OrderController.class).getAllUserOrders(id)).withRel("orders"));
+    add(linkTo(methodOn(OrderController.class).getAllUserOrders(id,pagination)).withRel("orders"));
 
   }
 

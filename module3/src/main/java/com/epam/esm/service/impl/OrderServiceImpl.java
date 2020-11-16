@@ -7,6 +7,8 @@ import com.epam.esm.exception.RepositoryDeleteException;
 import com.epam.esm.exception.RepositorySaveException;
 import com.epam.esm.exception.RepositoryUpdateException;
 import com.epam.esm.service.OrderService;
+import com.epam.esm.service.ServiceUtils;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -40,6 +42,8 @@ public class OrderServiceImpl implements OrderService {
 
   @Override
   public Order createOrder(Order order) throws RepositorySaveException, EntityNotFoundException {
+    LocalDateTime currentDateTime = ServiceUtils.getCurrentDateTime();
+    order.setTimestamp(currentDateTime);
     Long orderId = orderRepository.save(order);
     return getOrderById(orderId);
   }

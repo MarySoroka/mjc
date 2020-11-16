@@ -4,9 +4,11 @@ package com.epam.esm.service;
 import static java.util.Optional.ofNullable;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyMap;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
@@ -14,24 +16,27 @@ import com.epam.esm.dao.GiftCertificateRepository;
 import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.entity.Tag;
 import com.epam.esm.exception.EntityNotFoundException;
-import com.epam.esm.exception.GiftCertificateServiceException;
+import com.epam.esm.exception.EntityValidationException;
 import com.epam.esm.exception.RepositoryDeleteException;
 import com.epam.esm.exception.RepositorySaveException;
-import com.epam.esm.exception.TagServiceException;
 import com.epam.esm.service.impl.GiftCertificateServiceImpl;
 import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
 class GiftCertificateServiceTest {
 
+  private static final Map<String, Integer> pagination = new HashMap<String, Integer>(2);
 
   @Mock
   GiftCertificateRepository giftCertificateRepository;
@@ -39,22 +44,32 @@ class GiftCertificateServiceTest {
   TagService tagService;
   @InjectMocks
   GiftCertificateServiceImpl giftCertificatesService;
-
   GiftCertificate expectedGiftCertificate = new GiftCertificate(1L, "lala", "desk",
       new BigDecimal(12),
       ServiceUtils.getCurrentDateTime(), ServiceUtils.getCurrentDateTime(), 13);
+  GiftCertificate giftCertificate = new GiftCertificate(1L, "lala1", "desk",
+      new BigDecimal(13),
+      ServiceUtils.getCurrentDateTime(), ServiceUtils.getCurrentDateTime(), 13);
+  GiftCertificate incorrectGiftCertificate = new GiftCertificate(1L, "lala1", "desk",
+      new BigDecimal(-13),
+      ServiceUtils.getCurrentDateTime(), ServiceUtils.getCurrentDateTime(), -13);
   Tag tag = new Tag(1L, "name");
 
+  @BeforeAll
+  public static void setup() {
+    pagination.put("limit", 10);
+    pagination.put("offset", 0);
+  }
 
   @Test
-  void whenGetAllExistingCertificatesThenReturnOneCertificate() {
+  void whenMockGetAllExistingCertificatesThenReturnOneCertificate() {
 
-    when(giftCertificateRepository.getAllByQuery(anyMap(), anyMap()))
+    when(giftCertificateRepository.getAllByQuery(anyMap()))
         .thenReturn(Collections.singletonList(expectedGiftCertificate));
     when(tagService.getTagsByCertificateId(anyLong())).thenReturn(Collections.singleton(tag));
 
     List<GiftCertificate> certificates = giftCertificatesService
-        .getAllCertificates(new HashMap<>(), new HashMap<>());
+        .getAllCertificates(new HashMap<>());
 
     assertEquals(1, certificates.size());
     GiftCertificate giftCertificate = certificates.get(0);
@@ -63,9 +78,8 @@ class GiftCertificateServiceTest {
   }
 
   @Test
-  void whenGetExistingCertificateByIdThenReturnCorrectCertificate()
+  void whenMockGetExistingCertificateByIdThenReturnCorrectCertificate()
       throws EntityNotFoundException {
-
 
     when(giftCertificateRepository.getById(anyLong()))
         .thenReturn(ofNullable(expectedGiftCertificate));
@@ -78,8 +92,8 @@ class GiftCertificateServiceTest {
   }
 
   @Test
-  void whenCreateCertificateCorrectThenReturnId()
-      throws RepositorySaveException, TagServiceException, EntityNotFoundException {
+  void whenMockCreateCertificateCorrectThenReturnId()
+      throws RepositorySaveException, EntityNotFoundException {
     expectedGiftCertificate.setTags(Collections.singleton(tag));
     when(giftCertificateRepository.save(any())).thenReturn(1L);
     doNothing().when(tagService).saveCertificateTag(any(Tag.class), anyLong());
@@ -90,19 +104,42 @@ class GiftCertificateServiceTest {
         giftCertificatesService.createCertificate(expectedGiftCertificate));
   }
 
+
   @Test
-  void whenDeleteExistingCertificateThenDontThrowException() throws RepositoryDeleteException {
+  void whenMockDeleteExistingCertificateThenDontThrowException() throws RepositoryDeleteException {
     doNothing().when(giftCertificateRepository).delete(anyLong());
     assertDoesNotThrow(() -> giftCertificatesService.deleteCertificate(1L));
   }
 
   @Test
-  void whenUpdateExistingCertificateThenReturnDontThrowException() {
+  void whenMockUpdateExistingCertificateWithSameParamsThenThrowsException() {
     when(giftCertificateRepository.getById(anyLong())).thenReturn(ofNullable(
         expectedGiftCertificate));
-
-    assertDoesNotThrow(() -> giftCertificatesService.updateCertificate(expectedGiftCertificate));
+    assertThrows(EntityValidationException.class,
+        () -> giftCertificatesService.updateCertificate(expectedGiftCertificate));
   }
 
+  @Test
+  void whenMockUpdateExistingCertificateWithNotSameParamsThenDontThrowException() {
+    when(giftCertificateRepository.getById(anyLong())).thenReturn(ofNullable(
+        expectedGiftCertificate));
+    assertDoesNotThrow(() -> giftCertificatesService.updateCertificate(giftCertificate));
+  }
 
+  @Test
+  void whenMockUpdateExistingCertificateWithIncorrectParamsThenDontThrowException() {
+    when(giftCertificateRepository.getById(anyLong())).thenReturn(ofNullable(
+        expectedGiftCertificate));
+    assertThrows(EntityValidationException.class,
+        () -> giftCertificatesService.updateCertificate(incorrectGiftCertificate));
+  }
+
+  @Test
+  void whenMockGetCertificateByExistingTagNameThenReturnCertificate() {
+    when(
+        giftCertificateRepository.getGiftCertificatesByTagName(Mockito.anyString(), eq(pagination)))
+        .thenReturn(
+            Collections.singletonList(giftCertificate));
+    assertEquals(1L, giftCertificatesService.getCertificateByTagName("name", pagination).size());
+  }
 }

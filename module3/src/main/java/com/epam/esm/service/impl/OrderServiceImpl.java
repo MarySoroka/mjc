@@ -8,6 +8,7 @@ import com.epam.esm.exception.RepositorySaveException;
 import com.epam.esm.exception.RepositoryUpdateException;
 import com.epam.esm.service.OrderService;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,8 +25,8 @@ public class OrderServiceImpl implements OrderService {
   }
 
   @Override
-  public List<Order> getAllOrders() {
-    return orderRepository.getAll();
+  public List<Order> getAllOrders(Map<String,Integer> pagination) {
+    return orderRepository.getAll(pagination);
   }
 
   @Override
@@ -54,7 +55,7 @@ public class OrderServiceImpl implements OrderService {
   }
 
   @Override
-  public Set<Order> getAllUserOrders(Long userId) {
-    return orderRepository.getAllUserOrders(userId);
+  public Set<Order> getAllUserOrders(Long userId,Map<String,Integer> pagination) {
+    return orderRepository.getAllUserOrders(userId, pagination);
   }
 }

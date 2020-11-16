@@ -4,7 +4,9 @@ import com.epam.esm.entity.User;
 import com.epam.esm.exception.EntityNotFoundException;
 import com.epam.esm.resource.UserResource;
 import com.epam.esm.service.UserService;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
@@ -13,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -28,9 +31,9 @@ public class UserController {
   }
 
   @GetMapping
-  public ResponseEntity<CollectionModel<UserResource>> getAllUsers() {
+  public ResponseEntity<CollectionModel<UserResource>> getAllUsers(@RequestParam Map<String, Integer> pagination){
     final List<UserResource> userResources =
-        userService.getAllUsers().stream().map(UserResource::new).collect(Collectors.toList());
+        userService.getAllUsers(pagination).stream().map(UserResource::new).collect(Collectors.toList());
     final CollectionModel<UserResource> resources = CollectionModel.of(userResources);
     final String uriString = ServletUriComponentsBuilder.fromCurrentRequest().build().toUriString();
     resources.add(Link.of(uriString, "self"));

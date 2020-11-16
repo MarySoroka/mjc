@@ -38,9 +38,9 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
   }
 
   @Override
-  public List<GiftCertificate> getAllCertificates(Map<String, String> queryParams) {
+  public List<GiftCertificate> getAllCertificates(Map<String, String> queryParams,Map<String,Integer> pagination) {
     List<GiftCertificate> giftCertificates;
-    giftCertificates = giftCertificateRepository.getAllByQuery(queryParams);
+    giftCertificates = giftCertificateRepository.getAllByQuery(queryParams,pagination);
     giftCertificates.forEach(giftCertificate -> giftCertificate
         .setTags(new HashSet<>(tagService.getTagsByCertificateId(giftCertificate.getId()))));
 
@@ -112,9 +112,9 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
 
 
   @Override
-  public List<GiftCertificate> getCertificateByTagName(String tagName) {
+  public List<GiftCertificate> getCertificateByTagName(String tagName, Map<String, Integer> pagination) {
     List<GiftCertificate> giftCertificates = giftCertificateRepository
-        .getGiftCertificatesByTagName(tagName);
+        .getGiftCertificatesByTagName(tagName,pagination);
     giftCertificates.forEach(giftCertificate -> giftCertificate
         .setTags(new HashSet<>(tagService.getTagsByCertificateId(giftCertificate.getId()))));
     return giftCertificates;

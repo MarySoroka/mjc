@@ -16,7 +16,7 @@ public interface GiftCertificateRepository extends CRUDDao<GiftCertificate, Long
    * @param tagName tag name
    * @return gift certificates which have this tag
    */
-  List<GiftCertificate> getGiftCertificatesByTagName(String tagName);
+  List<GiftCertificate> getGiftCertificatesByTagName(String tagName, Map<String, Integer> pagination);
 
   /**
    * method return all certificates by query parameters
@@ -24,5 +24,5 @@ public interface GiftCertificateRepository extends CRUDDao<GiftCertificate, Long
    * @param queryParam query parameters
    * @return gift certificates
    */
-  List<GiftCertificate> getAllByQuery(Map<String, String> queryParam);
+  List<GiftCertificate> getAllByQuery(Map<String, String> queryParam, Map<String, Integer> pagination);
 }

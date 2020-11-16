@@ -16,7 +16,7 @@ import java.util.Map;
 
 public interface GiftCertificateService {
 
-  List<GiftCertificate> getAllCertificates(Map<String, String> queryParams);
+  List<GiftCertificate> getAllCertificates(Map<String, String> queryParams,  Map<String,Integer> pagination);
 
   /**
    * method find entity by id parameter
@@ -32,7 +32,6 @@ public interface GiftCertificateService {
    *
    * @param giftCertificate certificate entity, that should be save
    * @return if entity has been saved return generated id
-   * @throws GiftCertificateServiceException if generated id equals null
    */
   GiftCertificate createCertificate(GiftCertificate giftCertificate)
       throws TagServiceException, EntityNotFoundException, RepositorySaveException;
@@ -59,5 +58,5 @@ public interface GiftCertificateService {
    * @param tagName tag name
    * @return certificates
    */
-  List<GiftCertificate> getCertificateByTagName(String tagName);
+  List<GiftCertificate> getCertificateByTagName(String tagName, Map<String, Integer> pagination);
 }

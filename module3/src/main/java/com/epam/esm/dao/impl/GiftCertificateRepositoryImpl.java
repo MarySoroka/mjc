@@ -6,12 +6,9 @@ import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.entity.GiftCertificateFields;
 import com.epam.esm.entity.Tag;
 import com.epam.esm.exception.RepositoryDeleteException;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Optional;
-import java.util.Set;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
@@ -23,9 +20,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public class GiftCertificateRepositoryImpl implements GiftCertificateRepository {
-
-  private static final String SELECT_ALL_CERTIFICATES_QUERY = "SELECT gc.certificate_id,gc.name,gc.description, gc.price, gc.create_date, gc.last_update_date, gc.duration FROM gift_certificates.gift_certificate gc JOIN gift_certificates.certificate_tag ct on gc.certificate_id = ct.certificate_id JOIN gift_certificates.tag t on t.tag_id = ct.tag_id ";
-
   @PersistenceContext
   private EntityManager entityManager;
 

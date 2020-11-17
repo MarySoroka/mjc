@@ -1,5 +1,6 @@
 package com.epam.esm.entity;
 
+import com.epam.esm.entity.dto.TagDTO;
 import java.io.Serializable;
 import java.util.Objects;
 import javax.persistence.Column;
@@ -25,14 +26,16 @@ public class Tag  implements Serializable {
   }
 
   @Override
-  public String
-
-
-  toString() {
+  public String toString() {
     return "Tag{" +
         "id=" + id +
         ", name='" + name + '\'' +
         '}';
+  }
+
+  public Tag(TagDTO tag) {
+    this.id = tag.getTagId();
+    this.name = tag.getName();
   }
 
   public Tag(Long id, String name) {

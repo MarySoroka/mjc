@@ -1,5 +1,6 @@
 package com.epam.esm.entity;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -7,7 +8,6 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -19,10 +19,12 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "gift_certificate")
-public class GiftCertificate {
+public class GiftCertificate  implements Serializable {
 
+  private static final long serialVersionUID = 7065091900781462392L;
   @Id
   @GeneratedValue(strategy = GenerationType.TABLE)
+  @Column(name = "certificate_id")
   private Long id;
   @Column(nullable = false, unique = true)
   private String name;
@@ -39,11 +41,26 @@ public class GiftCertificate {
   @ManyToMany(targetEntity = Tag.class, cascade = CascadeType.REMOVE)
   @JoinTable(name = "certificate_tag",
       joinColumns = @JoinColumn(name = "certificate_id"),
-      inverseJoinColumns = @JoinColumn(name = "tag_id", referencedColumnName = "id")
+      inverseJoinColumns = @JoinColumn(name = "tag_id", referencedColumnName = "tag_id")
   )
   private Set<Tag> tags;
-  @OneToMany(fetch = FetchType.EAGER, mappedBy = "order")
+  @OneToMany
+  @JoinColumn(name = "order_certificate_id", referencedColumnName = "certificate_id")
   private Set<Order> orders;
+
+  public GiftCertificate(Long id, String name, String description, BigDecimal price,
+      LocalDateTime createDate, LocalDateTime lastUpdateDate, Integer duration,
+      Set<Tag> tags, Set<Order> orders) {
+    this.id = id;
+    this.name = name;
+    this.description = description;
+    this.price = price;
+    this.createDate = createDate;
+    this.lastUpdateDate = lastUpdateDate;
+    this.duration = duration;
+    this.tags = tags;
+    this.orders = orders;
+  }
 
   public GiftCertificate(Long id, String name, String description, BigDecimal price,
       LocalDateTime createDate, LocalDateTime lastUpdateDate, Integer duration) {

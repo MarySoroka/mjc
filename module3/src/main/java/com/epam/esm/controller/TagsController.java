@@ -1,6 +1,7 @@
 package com.epam.esm.controller;
 
 import com.epam.esm.entity.Tag;
+import com.epam.esm.entity.dto.TagDTO;
 import com.epam.esm.exception.ControllerEntityDeleteException;
 import com.epam.esm.exception.ControllerSaveEntityException;
 import com.epam.esm.exception.EntityNotFoundException;
@@ -66,7 +67,7 @@ public class TagsController {
   }
 
   @PostMapping
-  public ResponseEntity<TagResource> create(@RequestBody Tag tag)
+  public ResponseEntity<TagResource> create(@RequestBody TagDTO tag)
       throws ControllerSaveEntityException {
     try {
 

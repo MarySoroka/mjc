@@ -1,6 +1,7 @@
 package com.epam.esm.controller;
 
 import com.epam.esm.entity.GiftCertificate;
+import com.epam.esm.entity.dto.GiftCertificateDTO;
 import com.epam.esm.exception.ControllerEntityDeleteException;
 import com.epam.esm.exception.ControllerSaveEntityException;
 import com.epam.esm.exception.EntityNotFoundException;
@@ -56,7 +57,7 @@ public class GiftCertificatesController {
 
   @PostMapping
   public ResponseEntity<GiftCertificateResource> createGiftCertificate(
-      @RequestBody GiftCertificate giftCertificate)
+      @RequestBody GiftCertificateDTO giftCertificate)
       throws ControllerSaveEntityException {
     try {
       GiftCertificate certificate = giftCertificateService.createCertificate(giftCertificate);
@@ -70,7 +71,7 @@ public class GiftCertificatesController {
 
   @PatchMapping("/{id}")
   public ResponseEntity<GiftCertificateResource> update(@PathVariable("id") Long id,
-      @RequestBody GiftCertificate giftCertificate)
+      @RequestBody GiftCertificateDTO giftCertificate)
       throws GiftCertificateServiceException, EntityNotFoundException {
     giftCertificate.setId(id);
     giftCertificateService.updateCertificate(giftCertificate);

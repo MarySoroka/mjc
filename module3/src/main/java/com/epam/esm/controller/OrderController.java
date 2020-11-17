@@ -1,6 +1,7 @@
 package com.epam.esm.controller;
 
 import com.epam.esm.entity.Order;
+import com.epam.esm.entity.dto.OrderDTO;
 import com.epam.esm.exception.ControllerSaveEntityException;
 import com.epam.esm.exception.EntityNotFoundException;
 import com.epam.esm.exception.RepositoryDeleteException;
@@ -67,7 +68,7 @@ public class OrderController {
 
   @PostMapping
   public ResponseEntity<OrderResource> createOrder(
-      @RequestBody Order order) throws ControllerSaveEntityException {
+      @RequestBody OrderDTO order) throws ControllerSaveEntityException {
     try {
       final Order createdOrder = orderService.createOrder(order);
       OrderResource orderResource = new OrderResource(createdOrder);
@@ -81,7 +82,7 @@ public class OrderController {
 
   @PatchMapping("/{id}")
   public ResponseEntity<OrderResource> updateOrder(@PathVariable("id") Long id,
-      @RequestBody Order order)
+      @RequestBody OrderDTO order)
       throws RepositoryUpdateException, EntityNotFoundException {
     order.setId(id);
     orderService.updateOrder(order);

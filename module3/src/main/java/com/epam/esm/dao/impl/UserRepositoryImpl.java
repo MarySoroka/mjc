@@ -1,10 +1,17 @@
 package com.epam.esm.dao.impl;
 
 import com.epam.esm.dao.UserRepository;
+import com.epam.esm.entity.Tag;
 import com.epam.esm.entity.User;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -15,36 +22,26 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class UserRepositoryImpl implements UserRepository {
 
-
-  private static final String SELECT_ALL_USERS_QUERY = "SELECT  u.id, u.name,u.surname FROM gift_certificates.user u ORDER BY id LIMIT :limit OFFSET :offset";
-  private static final String SELECT_USER_BY_ID_QUERY = "SELECT  u.id, u.name,u.surname FROM gift_certificates.user  u WHERE u.id = :id ";
-  private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
-
-  @Autowired
-  public UserRepositoryImpl(
-      NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
-    this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
-  }
+  @PersistenceContext
+  private EntityManager entityManager;
 
   @Override
   public Optional<User> getById(Long id) {
-    SqlParameterSource namedParameters = new MapSqlParameterSource("id", id);
-    List<User> queryForObject = this.namedParameterJdbcTemplate
-        .query(SELECT_USER_BY_ID_QUERY, namedParameters, new BeanPropertyRowMapper<>(User.class));
-    if (queryForObject.size() != 1) {
-      return Optional.empty();
-    }
-    return Optional.ofNullable(queryForObject.get(0));
+    return Optional.ofNullable(entityManager.find(User.class, id));
   }
 
   @Override
   public List<User> getAll(Map<String,Integer> pagination) {
-    Integer limit = Integer.parseInt(String.valueOf(pagination.get("limit")));
-    Integer offset = Integer.parseInt(String.valueOf(pagination.get("offset")));
-    SqlParameterSource namedParameters = new MapSqlParameterSource("limit", limit).addValue("offset",
-        offset);
-    return namedParameterJdbcTemplate
-        .query(SELECT_ALL_USERS_QUERY,namedParameters, new BeanPropertyRowMapper<>(User.class));
+    int limit = Integer.parseInt(String.valueOf(pagination.get("limit")));
+    int offset = Integer.parseInt(String.valueOf(pagination.get("offset")));
+    CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+    CriteriaQuery<User> criteriaQuery = criteriaBuilder.createQuery(User.class);
+    Root<User> from = criteriaQuery.from(User.class);
+    CriteriaQuery<User> select = criteriaQuery.select(from);
+    TypedQuery<User> typedQuery = entityManager.createQuery(select);
+    typedQuery.setFirstResult(offset);
+    typedQuery.setMaxResults(limit);
+    return typedQuery.getResultList();
   }
 
   @Override
@@ -60,7 +57,7 @@ public class UserRepositoryImpl implements UserRepository {
   }
 
   @Override
-  public Long save(User user) {
+  public User save(User user) {
     throw new UnsupportedOperationException();
   }
 }

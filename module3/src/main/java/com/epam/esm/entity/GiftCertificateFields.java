@@ -7,8 +7,8 @@ public enum GiftCertificateFields {
   ID("id"),
   NAME("name"),
   DESCRIPTION("description"),
-  CREATE_DATE("create_date"),
-  LAST_UPDATE_DATE("last_update_date"),
+  CREATE_DATE("createDate"),
+  LAST_UPDATE_DATE("lastUpdateDate"),
   DURATION("duration"),
   PRICE("price");
 

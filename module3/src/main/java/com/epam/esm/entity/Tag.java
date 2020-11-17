@@ -1,5 +1,6 @@
 package com.epam.esm.entity;
 
+import java.io.Serializable;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,9 +11,12 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "tag")
-public class Tag {
+public class Tag  implements Serializable {
+
+  private static final long serialVersionUID = 7060096489786514736L;
   @Id
   @GeneratedValue(strategy = GenerationType.TABLE)
+  @Column(name = "tag_id")
   private Long id;
   @Column(nullable = false, unique = true)
   private String name;

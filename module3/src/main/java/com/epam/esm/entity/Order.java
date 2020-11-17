@@ -1,5 +1,6 @@
 package com.epam.esm.entity;
 
+import com.epam.esm.entity.dto.OrderDTO;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -43,7 +44,6 @@ public class Order implements Serializable {
   public Order() {
   }
 
-
   @Override
   public String toString() {
     return "Order{" +
@@ -54,6 +54,15 @@ public class Order implements Serializable {
         ", userId=" + userId +
         '}';
   }
+
+  public Order(OrderDTO orderDTO) {
+    this.id = orderDTO.getId();
+    this.orderCertificateId = orderDTO.getOrderCertificateId();
+    this.timestamp = orderDTO.getTimestamp();
+    this.cost = orderDTO.getCost();
+    this.userId = orderDTO.getUserId();
+  }
+
 
   public LocalDateTime getTimestamp() {
     return timestamp;

@@ -1,6 +1,7 @@
 package com.epam.esm.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.io.Serializable;
 import java.util.Objects;
 import java.util.Set;
 import javax.persistence.CascadeType;
@@ -15,18 +16,20 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "user")
-public class User {
+public class User implements Serializable {
 
+  private static final long serialVersionUID = -5597587150308014843L;
   @Id
   @GeneratedValue(strategy = GenerationType.TABLE)
+  @Column(name = "user_id")
   private Long id;
   @Column(nullable = false)
   private String name;
   @Column(nullable = false)
   private String surname;
   @JsonIgnore
-  @OneToMany(cascade = CascadeType.REMOVE)
-  @JoinColumn(name = "user_id", referencedColumnName = "id")
+  @OneToMany( cascade = CascadeType.REMOVE)
+  @JoinColumn(name = "user_id", referencedColumnName = "user_id")
   private Set<Order> orders;
 
   public User(Long id, String name, String surname) {

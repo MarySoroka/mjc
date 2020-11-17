@@ -1,70 +1,48 @@
 package com.epam.esm.entity;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Objects;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "order")
-public class Order {
+@Table(name = "user_order")
+public class Order implements Serializable {
 
+  private static final long serialVersionUID = -6785077151599358812L;
   @Id
   @GeneratedValue(strategy = GenerationType.TABLE)
+  @Column(name = "order_id",nullable = false)
   private Long id;
   @Column(name = "order_certificate_id", nullable = false)
   private Long orderCertificateId;
-
   @Column(nullable = false)
   private LocalDateTime timestamp;
-
-
   @Column(nullable = false, columnDefinition = "decimal(10,2)")
   private BigDecimal cost;
   @Column(name = "user_id", nullable = false)
   private Long userId;
-  private GiftCertificate giftCertificate;
+
 
   public Order(Long id, Long orderCertificateId, LocalDateTime timestamp, BigDecimal cost,
-      Long userId, GiftCertificate giftCertificate) {
+      Long userId) {
     this.id = id;
     this.orderCertificateId = orderCertificateId;
     this.timestamp = timestamp;
     this.cost = cost;
     this.userId = userId;
-    this.giftCertificate = giftCertificate;
-  }
 
-  public Order(Long id, Long orderCertificateId, LocalDateTime timestamp,
-      BigDecimal cost, Long userId) {
-    this.id = id;
-    this.orderCertificateId = orderCertificateId;
-    this.timestamp = timestamp;
-    this.cost = cost;
-    this.userId = userId;
   }
 
   public Order() {
   }
 
-  @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
-  @JoinColumn(name = "order_certificate_id", nullable = false)
-  public GiftCertificate getGiftCertificate() {
-    return giftCertificate;
-  }
-
-  public void setGiftCertificate(GiftCertificate giftCertificate) {
-    this.giftCertificate = giftCertificate;
-  }
 
   @Override
   public String toString() {

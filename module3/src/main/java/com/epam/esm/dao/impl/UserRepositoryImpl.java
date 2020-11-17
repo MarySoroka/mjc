@@ -1,7 +1,6 @@
 package com.epam.esm.dao.impl;
 
 import com.epam.esm.dao.UserRepository;
-import com.epam.esm.entity.Tag;
 import com.epam.esm.entity.User;
 import java.util.List;
 import java.util.Map;
@@ -12,11 +11,6 @@ import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
-import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -31,7 +25,7 @@ public class UserRepositoryImpl implements UserRepository {
   }
 
   @Override
-  public List<User> getAll(Map<String,Integer> pagination) {
+  public List<User> getAll(Map<String, Integer> pagination) {
     int limit = Integer.parseInt(String.valueOf(pagination.get("limit")));
     int offset = Integer.parseInt(String.valueOf(pagination.get("offset")));
     CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();

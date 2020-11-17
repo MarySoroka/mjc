@@ -28,7 +28,7 @@ public class User implements Serializable {
   @Column(nullable = false)
   private String surname;
   @JsonIgnore
-  @OneToMany( cascade = CascadeType.REMOVE)
+  @OneToMany(cascade = CascadeType.REMOVE)
   @JoinColumn(name = "user_id", referencedColumnName = "user_id")
   private Set<Order> orders;
 
@@ -44,6 +44,16 @@ public class User implements Serializable {
   public User(String name, String surname) {
     this.name = name;
     this.surname = surname;
+  }
+
+  @Override
+  public String toString() {
+    return "User{" +
+        "id=" + id +
+        ", name='" + name + '\'' +
+        ", surname='" + surname + '\'' +
+        ", orders=" + orders +
+        '}';
   }
 
   @Override

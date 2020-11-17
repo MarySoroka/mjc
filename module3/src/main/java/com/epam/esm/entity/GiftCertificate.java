@@ -1,10 +1,13 @@
 package com.epam.esm.entity;
 
+import com.epam.esm.entity.dto.GiftCertificateDTO;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -19,7 +22,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "gift_certificate")
-public class GiftCertificate  implements Serializable {
+public class GiftCertificate implements Serializable {
 
   private static final long serialVersionUID = 7065091900781462392L;
   @Id
@@ -38,7 +41,7 @@ public class GiftCertificate  implements Serializable {
   private LocalDateTime lastUpdateDate;
   @Column(nullable = false)
   private Integer duration;
-  @ManyToMany(targetEntity = Tag.class, cascade = CascadeType.REMOVE)
+  @ManyToMany(targetEntity = Tag.class, cascade = CascadeType.ALL)
   @JoinTable(name = "certificate_tag",
       joinColumns = @JoinColumn(name = "certificate_id"),
       inverseJoinColumns = @JoinColumn(name = "tag_id", referencedColumnName = "tag_id")
@@ -75,6 +78,36 @@ public class GiftCertificate  implements Serializable {
 
   public GiftCertificate() {
 
+  }
+
+  @Override
+  public String toString() {
+    return "GiftCertificate{" +
+        "id=" + id +
+        ", name='" + name + '\'' +
+        ", description='" + description + '\'' +
+        ", price=" + price +
+        ", createDate=" + createDate +
+        ", lastUpdateDate=" + lastUpdateDate +
+        ", duration=" + duration +
+        ", tags=" + tags +
+        ", orders=" + orders +
+        '}';
+  }
+
+  public GiftCertificate(GiftCertificateDTO giftCertificate) {
+    this.id = giftCertificate.getId();
+    this.name = giftCertificate.getName();
+    this.description = giftCertificate.getDescription();
+    this.price = giftCertificate.getPrice();
+    this.createDate = giftCertificate.getCreateDate();
+    this.lastUpdateDate = giftCertificate.getLastUpdateDate();
+    this.duration = giftCertificate.getDuration();
+    this.tags = giftCertificate.getTags() != null ? giftCertificate.getTags().stream().map(Tag::new)
+        .collect(Collectors.toSet()) : new HashSet<Tag>();
+    this.orders =
+        giftCertificate.getOrders() != null ? giftCertificate.getOrders().stream().map(Order::new)
+            .collect(Collectors.toSet()) : new HashSet<Order>();
   }
 
   public Set<Order> getOrders() {

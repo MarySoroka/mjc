@@ -8,6 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doNothing;
@@ -37,7 +38,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 class TagServiceTest {
 
-  private static final Map<String, Integer> pagination = new HashMap<>(2);
   Tag tag = new Tag(1L, "name");
   @Mock
   private TagRepository tagRepository;
@@ -45,16 +45,11 @@ class TagServiceTest {
   @InjectMocks
   private TagServiceImpl tagsService;
 
-  @BeforeAll
-  public static void setup() {
-    pagination.put("limit", 10);
-    pagination.put("offset", 0);
-  }
 
   @Test
   void whenMockGetAllTagsThenReturnEmptyList() {
-    when(tagRepository.getAll(pagination)).thenReturn(new LinkedList<>());
-    List<Tag> tags = tagsService.getAllTags(pagination);
+    when(tagRepository.getAll(anyInt(),anyInt())).thenReturn(new LinkedList<>());
+    List<Tag> tags = tagsService.getAllTags(10,0);
     assertEquals(0, tags.size());
   }
 

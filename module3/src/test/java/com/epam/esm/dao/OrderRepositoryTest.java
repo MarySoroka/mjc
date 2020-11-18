@@ -25,7 +25,6 @@ import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 
 class OrderRepositoryTest {
 
-  private static final Map<String, Integer> pagination = new HashMap<String, Integer>(2);
   private static OrderRepository orderRepository;
   private final Order order = new Order(2L, 3L, ServiceUtils.getCurrentDateTime(),
       new BigDecimal(12),
@@ -40,19 +39,18 @@ class OrderRepositoryTest {
         .build();
     NamedParameterJdbcTemplate jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
     orderRepository = new OrderRepositoryImpl(jdbcTemplate);
-    pagination.put("limit", 10);
-    pagination.put("offset", 0);
+
   }
 
   @Test
   void whenGetAllUserOrdersThenReturnTwoOrders() {
-    Set<Order> allUserOrders = orderRepository.getAllUserOrders(1L, pagination);
+    Set<Order> allUserOrders = orderRepository.getAllUserOrders(1L, 10,0);
     assertEquals(1L, allUserOrders.size());
   }
 
   @Test
   void whenGetAllUserOrdersIfUserDoesntExistThenReturnEmptySet() {
-    Set<Order> allUserOrders = orderRepository.getAllUserOrders(100L, pagination);
+    Set<Order> allUserOrders = orderRepository.getAllUserOrders(100L, 10,0);
     assertEquals(0L, allUserOrders.size());
   }
 
@@ -72,7 +70,7 @@ class OrderRepositoryTest {
 
   @Test
   void whenGetAllOrdersThenReturnThreeOrders() {
-    List<Order> orders = orderRepository.getAll(pagination);
+    List<Order> orders = orderRepository.getAll(10,0);
     assertEquals(4L, orders.size());
   }
 

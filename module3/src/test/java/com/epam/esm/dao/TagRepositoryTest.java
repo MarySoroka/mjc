@@ -25,7 +25,6 @@ import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 
 class TagRepositoryTest {
 
-  private static final Map<String, Integer> pagination = new HashMap<String, Integer>(2);
   private static TagRepository tagRepository;
 
   @BeforeAll
@@ -38,8 +37,7 @@ class TagRepositoryTest {
     NamedParameterJdbcTemplate namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(
         dataSource);
     tagRepository = new TagRepositoryImpl(namedParameterJdbcTemplate);
-    pagination.put("limit", 10);
-    pagination.put("offset", 0);
+
   }
 
   @Test
@@ -58,7 +56,7 @@ class TagRepositoryTest {
 
   @Test
   void whenGetAllFromDatabaseThenReturnCorrectTagsCount() {
-    List<Tag> tags = tagRepository.getAll(pagination);
+    List<Tag> tags = tagRepository.getAll(10,0);
     assertEquals(5, tags.size());
   }
 

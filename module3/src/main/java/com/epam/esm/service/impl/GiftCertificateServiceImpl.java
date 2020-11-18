@@ -111,10 +111,9 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
 
 
   @Override
-  public List<GiftCertificate> getCertificateByTagName(String tagName,
-      Map<String, Integer> pagination) {
+  public List<GiftCertificate> getCertificateByTagName(String tagName,Integer limit, Integer offset) {
     List<GiftCertificate> giftCertificates = giftCertificateRepository
-        .getGiftCertificatesByTagName(tagName, pagination);
+        .getGiftCertificatesByTagName(tagName, limit, offset);
     giftCertificates.forEach(giftCertificate -> giftCertificate
         .setTags(new HashSet<>(tagService.getTagsByCertificateId(giftCertificate.getId()))));
     return giftCertificates;

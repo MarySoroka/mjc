@@ -3,6 +3,7 @@ package com.epam.esm.service;
 import static java.util.Optional.ofNullable;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
@@ -26,7 +27,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 class UserServiceTest {
 
-  private static final Map<String, Integer> pagination = new HashMap<>(2);
   User user = new User(1L, "name", "surname");
   @Mock
   private UserRepository userRepository;
@@ -34,16 +34,11 @@ class UserServiceTest {
   @InjectMocks
   private UserServiceImpl userService;
 
-  @BeforeAll
-  public static void setup() {
-    pagination.put("limit", 10);
-    pagination.put("offset", 0);
-  }
 
   @Test
   void whenMockGetAllUsersThenReturnOneUser() {
-    when(userRepository.getAll(eq(pagination))).thenReturn(Collections.singletonList(user));
-    List<User> allUsers = userService.getAllUsers(pagination);
+    when(userRepository.getAll(anyInt(),anyInt())).thenReturn(Collections.singletonList(user));
+    List<User> allUsers = userService.getAllUsers(10,0);
     assertEquals(1L, allUsers.size());
   }
 

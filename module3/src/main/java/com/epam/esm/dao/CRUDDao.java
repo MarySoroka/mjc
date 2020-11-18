@@ -26,7 +26,7 @@ public interface CRUDDao<E, K> {
     /**
      * @return all objects in specific db table
      */
-    List<E> getAll(Map<String,Integer> pagination);
+    List<E> getAll(Integer limit, Integer offset);
 
     /**
      * delete entity by key parameter

@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyMap;
 import static org.mockito.ArgumentMatchers.eq;
@@ -137,9 +138,9 @@ class GiftCertificateServiceTest {
   @Test
   void whenMockGetCertificateByExistingTagNameThenReturnCertificate() {
     when(
-        giftCertificateRepository.getGiftCertificatesByTagName(Mockito.anyString(), eq(pagination)))
+        giftCertificateRepository.getGiftCertificatesByTagName(Mockito.anyString(), anyInt(),anyInt()))
         .thenReturn(
             Collections.singletonList(giftCertificate));
-    assertEquals(1L, giftCertificatesService.getCertificateByTagName("name", pagination).size());
+    assertEquals(1L, giftCertificatesService.getCertificateByTagName("name", 10,0).size());
   }
 }

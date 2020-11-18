@@ -7,7 +7,6 @@ import com.epam.esm.exception.RepositorySaveException;
 import com.epam.esm.exception.RepositoryUpdateException;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,9 +48,7 @@ public class OrderRepositoryImpl implements OrderRepository {
   }
 
   @Override
-  public List<Order> getAll(Map<String, Integer> pagination) {
-    Integer limit = Integer.parseInt(String.valueOf(pagination.get("limit")));
-    Integer offset = Integer.parseInt(String.valueOf(pagination.get("offset")));
+  public List<Order> getAll(Integer limit, Integer offset) {
     SqlParameterSource namedParameters = new MapSqlParameterSource("limit", limit)
         .addValue("offset", offset);
     return namedParameterJdbcTemplate
@@ -93,9 +90,7 @@ public class OrderRepositoryImpl implements OrderRepository {
   }
 
   @Override
-  public Set<Order> getAllUserOrders(Long userId, Map<String, Integer> pagination) {
-    Integer limit = Integer.parseInt(String.valueOf(pagination.get("limit")));
-    Integer offset = Integer.parseInt(String.valueOf(pagination.get("offset")));
+  public Set<Order> getAllUserOrders(Long userId, Integer limit, Integer offset) {
     SqlParameterSource namedParameters = new MapSqlParameterSource("limit", limit)
         .addValue("offset",
             offset)

@@ -51,8 +51,8 @@ public class GiftCertificateRepositoryImpl implements GiftCertificateRepository 
   }
 
   @Override
-  public List<GiftCertificate> getAll(Map<String, Integer> pagination) {
-    SqlParameterSource namedParameters = new MapSqlParameterSource(pagination);
+  public List<GiftCertificate> getAll(Integer limit, Integer offset) {
+    SqlParameterSource namedParameters = new MapSqlParameterSource("limit", limit).addValue("offset", offset);
     return namedParameterJdbcTemplate
         .query(SELECT_ALL_CERTIFICATES_QUERY, namedParameters,
             new BeanPropertyRowMapper<>(GiftCertificate.class));
@@ -94,9 +94,8 @@ public class GiftCertificateRepositoryImpl implements GiftCertificateRepository 
   }
 
   @Override
-  public List<GiftCertificate> getGiftCertificatesByTagName(String tagName,
-      Map<String, Integer> pagination) {
-    SqlParameterSource namedParameters = new MapSqlParameterSource(pagination)
+  public List<GiftCertificate> getGiftCertificatesByTagName(String tagName, Integer limit, Integer offset) {
+    SqlParameterSource namedParameters = new MapSqlParameterSource("limit", limit).addValue("offset", offset)
         .addValue("name", tagName);
     return this.namedParameterJdbcTemplate
         .query(SELECT_CERTIFICATE_BY_TAG_NAME_QUERY, namedParameters,

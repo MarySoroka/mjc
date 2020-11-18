@@ -20,8 +20,7 @@ import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 
 class UserRepositoryTest {
 
-  private static final Map<String, Integer> pagination = new HashMap<String, Integer>(2);
-  private static UserRepository userRepository;
+ private static UserRepository userRepository;
   private final User user = new User(1L, "Mary", "D");
 
   @BeforeAll
@@ -33,13 +32,12 @@ class UserRepositoryTest {
         .build();
     NamedParameterJdbcTemplate jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
     userRepository = new UserRepositoryImpl(jdbcTemplate);
-    pagination.put("limit", 10);
-    pagination.put("offset", 0);
+
   }
 
   @Test
   void getAllUsersThenReturnTwoUsers() {
-    List<User> userRepositoryAll = userRepository.getAll(pagination);
+    List<User> userRepositoryAll = userRepository.getAll(10,0);
     assertEquals(2L, userRepositoryAll.size());
   }
 

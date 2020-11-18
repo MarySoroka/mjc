@@ -3,7 +3,6 @@ package com.epam.esm.dao.impl;
 import com.epam.esm.dao.UserRepository;
 import com.epam.esm.entity.User;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -37,9 +36,7 @@ public class UserRepositoryImpl implements UserRepository {
   }
 
   @Override
-  public List<User> getAll(Map<String, Integer> pagination) {
-    Integer limit = Integer.parseInt(String.valueOf(pagination.get("limit")));
-    Integer offset = Integer.parseInt(String.valueOf(pagination.get("offset")));
+  public List<User> getAll(Integer limit, Integer offset) {
     SqlParameterSource namedParameters = new MapSqlParameterSource("limit", limit).addValue("offset",
         offset);
     return namedParameterJdbcTemplate

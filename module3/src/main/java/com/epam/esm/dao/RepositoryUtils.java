@@ -23,8 +23,7 @@ public class RepositoryUtils {
   private RepositoryUtils() {
   }
 
-  public static String getFilterStringByParams(Map<String, String> queryParams) {
-    StringBuilder sql = new StringBuilder(HAVING);
+  public static Map<String, String> getFilterStringByParams(Map<String, String> queryParams) {
     Map<String, String> resultFilterMap = new HashMap<>();
     Set<Entry<String, String>> entries = queryParams.entrySet();
     for (Entry<String, String> entry : entries) {
@@ -33,16 +32,7 @@ public class RepositoryUtils {
         resultFilterMap.put(k, entry.getValue());
       }
     }
-    resultFilterMap.forEach(
-        (key, value) ->
-            sql
-                .append(CERTIFICATE_TABLE_NAME)
-                .append(key)
-                .append(LIKE_START)
-                .append(value)
-                .append(LIKE_END)
-                .append(AND));
-    return sql.substring(0, sql.length() - 5);
+    return resultFilterMap;
   }
 
   public static String getSortStringByQuery(Map<String, String> queryParam) {

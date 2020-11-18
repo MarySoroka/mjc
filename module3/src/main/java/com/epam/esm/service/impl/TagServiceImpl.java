@@ -45,7 +45,7 @@ public class TagServiceImpl implements TagService {
   @Override
   @Transactional
   public Tag createTag(TagDTO tag)
-      throws RepositorySaveException, EntityNotFoundException {
+      throws RepositorySaveException {
     return tagRepository.save(new Tag(tag));
 
   }

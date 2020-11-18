@@ -2,6 +2,7 @@ package com.epam.esm.service.impl;
 
 import com.epam.esm.dao.OrderRepository;
 import com.epam.esm.entity.Order;
+import com.epam.esm.entity.dto.OrderDTO;
 import com.epam.esm.exception.EntityNotFoundException;
 import com.epam.esm.exception.RepositoryDeleteException;
 import com.epam.esm.exception.RepositorySaveException;
@@ -27,8 +28,8 @@ public class OrderServiceImpl implements OrderService {
   }
 
   @Override
-  public List<Order> getAllOrders(Integer limit, Integer offset) {
-    return orderRepository.getAll(limit,offset);
+  public List<Order> getAllOrders(Map<String, Integer> pagination) {
+    return orderRepository.getAll(pagination);
   }
 
   @Override
@@ -41,11 +42,10 @@ public class OrderServiceImpl implements OrderService {
   }
 
   @Override
-  public Order createOrder(Order order) throws RepositorySaveException, EntityNotFoundException {
+  public Order createOrder(OrderDTO order) throws RepositorySaveException {
     LocalDateTime currentDateTime = ServiceUtils.getCurrentDateTime();
     order.setTimestamp(currentDateTime);
-    Long orderId = orderRepository.save(order);
-    return getOrderById(orderId);
+    return orderRepository.save(new Order(order));
   }
 
   @Override
@@ -54,12 +54,12 @@ public class OrderServiceImpl implements OrderService {
   }
 
   @Override
-  public void updateOrder(Order order) throws RepositoryUpdateException {
-    orderRepository.update(order);
+  public void updateOrder(OrderDTO order) throws RepositoryUpdateException {
+    orderRepository.update(new Order(order));
   }
 
   @Override
-  public Set<Order> getAllUserOrders(Long userId,Integer limit, Integer offset) {
-    return orderRepository.getAllUserOrders(userId, limit,offset);
+  public Set<Order> getAllUserOrders(Long userId, Map<String, Integer> pagination) {
+    return orderRepository.getAllUserOrders(userId, pagination);
   }
 }

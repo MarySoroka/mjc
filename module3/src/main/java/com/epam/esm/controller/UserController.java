@@ -37,7 +37,7 @@ public class UserController {
             .collect(Collectors.toList());
     final CollectionModel<UserResource> resources = CollectionModel.of(userResources);
     final String uriString = ServletUriComponentsBuilder.fromCurrentRequest().build().toUriString();
-    resources.add(Link.of(uriString, "self"));
+    resources.add(Link.of(uriString).withSelfRel());
     return ResponseEntity.ok(resources);
 
   }

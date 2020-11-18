@@ -16,6 +16,7 @@ import static org.mockito.Mockito.when;
 import com.epam.esm.dao.GiftCertificateRepository;
 import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.entity.Tag;
+import com.epam.esm.entity.dto.GiftCertificateDTO;
 import com.epam.esm.exception.EntityNotFoundException;
 import com.epam.esm.exception.EntityValidationException;
 import com.epam.esm.exception.RepositoryDeleteException;
@@ -67,7 +68,8 @@ class GiftCertificateServiceTest {
 
     when(giftCertificateRepository.getAllByQuery(anyMap()))
         .thenReturn(Collections.singletonList(expectedGiftCertificate));
-    when(tagService.getTagsByCertificateId(anyLong())).thenReturn(Collections.singleton(tag));
+    when(tagService.getTagsByCertificateId(anyLong(), pagination))
+        .thenReturn(Collections.singleton(tag));
 
     List<GiftCertificate> certificates = giftCertificatesService
         .getAllCertificates(new HashMap<>());
@@ -84,7 +86,8 @@ class GiftCertificateServiceTest {
 
     when(giftCertificateRepository.getById(anyLong()))
         .thenReturn(ofNullable(expectedGiftCertificate));
-    when(tagService.getTagsByCertificateId(anyLong())).thenReturn(Collections.singleton(tag));
+    when(tagService.getTagsByCertificateId(anyLong(), pagination))
+        .thenReturn(Collections.singleton(tag));
 
     GiftCertificate certificateById = giftCertificatesService.getCertificateById(1L);
 
@@ -94,15 +97,14 @@ class GiftCertificateServiceTest {
 
   @Test
   void whenMockCreateCertificateCorrectThenReturnId()
-      throws RepositorySaveException, EntityNotFoundException {
+      throws RepositorySaveException {
     expectedGiftCertificate.setTags(Collections.singleton(tag));
-    when(giftCertificateRepository.save(any())).thenReturn(1L);
-    doNothing().when(tagService).saveCertificateTag(any(Tag.class), anyLong());
-    when(giftCertificateRepository.getById(anyLong())).thenReturn(ofNullable(
-        expectedGiftCertificate));
+    when(giftCertificateRepository.save(any())).thenReturn(giftCertificate);
+    when(giftCertificateRepository.getById(anyLong()))
+        .thenReturn(ofNullable(expectedGiftCertificate));
 
     assertEquals(expectedGiftCertificate,
-        giftCertificatesService.createCertificate(expectedGiftCertificate));
+        giftCertificatesService.createCertificate(new GiftCertificateDTO(expectedGiftCertificate)));
   }
 
 
@@ -116,23 +118,28 @@ class GiftCertificateServiceTest {
   void whenMockUpdateExistingCertificateWithSameParamsThenThrowsException() {
     when(giftCertificateRepository.getById(anyLong())).thenReturn(ofNullable(
         expectedGiftCertificate));
+    GiftCertificateDTO giftCertificateDTO = new GiftCertificateDTO(expectedGiftCertificate);
     assertThrows(EntityValidationException.class,
-        () -> giftCertificatesService.updateCertificate(expectedGiftCertificate));
+        () -> giftCertificatesService
+            .updateCertificate(giftCertificateDTO));
   }
 
   @Test
   void whenMockUpdateExistingCertificateWithNotSameParamsThenDontThrowException() {
     when(giftCertificateRepository.getById(anyLong())).thenReturn(ofNullable(
         expectedGiftCertificate));
-    assertDoesNotThrow(() -> giftCertificatesService.updateCertificate(giftCertificate));
+    assertDoesNotThrow(
+        () -> giftCertificatesService.updateCertificate(new GiftCertificateDTO(giftCertificate)));
   }
 
   @Test
   void whenMockUpdateExistingCertificateWithIncorrectParamsThenDontThrowException() {
     when(giftCertificateRepository.getById(anyLong())).thenReturn(ofNullable(
         expectedGiftCertificate));
+    GiftCertificateDTO giftCertificateDTO = new GiftCertificateDTO(expectedGiftCertificate);
     assertThrows(EntityValidationException.class,
-        () -> giftCertificatesService.updateCertificate(incorrectGiftCertificate));
+        () -> giftCertificatesService
+            .updateCertificate(giftCertificateDTO));
   }
 
   @Test

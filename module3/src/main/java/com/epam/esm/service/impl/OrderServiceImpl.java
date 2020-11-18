@@ -27,8 +27,8 @@ public class OrderServiceImpl implements OrderService {
   }
 
   @Override
-  public List<Order> getAllOrders(Map<String,Integer> pagination) {
-    return orderRepository.getAll(pagination);
+  public List<Order> getAllOrders(Integer limit, Integer offset) {
+    return orderRepository.getAll(limit,offset);
   }
 
   @Override
@@ -59,7 +59,7 @@ public class OrderServiceImpl implements OrderService {
   }
 
   @Override
-  public Set<Order> getAllUserOrders(Long userId,Map<String,Integer> pagination) {
-    return orderRepository.getAllUserOrders(userId, pagination);
+  public Set<Order> getAllUserOrders(Long userId,Integer limit, Integer offset) {
+    return orderRepository.getAllUserOrders(userId, limit,offset);
   }
 }

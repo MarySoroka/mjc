@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doNothing;
@@ -33,7 +34,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 class OrderServiceTest {
 
-  private static final Map<String, Integer> pagination = new HashMap<String, Integer>(2);
 
   @Mock
   OrderRepositoryImpl orderRepository;
@@ -42,16 +42,12 @@ class OrderServiceTest {
   OrderServiceImpl orderService;
   Order order = new Order(1L, 1L, ServiceUtils.getCurrentDateTime(), new BigDecimal(13), 1L);
 
-  @BeforeAll
-  public static void setup() {
-    pagination.put("limit", 10);
-    pagination.put("offset", 0);
-  }
+
 
   @Test
   void whenMockGetAllOrdersThenReturnOrder() {
-    when(orderRepository.getAll(eq(pagination))).thenReturn(Collections.singletonList(order));
-    assertEquals(1L, orderService.getAllOrders(pagination).size());
+    when(orderRepository.getAll(anyInt(),anyInt())).thenReturn(Collections.singletonList(order));
+    assertEquals(1L, orderService.getAllOrders(10,0).size());
   }
 
   @Test
@@ -106,8 +102,8 @@ class OrderServiceTest {
 
   @Test
   void whenMockGetAllUserOrdersThenReturnOneOrder() {
-    when(orderRepository.getAllUserOrders(anyLong(), eq(pagination)))
+    when(orderRepository.getAllUserOrders(anyLong(), anyInt(),anyInt()))
         .thenReturn(Collections.singleton(order));
-    assertEquals(1L, orderService.getAllUserOrders(1L, pagination).size());
+    assertEquals(1L, orderService.getAllUserOrders(1L, 10,0).size());
   }
 }

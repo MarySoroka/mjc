@@ -16,9 +16,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import javax.persistence.EntityManager;
 import javax.sql.DataSource;
+import org.aspectj.lang.annotation.Before;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
@@ -35,7 +38,6 @@ GiftCertificateRepositoryTest {
       "desc",
       new BigDecimal(12),
       ServiceUtils.getCurrentDateTime(), ServiceUtils.getCurrentDateTime(), 13);
-  private static final Map<String, Integer> pagination = new HashMap<String, Integer>(2 );
   private static final Map<String, String> queryParams = new HashMap<>(3 );
 
   @BeforeAll
@@ -47,8 +49,7 @@ GiftCertificateRepositoryTest {
         .build();
     NamedParameterJdbcTemplate jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
     giftCertificateRepository = new GiftCertificateRepositoryImpl(jdbcTemplate);
-    pagination.put("limit", 10);
-    pagination.put("offset", 0);
+
     queryParams.put("limit", "10");
     queryParams.put("offset","0");
     queryParams.put("name","lala");
@@ -67,14 +68,14 @@ GiftCertificateRepositoryTest {
   @Test
   void whenGetExistingCertificateFromDatabaseByTagNameThenReturnCorrectCertificate() {
     List<GiftCertificate> giftCertificatesByTagName = giftCertificateRepository
-        .getGiftCertificatesByTagName("name", pagination);
+        .getGiftCertificatesByTagName("name", 10,0);
     assertEquals(2L,giftCertificatesByTagName.size());
   }
 
   @Test
   void whenGetAllCertificatesThenReturnThreeCertificates() {
     List<GiftCertificate> giftCertificatesDaoAll = giftCertificateRepository
-        .getAll(new HashMap<>());
+        .getAll(10,0);
     assertEquals(3L, giftCertificatesDaoAll.size());
   }
 

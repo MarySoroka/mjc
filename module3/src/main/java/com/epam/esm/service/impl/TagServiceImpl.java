@@ -26,8 +26,8 @@ public class TagServiceImpl implements TagService {
 
 
   @Override
-  public List<Tag> getAllTags(Map<String, Integer> pagination) {
-    return tagRepository.getAll(pagination);
+  public List<Tag> getAllTags(Integer limit, Integer offset) {
+    return tagRepository.getAll(limit, offset);
   }
 
 

@@ -19,7 +19,7 @@ public interface TagService {
    */
 
 
-  List<Tag> getAllTags(Map<String, Integer> pagination);
+  List<Tag> getAllTags(Integer limit, Integer offset);
 
   /**
    * method find entity by key parameter

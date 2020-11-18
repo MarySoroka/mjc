@@ -2,6 +2,7 @@ package com.epam.esm.service.impl;
 
 import com.epam.esm.dao.TagRepository;
 import com.epam.esm.entity.Tag;
+import com.epam.esm.entity.dto.TagDTO;
 import com.epam.esm.exception.EntityNotFoundException;
 import com.epam.esm.exception.RepositoryDeleteException;
 import com.epam.esm.exception.RepositorySaveException;
@@ -26,8 +27,8 @@ public class TagServiceImpl implements TagService {
 
 
   @Override
-  public List<Tag> getAllTags(Integer limit, Integer offset) {
-    return tagRepository.getAll(limit, offset);
+  public List<Tag> getAllTags(Map<String, Integer> pagination) {
+    return tagRepository.getAll(pagination);
   }
 
 
@@ -43,10 +44,9 @@ public class TagServiceImpl implements TagService {
 
   @Override
   @Transactional
-  public Tag createTag(Tag tag)
+  public Tag createTag(TagDTO tag)
       throws RepositorySaveException, EntityNotFoundException {
-    Long tagId = tagRepository.save(tag);
-    return getTagById(tagId);
+    return tagRepository.save(new Tag(tag));
 
   }
 
@@ -57,8 +57,8 @@ public class TagServiceImpl implements TagService {
   }
 
   @Override
-  public Set<Tag> getTagsByCertificateId(Long certificateId) {
-    return tagRepository.getTagsByCertificateId(certificateId);
+  public Set<Tag> getTagsByCertificateId(Long certificateId,Map<String, Integer> pagination) {
+    return tagRepository.getTagsByCertificateId(certificateId, pagination);
   }
 
   @Override
@@ -66,22 +66,6 @@ public class TagServiceImpl implements TagService {
     return tagRepository.getTagByName(tagName);
   }
 
-  @Override
-  public void deleteTagForCertificate(Long tagId, Long certificateId) throws RepositoryDeleteException {
-    tagRepository.deleteCertificateTag(tagId, certificateId);
-  }
-
-  @Override
-  @Transactional
-  public void saveCertificateTag(Tag tag, Long certificateId) throws RepositorySaveException, EntityNotFoundException {
-    Optional<Tag> tagByName = getTagByName(tag.getName());
-    if (!tagByName.isPresent()) {
-      createTag(tag);
-      tagRepository.saveCertificateTag(tag.getId(), certificateId);
-    } else {
-      tagRepository.saveCertificateTag(tagByName.get().getId(), certificateId);
-    }
-  }
 
   @Override
   public Tag getTheMostWidelyUsedTag() {

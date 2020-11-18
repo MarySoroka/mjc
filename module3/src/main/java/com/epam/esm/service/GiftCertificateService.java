@@ -22,8 +22,7 @@ public interface GiftCertificateService {
    * @param id certificate id, which is using to find entity
    * @return entity or Optional.empty(), if entity is not found by this key
    */
-  GiftCertificate getCertificateById(Long id)
-      throws EntityNotFoundException;
+  GiftCertificate getCertificateById(Long id) throws EntityNotFoundException;
 
   /**
    * method save entity
@@ -32,23 +31,21 @@ public interface GiftCertificateService {
    * @return if entity has been saved return generated id
    */
   GiftCertificate createCertificate(GiftCertificate giftCertificate)
-      throws  EntityNotFoundException, RepositorySaveException;
+      throws EntityNotFoundException, RepositorySaveException;
 
   /**
    * delete entity by key parameter
    *
    * @param certificateId certificate id
    */
-  void deleteCertificate(Long certificateId)
-      throws  RepositoryDeleteException;
+  void deleteCertificate(Long certificateId) throws RepositoryDeleteException;
 
   /**
    * method update entity using new values in giftCertificate
    *
    * @param giftCertificate new values for entity
    */
-  void updateCertificate(GiftCertificate giftCertificate)
-      throws GiftCertificateServiceException;
+  void updateCertificate(GiftCertificate giftCertificate) throws GiftCertificateServiceException;
 
   /**
    * method return certificate by tag name

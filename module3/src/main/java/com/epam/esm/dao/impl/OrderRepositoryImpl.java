@@ -32,8 +32,7 @@ public class OrderRepositoryImpl implements OrderRepository {
   private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
   @Autowired
-  public OrderRepositoryImpl(
-      NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
+  public OrderRepositoryImpl(NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
     this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
   }
 

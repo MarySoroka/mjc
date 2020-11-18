@@ -19,7 +19,8 @@ public interface TagService {
    */
 
 
-  List<Tag> getAllTags( Map<String,Integer> pagination);
+  List<Tag> getAllTags(Map<String, Integer> pagination);
+
   /**
    * method find entity by key parameter
    *
@@ -34,8 +35,7 @@ public interface TagService {
    * @param tag tag, that should be save
    * @return if entity has been saved return generated id
    */
-  Tag createTag(Tag tag)
-      throws RepositorySaveException, EntityNotFoundException;
+  Tag createTag(Tag tag) throws RepositorySaveException, EntityNotFoundException;
 
   /**
    * delete entity by key parameter
@@ -67,8 +67,7 @@ public interface TagService {
    * @param tagId         tag id
    * @param certificateId certificate id
    */
-  void deleteTagForCertificate(Long tagId, Long certificateId)
-      throws RepositoryDeleteException;
+  void deleteTagForCertificate(Long tagId, Long certificateId) throws RepositoryDeleteException;
 
   /**
    * method save tag certificate
@@ -76,8 +75,7 @@ public interface TagService {
    * @param tag           tag
    * @param certificateId certificate id
    */
-  void saveCertificateTag(Tag tag, Long certificateId)
-      throws RepositorySaveException, EntityNotFoundException;
+  void saveCertificateTag(Tag tag, Long certificateId) throws RepositorySaveException, EntityNotFoundException;
 
   Tag getTheMostWidelyUsedTag();
 }

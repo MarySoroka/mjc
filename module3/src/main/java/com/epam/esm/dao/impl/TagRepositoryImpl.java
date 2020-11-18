@@ -63,14 +63,14 @@ public class TagRepositoryImpl implements TagRepository {
   }
 
   @Override
-  public List<Tag> getAll(Map<String,Integer> pagination) {
+  public List<Tag> getAll(Map<String, Integer> pagination) {
 
     Integer limit = Integer.parseInt(String.valueOf(pagination.get("limit")));
     Integer offset = Integer.parseInt(String.valueOf(pagination.get("offset")));
     SqlParameterSource namedParameters = new MapSqlParameterSource("limit", limit).addValue("offset",
         offset);
     return namedParameterJdbcTemplate
-        .query(SELECT_ALL_TAGS_QUERY,namedParameters, new BeanPropertyRowMapper<>(Tag.class));
+        .query(SELECT_ALL_TAGS_QUERY, namedParameters, new BeanPropertyRowMapper<>(Tag.class));
   }
 
   @Override

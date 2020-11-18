@@ -1,9 +1,14 @@
 package com.epam.esm.entity.dto;
 
+import com.epam.esm.entity.GiftCertificate;
+import com.epam.esm.entity.Order;
+import com.epam.esm.entity.Tag;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class GiftCertificateDTO {
 
@@ -29,6 +34,22 @@ public class GiftCertificateDTO {
     this.duration = duration;
     this.tags = tags;
     this.orders = orders;
+  }
+
+  public GiftCertificateDTO(GiftCertificate giftCertificate) {
+    this.id = giftCertificate.getId();
+    this.name = giftCertificate.getName();
+    this.description = giftCertificate.getDescription();
+    this.price = giftCertificate.getPrice();
+    this.createDate = giftCertificate.getCreateDate();
+    this.lastUpdateDate = giftCertificate.getLastUpdateDate();
+    this.duration = giftCertificate.getDuration();
+    this.tags = giftCertificate.getTags() != null ? giftCertificate.getTags().stream().map(TagDTO::new)
+        .collect(Collectors.toSet()) : new HashSet<TagDTO>();
+    this.orders =
+        giftCertificate.getOrders() != null ? giftCertificate.getOrders().stream().map(OrderDTO::new)
+            .collect(Collectors.toSet()) : new HashSet<OrderDTO>();
+
   }
 
   @Override

@@ -1,6 +1,7 @@
 package com.epam.esm.service;
 
 import com.epam.esm.entity.GiftCertificate;
+import com.epam.esm.entity.dto.GiftCertificateDTO;
 import com.epam.esm.exception.EntityNotFoundException;
 import com.epam.esm.exception.GiftCertificateServiceException;
 import com.epam.esm.exception.RepositoryDeleteException;
@@ -31,7 +32,7 @@ public interface GiftCertificateService {
    * @param giftCertificate certificate entity, that should be save
    * @return if entity has been saved return generated id
    */
-  GiftCertificate createCertificate(GiftCertificate giftCertificate)
+  GiftCertificate createCertificate(GiftCertificateDTO giftCertificate)
       throws  EntityNotFoundException, RepositorySaveException;
 
   /**
@@ -47,7 +48,7 @@ public interface GiftCertificateService {
    *
    * @param giftCertificate new values for entity
    */
-  void updateCertificate(GiftCertificate giftCertificate)
+  void updateCertificate(GiftCertificateDTO giftCertificate)
       throws GiftCertificateServiceException;
 
   /**

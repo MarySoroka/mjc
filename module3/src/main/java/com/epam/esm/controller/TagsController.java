@@ -46,7 +46,7 @@ public class TagsController {
             .collect(Collectors.toList());
     final CollectionModel<TagResource> resources = CollectionModel.of(tagResources);
     final String uriString = ServletUriComponentsBuilder.fromCurrentRequest().build().toUriString();
-    resources.add(Link.of(uriString, "self"));
+    resources.add(Link.of(uriString).withSelfRel());
     return ResponseEntity.ok(resources);
   }
 

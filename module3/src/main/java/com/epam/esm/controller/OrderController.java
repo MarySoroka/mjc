@@ -52,7 +52,7 @@ public class OrderController {
     }
     CollectionModel<OrderResource> orderResources = CollectionModel.of(userOrders);
     final String uriString = ServletUriComponentsBuilder.fromCurrentRequest().build().toUriString();
-    orderResources.add(Link.of(uriString, "self"));
+    orderResources.add(Link.of(uriString).withSelfRel());
     return ResponseEntity.ok(orderResources);
   }
 

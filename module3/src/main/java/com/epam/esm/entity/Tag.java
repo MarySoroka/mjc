@@ -10,17 +10,6 @@ public class Tag {
   public Tag() {
   }
 
-  @Override
-  public String
-
-
-  toString() {
-    return "Tag{" +
-        "id=" + id +
-        ", name='" + name + '\'' +
-        '}';
-  }
-
   public Tag(Long id, String name) {
     this.id = id;
     this.name = name;
@@ -28,6 +17,16 @@ public class Tag {
 
   public Tag(String name) {
     this.name = name;
+  }
+
+  @Override
+  public String
+
+  toString() {
+    return "Tag{" +
+        "id=" + id +
+        ", name='" + name + '\'' +
+        '}';
   }
 
   @Override

@@ -31,8 +31,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
   private final TagService tagService;
 
   @Autowired
-  public GiftCertificateServiceImpl(GiftCertificateRepository giftCertificateRepository,
-      TagService tagService) {
+  public GiftCertificateServiceImpl(GiftCertificateRepository giftCertificateRepository, TagService tagService) {
     this.giftCertificateRepository = giftCertificateRepository;
     this.tagService = tagService;
   }
@@ -48,8 +47,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
   }
 
   @Override
-  public GiftCertificate getCertificateById(Long id)
-      throws EntityNotFoundException {
+  public GiftCertificate getCertificateById(Long id) throws EntityNotFoundException {
     Optional<GiftCertificate> giftCertificate = giftCertificateRepository.getById(id);
     if (!giftCertificate.isPresent()) {
       throw new EntityNotFoundException(
@@ -80,21 +78,19 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
 
   @Override
   @Transactional
-  public void deleteCertificate(Long certificateId)
-      throws RepositoryDeleteException {
+  public void deleteCertificate(Long certificateId) throws RepositoryDeleteException {
     giftCertificateRepository.delete(certificateId);
   }
 
   @Override
   @Transactional
-  public void updateCertificate(GiftCertificate giftCertificate)
-      throws GiftCertificateServiceException {
+  public void updateCertificate(GiftCertificate giftCertificate) throws GiftCertificateServiceException {
     try {
       GiftCertificate certificateById = getCertificateById(giftCertificate.getId());
       if (!giftCertificate.equals(certificateById)) {
         updateCertificateFields(certificateById, giftCertificate);
         giftCertificateRepository.update(giftCertificate);
-      }else{
+      } else {
         throw new EntityValidationException("Service exception: no new entity field values was found");
       }
       if (giftCertificate.getTags() != null && !giftCertificate.getTags().isEmpty()) {

@@ -21,16 +21,16 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public List<User> getAllUsers(Map<String,Integer> pagination) {
+  public List<User> getAllUsers(Map<String, Integer> pagination) {
     return userRepository.getAll(pagination);
   }
 
   @Override
   public User getById(Long id) throws EntityNotFoundException {
     Optional<User> user = userRepository.getById(id);
-    if (user.isPresent()){
+    if (user.isPresent()) {
       return user.get();
     }
-     throw new EntityNotFoundException("Service exception : Couldn't get user by id: " + id);
+    throw new EntityNotFoundException("Service exception : Couldn't get user by id: " + id);
   }
 }

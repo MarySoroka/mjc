@@ -26,7 +26,7 @@ public class TagServiceImpl implements TagService {
 
 
   @Override
-  public List<Tag> getAllTags(Map<String,Integer> pagination) {
+  public List<Tag> getAllTags(Map<String, Integer> pagination) {
     return tagRepository.getAll(pagination);
   }
 
@@ -67,15 +67,13 @@ public class TagServiceImpl implements TagService {
   }
 
   @Override
-  public void deleteTagForCertificate(Long tagId, Long certificateId)
-      throws RepositoryDeleteException {
+  public void deleteTagForCertificate(Long tagId, Long certificateId) throws RepositoryDeleteException {
     tagRepository.deleteCertificateTag(tagId, certificateId);
   }
 
   @Override
   @Transactional
-  public void saveCertificateTag(Tag tag, Long certificateId)
-      throws RepositorySaveException, EntityNotFoundException {
+  public void saveCertificateTag(Tag tag, Long certificateId) throws RepositorySaveException, EntityNotFoundException {
     Optional<Tag> tagByName = getTagByName(tag.getName());
     if (!tagByName.isPresent()) {
       createTag(tag);

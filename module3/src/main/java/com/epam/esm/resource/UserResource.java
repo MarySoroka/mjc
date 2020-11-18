@@ -22,7 +22,7 @@ public class UserResource extends RepresentationModel<UserResource> {
     pagination.put("limit", 10);
     pagination.put("offset", 0);
     add(linkTo(UserController.class).withRel("users"));
-    add(linkTo(methodOn(OrderController.class).getAllUserOrders(id,pagination)).withRel("orders"));
+    add(linkTo(methodOn(OrderController.class).getAllUserOrders(id, pagination)).withRel("orders"));
 
   }
 

@@ -55,14 +55,13 @@ public class GiftCertificatesController {
   }
 
   @PostMapping
-  public ResponseEntity<GiftCertificateResource> createGiftCertificate(
-      @RequestBody GiftCertificate giftCertificate)
+  public ResponseEntity<GiftCertificateResource> createGiftCertificate(@RequestBody GiftCertificate giftCertificate)
       throws ControllerSaveEntityException {
     try {
       GiftCertificate certificate = giftCertificateService.createCertificate(giftCertificate);
       GiftCertificateResource giftCertificateResource = new GiftCertificateResource(certificate);
       return ResponseEntity.ok(giftCertificateResource);
-    } catch ( EntityNotFoundException | RepositorySaveException e) {
+    } catch (EntityNotFoundException | RepositorySaveException e) {
       throw new ControllerSaveEntityException(
           "Controller exception : Couldn't create certificate", e);
     }
@@ -83,8 +82,7 @@ public class GiftCertificatesController {
 
 
   @DeleteMapping("/{id}")
-  public ResponseEntity<HttpStatus> delete(@PathVariable("id") Long id)
-      throws ControllerEntityDeleteException {
+  public ResponseEntity<HttpStatus> delete(@PathVariable("id") Long id) throws ControllerEntityDeleteException {
     try {
       giftCertificateService.deleteCertificate(id);
       return ResponseEntity.noContent().build();

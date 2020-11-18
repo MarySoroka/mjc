@@ -8,17 +8,7 @@ public class Order {
 
   private Long id;
   private Long orderCertificateId;
-
-  public void setTimestamp(LocalDateTime timestamp) {
-    this.timestamp = timestamp;
-  }
-
   private LocalDateTime timestamp;
-
-  public LocalDateTime getTimestamp() {
-    return timestamp;
-  }
-
   private BigDecimal cost;
   private Long userId;
 
@@ -30,6 +20,16 @@ public class Order {
     this.cost = cost;
     this.userId = userId;
   }
+  public Order() {
+  }
+
+  public LocalDateTime getTimestamp() {
+    return timestamp;
+  }
+
+  public void setTimestamp(LocalDateTime timestamp) {
+    this.timestamp = timestamp;
+  }
 
   @Override
   public String toString() {
@@ -40,9 +40,6 @@ public class Order {
         ", cost=" + cost +
         ", userId=" + userId +
         '}';
-  }
-
-  public Order() {
   }
 
   public Long getOrderCertificateId() {
@@ -89,7 +86,6 @@ public class Order {
   public void setId(Long id) {
     this.id = id;
   }
-
 
 
   public BigDecimal getCost() {

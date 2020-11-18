@@ -40,8 +40,8 @@ public class OrderController {
 
 
   @GetMapping
-  public ResponseEntity<CollectionModel<OrderResource>> getAllUserOrders(
-      @RequestParam(required = false) Long userId, @RequestParam Map<String, Integer> pagination) {
+  public ResponseEntity<CollectionModel<OrderResource>> getAllUserOrders(@RequestParam(required = false) Long userId,
+      @RequestParam Map<String, Integer> pagination) {
     Set<OrderResource> userOrders;
     if (userId != null) {
       userOrders = orderService.getAllUserOrders(userId, pagination).stream()
@@ -57,8 +57,7 @@ public class OrderController {
   }
 
   @GetMapping("/{id}")
-  public ResponseEntity<OrderResource> getOrderById(@PathVariable("id") Long id)
-      throws EntityNotFoundException {
+  public ResponseEntity<OrderResource> getOrderById(@PathVariable("id") Long id) throws EntityNotFoundException {
     Order orderById = orderService.getOrderById(id);
     OrderResource orderResource = new OrderResource(orderById);
     return ResponseEntity.ok(orderResource);
@@ -66,8 +65,7 @@ public class OrderController {
 
 
   @PostMapping
-  public ResponseEntity<OrderResource> createOrder(
-      @RequestBody Order order) throws ControllerSaveEntityException {
+  public ResponseEntity<OrderResource> createOrder(@RequestBody Order order) throws ControllerSaveEntityException {
     try {
       final Order createdOrder = orderService.createOrder(order);
       OrderResource orderResource = new OrderResource(createdOrder);
@@ -80,8 +78,7 @@ public class OrderController {
 
 
   @PatchMapping("/{id}")
-  public ResponseEntity<OrderResource> updateOrder(@PathVariable("id") Long id,
-      @RequestBody Order order)
+  public ResponseEntity<OrderResource> updateOrder(@PathVariable("id") Long id, @RequestBody Order order)
       throws RepositoryUpdateException, EntityNotFoundException {
     order.setId(id);
     orderService.updateOrder(order);
@@ -92,8 +89,7 @@ public class OrderController {
 
 
   @DeleteMapping("/{id}")
-  public ResponseEntity<HttpStatus> delete(@PathVariable("id") Long id)
-      throws RepositoryDeleteException {
+  public ResponseEntity<HttpStatus> delete(@PathVariable("id") Long id) throws RepositoryDeleteException {
     orderService.deleteOrder(id);
     return ResponseEntity.noContent().build();
   }

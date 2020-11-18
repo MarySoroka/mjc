@@ -2,7 +2,7 @@ package com.epam.esm.service.impl;
 
 import com.epam.esm.dao.GiftCertificateRepository;
 import com.epam.esm.entity.GiftCertificate;
-import com.epam.esm.entity.Tag;
+import com.epam.esm.entity.dto.GiftCertificateDTO;
 import com.epam.esm.exception.EntityNotFoundException;
 import com.epam.esm.exception.EntityValidationException;
 import com.epam.esm.exception.GiftCertificateServiceException;
@@ -18,7 +18,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,12 +37,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
 
   @Override
   public List<GiftCertificate> getAllCertificates(Map<String, String> queryParams) {
-    List<GiftCertificate> giftCertificates;
-    giftCertificates = giftCertificateRepository.getAllByQuery(queryParams);
-    giftCertificates.forEach(giftCertificate -> giftCertificate
-        .setTags(new HashSet<>(tagService.getTagsByCertificateId(giftCertificate.getId()))));
-
-    return giftCertificates;
+    return giftCertificateRepository.getAllByQuery(queryParams);
   }
 
   @Override
@@ -53,27 +47,18 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
       throw new EntityNotFoundException(
           "Service exception : Couldn't get certificate by id : " + id);
     }
-    giftCertificate.get()
-        .setTags(tagService.getTagsByCertificateId(giftCertificate.get().getId()));
     return giftCertificate.get();
   }
 
   @Override
   @Transactional
-  public GiftCertificate createCertificate(GiftCertificate giftCertificate)
-      throws EntityNotFoundException, RepositorySaveException {
+  public GiftCertificate createCertificate(GiftCertificateDTO giftCertificate)
+      throws RepositorySaveException {
     LocalDateTime currentDateTime = ServiceUtils.getCurrentDateTime();
     giftCertificate.setLastUpdateDate(currentDateTime);
     giftCertificate.setCreateDate(currentDateTime);
-    Long certificateId = giftCertificateRepository.save(giftCertificate);
-    Set<Tag> tags = giftCertificate.getTags();
-    if (tags != null && !tags.isEmpty()) {
-      for (Tag tag : tags) {
-        tagService.saveCertificateTag(tag, certificateId);
-      }
-    }
-    return getCertificateById(certificateId);
-
+    GiftCertificate certificate = new GiftCertificate(giftCertificate);
+    return giftCertificateRepository.save(certificate);
   }
 
   @Override
@@ -84,26 +69,19 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
 
   @Override
   @Transactional
-  public void updateCertificate(GiftCertificate giftCertificate) throws GiftCertificateServiceException {
+  public void updateCertificate(GiftCertificateDTO giftCertificate)
+      throws GiftCertificateServiceException {
     try {
+      GiftCertificate updateCertificate = new GiftCertificate(giftCertificate);
       GiftCertificate certificateById = getCertificateById(giftCertificate.getId());
-      if (!giftCertificate.equals(certificateById)) {
-        updateCertificateFields(certificateById, giftCertificate);
-        giftCertificateRepository.update(giftCertificate);
+      if (!updateCertificate.equals(certificateById)) {
+        updateCertificateFields(certificateById, updateCertificate);
+        giftCertificateRepository.update(updateCertificate);
       } else {
-        throw new EntityValidationException("Service exception: no new entity field values was found");
+        throw new EntityValidationException(
+            "Service exception: no new entity field values was found");
       }
-      if (giftCertificate.getTags() != null && !giftCertificate.getTags().isEmpty()) {
-        for (Tag tag : giftCertificate.getTags()) {
-          if (!certificateById.getTags().remove(tag)) {
-            tagService.saveCertificateTag(tag, giftCertificate.getId());
-          }
-        }
-        for (Tag tag : certificateById.getTags()) {
-          tagService.deleteTagForCertificate(tag.getId(), certificateById.getId());
-        }
-      }
-    } catch (RepositoryDeleteException | RepositoryUpdateException | EntityNotFoundException | RepositorySaveException e) {
+    } catch (RepositoryUpdateException | EntityNotFoundException e) {
       throw new GiftCertificateServiceException("Service exception : couldn't update certificate ",
           e);
     }
@@ -111,12 +89,10 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
 
 
   @Override
-  public List<GiftCertificate> getCertificateByTagName(String tagName,Integer limit, Integer offset) {
-    List<GiftCertificate> giftCertificates = giftCertificateRepository
-        .getGiftCertificatesByTagName(tagName, limit, offset);
-    giftCertificates.forEach(giftCertificate -> giftCertificate
-        .setTags(new HashSet<>(tagService.getTagsByCertificateId(giftCertificate.getId()))));
-    return giftCertificates;
+  public List<GiftCertificate> getCertificateByTagName(String tagName,
+      Map<String, Integer> pagination) {
+    return giftCertificateRepository
+        .getGiftCertificatesByTagName(tagName, pagination);
   }
 
   private void updateCertificateFields(GiftCertificate certificate,

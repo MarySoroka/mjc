@@ -1,5 +1,6 @@
 package com.epam.esm.entity.dto;
 
+import com.epam.esm.entity.Order;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
@@ -38,7 +39,13 @@ public class OrderDTO {
   }
   public OrderDTO() {
   }
-
+  public OrderDTO(Order order) {
+    this.id = order.getId();
+    this.orderCertificateId = order.getOrderCertificateId();
+    this.timestamp = order.getTimestamp();
+    this.cost = order.getCost();
+    this.userId = order.getUserId();
+  }
   public LocalDateTime getTimestamp() {
     return timestamp;
   }

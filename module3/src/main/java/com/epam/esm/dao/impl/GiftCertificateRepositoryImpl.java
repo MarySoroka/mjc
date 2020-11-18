@@ -20,6 +20,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public class GiftCertificateRepositoryImpl implements GiftCertificateRepository {
+
   @PersistenceContext
   private EntityManager entityManager;
 
@@ -93,8 +94,8 @@ public class GiftCertificateRepositoryImpl implements GiftCertificateRepository 
     resultFilterMap.forEach(
         (key, value) -> query.having(
             criteriaBuilder.and(
-                criteriaBuilder.equal(
-                    giftCertificateRoot.get(key), value
+                criteriaBuilder.like(
+                    giftCertificateRoot.get(key), "%" + value + "%"
                 )
             )
         )

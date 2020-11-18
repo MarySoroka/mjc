@@ -49,6 +49,6 @@ public interface CRUDDao<E, K> {
      * @return if entity has been saved return generated id
      * @throws RepositorySaveException if generated id equals null
      */
-    K save(E e) throws RepositorySaveException;
+    E save(E e) throws RepositorySaveException;
 
 }

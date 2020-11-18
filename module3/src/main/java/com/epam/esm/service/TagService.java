@@ -1,6 +1,7 @@
 package com.epam.esm.service;
 
 import com.epam.esm.entity.Tag;
+import com.epam.esm.entity.dto.TagDTO;
 import com.epam.esm.exception.EntityNotFoundException;
 import com.epam.esm.exception.RepositoryDeleteException;
 import com.epam.esm.exception.RepositorySaveException;
@@ -34,7 +35,7 @@ public interface TagService {
    * @param tag tag, that should be save
    * @return if entity has been saved return generated id
    */
-  Tag createTag(Tag tag)
+  Tag createTag(TagDTO tag)
       throws RepositorySaveException, EntityNotFoundException;
 
   /**
@@ -51,7 +52,7 @@ public interface TagService {
    * @param certificateId certificate id
    * @return certificate tags
    */
-  Set<Tag> getTagsByCertificateId(Long certificateId);
+  Set<Tag> getTagsByCertificateId(Long certificateId, Map<String, Integer> pagination);
 
   /**
    * method finds tag by tag
@@ -61,23 +62,6 @@ public interface TagService {
    */
   Optional<Tag> getTagByName(String tagName);
 
-  /**
-   * method delete tag for specific certificate
-   *
-   * @param tagId         tag id
-   * @param certificateId certificate id
-   */
-  void deleteTagForCertificate(Long tagId, Long certificateId)
-      throws RepositoryDeleteException;
-
-  /**
-   * method save tag certificate
-   *
-   * @param tag           tag
-   * @param certificateId certificate id
-   */
-  void saveCertificateTag(Tag tag, Long certificateId)
-      throws RepositorySaveException, EntityNotFoundException;
 
   Tag getTheMostWidelyUsedTag();
 }

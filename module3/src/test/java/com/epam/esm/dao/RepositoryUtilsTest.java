@@ -1,5 +1,6 @@
 package com.epam.esm.dao;
 
+import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.HashMap;
@@ -23,20 +24,9 @@ class RepositoryUtilsTest {
 
   @Test
   void getFilterStringByParams() {
-    String filterStringByParams = RepositoryUtils.getFilterStringByParams(queryParams);
-    assertEquals(" HAVING gc.name LIKE '%lala%' ",filterStringByParams);
-  }
-
-  @Test
-  void getSortStringByQuery() {
-    String sortStringByQuery = RepositoryUtils.getSortStringByQuery(queryParams);
-    assertEquals(" ORDER BY gc.create_date asc",sortStringByQuery);
-  }
-
-  @Test
-  void getLimitStringByQuery() {
-    String limitStringByQuery = RepositoryUtils.getLimitStringByQuery(queryParams);
-    assertEquals(" LIMIT 10 OFFSET 0",limitStringByQuery);
+    Map<String, String> filterStringByParams = RepositoryUtils.getFilterStringByParams(queryParams);
+    assertTrue(filterStringByParams.containsKey("name"));
+    assertEquals("lala", filterStringByParams.get("name"));
   }
 
 }

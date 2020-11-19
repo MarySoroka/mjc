@@ -5,50 +5,51 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import com.epam.esm.dao.impl.UserRepositoryImpl;
 import com.epam.esm.entity.User;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
-import javax.sql.DataSource;
-import org.junit.jupiter.api.BeforeAll;
+import javax.persistence.EntityManager;
 import org.junit.jupiter.api.Test;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.transaction.annotation.Transactional;
 
+@RunWith(SpringRunner.class)
+@SpringBootTest
+@ActiveProfiles("test")
+@TestPropertySource(locations = "classpath:application-test.properties")
 class UserRepositoryTest {
 
-  private static final Map<String, Integer> pagination = new HashMap<String, Integer>(2);
-  private static UserRepository userRepository;
-  private final User user = new User(1L, "Mary", "D");
+  private final User user = new User(null, "Mary", "D");
+  @Autowired
+  private UserRepository userRepository;
+  private Long userId;
+  @Autowired
+  private EntityManager entityManager;
 
-  @BeforeAll
-  public static void setup() {
-    DataSource dataSource = new EmbeddedDatabaseBuilder().setType(EmbeddedDatabaseType.H2)
-        .generateUniqueName(true)
-        .addScript("classpath:database.sql")
-        .addScript("classpath:test-data.sql")
-        .build();
-    NamedParameterJdbcTemplate jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
-    userRepository = new UserRepositoryImpl(jdbcTemplate);
-    pagination.put("limit", 10);
-    pagination.put("offset", 0);
+
+  @Test
+  @Transactional
+  void getAllUsersThenReturnOneUser() {
+    entityManager.persist(user);
+    userId = user.getId();
+    List<User> userRepositoryAll = userRepository.getAll(10, 0);
+    assertEquals(1L, userRepositoryAll.size());
   }
 
   @Test
-  void getAllUsersThenReturnTwoUsers() {
-    List<User> userRepositoryAll = userRepository.getAll(pagination);
-    assertEquals(2L, userRepositoryAll.size());
-  }
-
-  @Test
+  @Transactional
   void getExistingUserByIdThenReturnCorrectUser() {
-    Optional<User> user = userRepository.getById(1L);
+    entityManager.persist(user);
+    userId = user.getId();
+    Optional<User> user = userRepository.getById(userId);
     assertTrue(user.isPresent());
     User userExpected = user.get();
-    assertEquals(1L, userExpected.getId());
+    assertEquals(2L, userExpected.getId());
   }
 
   @Test

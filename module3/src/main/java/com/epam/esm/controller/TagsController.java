@@ -10,7 +10,6 @@ import com.epam.esm.exception.RepositorySaveException;
 import com.epam.esm.resource.TagResource;
 import com.epam.esm.service.TagService;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
@@ -42,10 +41,9 @@ public class TagsController {
 
   @GetMapping
   public ResponseEntity<CollectionModel<TagResource>> getAllTags(
-    @RequestParam(defaultValue = "0") Integer offset, @RequestParam(defaultValue = "10") Integer limit) {
+      @RequestParam(defaultValue = "0") Integer offset, @RequestParam(defaultValue = "10") Integer limit) {
     final List<TagResource> tagResources =
-        tagService.getAllTags(limit, offset).stream().map(TagResource::new)
-            .collect(Collectors.toList());
+        tagService.getAllTags(limit, offset).stream().map(TagResource::new).collect(Collectors.toList());
     final CollectionModel<TagResource> resources = CollectionModel.of(tagResources);
     final String uriString = ServletUriComponentsBuilder.fromCurrentRequest().build().toUriString();
     resources.add(Link.of(uriString).withSelfRel());
@@ -66,8 +64,7 @@ public class TagsController {
   }
 
   @PostMapping
-  public ResponseEntity<TagResource> create(@RequestBody TagDTO tag)
-      throws ControllerSaveEntityException {
+  public ResponseEntity<TagResource> create(@RequestBody TagDTO tag) throws ControllerSaveEntityException {
     try {
       Tag createdTag = tagService.createTag(tag);
       TagResource tagResource = new TagResource(createdTag);

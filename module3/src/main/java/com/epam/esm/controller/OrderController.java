@@ -9,7 +9,6 @@ import com.epam.esm.exception.RepositorySaveException;
 import com.epam.esm.exception.RepositoryUpdateException;
 import com.epam.esm.resource.OrderResource;
 import com.epam.esm.service.OrderService;
-import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,10 +41,11 @@ public class OrderController {
 
   @GetMapping
   public ResponseEntity<CollectionModel<OrderResource>> getAllUserOrders(
-      @RequestParam(required = false) Long userId,  @RequestParam(defaultValue = "0") Integer offset, @RequestParam(defaultValue = "10") Integer limit) {
+      @RequestParam(required = false) Long userId, @RequestParam(defaultValue = "0") Integer offset,
+      @RequestParam(defaultValue = "10") Integer limit) {
     Set<OrderResource> userOrders;
     if (userId != null) {
-      userOrders = orderService.getAllUserOrders(userId,limit, offset).stream()
+      userOrders = orderService.getAllUserOrders(userId, limit, offset).stream()
           .map(OrderResource::new).collect(Collectors.toSet());
     } else {
       userOrders = orderService.getAllOrders(limit, offset).stream()

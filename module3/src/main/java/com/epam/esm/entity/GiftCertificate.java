@@ -80,21 +80,6 @@ public class GiftCertificate implements Serializable {
 
   }
 
-  @Override
-  public String toString() {
-    return "GiftCertificate{" +
-        "id=" + id +
-        ", name='" + name + '\'' +
-        ", description='" + description + '\'' +
-        ", price=" + price +
-        ", createDate=" + createDate +
-        ", lastUpdateDate=" + lastUpdateDate +
-        ", duration=" + duration +
-        ", tags=" + tags +
-        ", orders=" + orders +
-        '}';
-  }
-
   public GiftCertificate(GiftCertificateDTO giftCertificate) {
     this.id = giftCertificate.getId();
     this.name = giftCertificate.getName();
@@ -108,6 +93,21 @@ public class GiftCertificate implements Serializable {
     this.orders =
         giftCertificate.getOrders() != null ? giftCertificate.getOrders().stream().map(Order::new)
             .collect(Collectors.toSet()) : new HashSet<Order>();
+  }
+
+  @Override
+  public String toString() {
+    return "GiftCertificate{" +
+        "id=" + id +
+        ", name='" + name + '\'' +
+        ", description='" + description + '\'' +
+        ", price=" + price +
+        ", createDate=" + createDate +
+        ", lastUpdateDate=" + lastUpdateDate +
+        ", duration=" + duration +
+        ", tags=" + tags +
+        ", orders=" + orders +
+        '}';
   }
 
   public Set<Order> getOrders() {

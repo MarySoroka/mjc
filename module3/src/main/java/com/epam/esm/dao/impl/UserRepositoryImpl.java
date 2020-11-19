@@ -24,7 +24,7 @@ public class UserRepositoryImpl implements UserRepository {
   }
 
   @Override
-  public List<User> getAll( Integer limit, Integer offset) {
+  public List<User> getAll(Integer limit, Integer offset) {
     CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
     CriteriaQuery<User> criteriaQuery = criteriaBuilder.createQuery(User.class);
     Root<User> from = criteriaQuery.from(User.class);

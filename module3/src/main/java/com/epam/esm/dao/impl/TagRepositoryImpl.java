@@ -51,7 +51,7 @@ public class TagRepositoryImpl implements TagRepository {
   }
 
   @Override
-  public List<Tag> getAll( Integer limit, Integer offset) {
+  public List<Tag> getAll(Integer limit, Integer offset) {
     CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
     CriteriaQuery<Tag> criteriaQuery = criteriaBuilder.createQuery(Tag.class);
     Root<Tag> from = criteriaQuery.from(Tag.class);
@@ -86,10 +86,9 @@ public class TagRepositoryImpl implements TagRepository {
   }
 
   @Override
-  public Set<Tag> getTagsByCertificateId(Long certificateId,  Integer limit, Integer offset) {
+  public Set<Tag> getTagsByCertificateId(Long certificateId, Integer limit, Integer offset) {
     CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-    CriteriaQuery<Tag> criteriaQuery = criteriaBuilder
-        .createQuery(Tag.class);
+    CriteriaQuery<Tag> criteriaQuery = criteriaBuilder.createQuery(Tag.class);
     Root<Tag> tagRoot = criteriaQuery.from(Tag.class);
     Root<GiftCertificate> giftCertificateRoot = criteriaQuery.from(GiftCertificate.class);
 

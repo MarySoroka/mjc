@@ -6,8 +6,6 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 import com.epam.esm.controller.OrderController;
 import com.epam.esm.controller.UserController;
 import com.epam.esm.entity.User;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Objects;
 import org.springframework.hateoas.RepresentationModel;
 

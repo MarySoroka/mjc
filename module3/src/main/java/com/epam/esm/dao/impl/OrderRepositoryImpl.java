@@ -29,10 +29,9 @@ public class OrderRepositoryImpl implements OrderRepository {
   }
 
   @Override
-  public List<Order> getAll( Integer limit, Integer offset) {
+  public List<Order> getAll(Integer limit, Integer offset) {
     CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-    CriteriaQuery<Order> criteriaQuery = criteriaBuilder
-        .createQuery(Order.class);
+    CriteriaQuery<Order> criteriaQuery = criteriaBuilder.createQuery(Order.class);
     Root<Order> from = criteriaQuery.from(Order.class);
     CriteriaQuery<Order> select = criteriaQuery.select(from);
     TypedQuery<Order> typedQuery = entityManager.createQuery(select);
@@ -66,11 +65,9 @@ public class OrderRepositoryImpl implements OrderRepository {
   @Override
   public Set<Order> getAllUserOrders(Long userId, Integer limit, Integer offset) {
     CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-    CriteriaQuery<Order> criteriaQuery = criteriaBuilder
-        .createQuery(Order.class);
+    CriteriaQuery<Order> criteriaQuery = criteriaBuilder.createQuery(Order.class);
     Root<Order> orderRoot = criteriaQuery.from(Order.class);
     Root<User> userRoot = criteriaQuery.from(User.class);
-
     CriteriaQuery<Order> select = criteriaQuery.select(orderRoot);
     select.where(
         criteriaBuilder.equal(userRoot.get("user_id"), userId)

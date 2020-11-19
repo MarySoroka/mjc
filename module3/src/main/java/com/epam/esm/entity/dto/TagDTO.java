@@ -3,7 +3,9 @@ package com.epam.esm.entity.dto;
 import com.epam.esm.entity.Tag;
 
 public class TagDTO {
+
   private Long tagId;
+  private String name;
 
   public TagDTO() {
   }
@@ -12,6 +14,7 @@ public class TagDTO {
     this.tagId = tag.getId();
     this.name = tag.getName();
   }
+
   public Long getTagId() {
     return tagId;
   }
@@ -27,7 +30,5 @@ public class TagDTO {
   public void setName(String name) {
     this.name = name;
   }
-
-  private String name;
 
 }

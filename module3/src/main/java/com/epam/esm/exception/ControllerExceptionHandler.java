@@ -51,8 +51,7 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
   @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
   public ExceptionResponse handleNotWatchedException(Exception ex) {
 
-    return new ExceptionResponse(ex.getMessage() == null ? "Fatal error" :
-        ex.getMessage(), "50003");
+    return new ExceptionResponse(ex.getMessage() == null ? "Fatal error" : ex.getMessage(), "50003");
   }
 
   @ExceptionHandler
@@ -86,10 +85,7 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
   @ExceptionHandler
   @ResponseStatus(HttpStatus.BAD_REQUEST)
   protected ExceptionResponse handleMethodArgumentTypeMismatch(MethodArgumentTypeMismatchException ex) {
-    return new ExceptionResponse(
-        ex.getMessage() == null ? "Entity fields type mismatch" :
-            ex.getMessage(),
-        "40004");
+    return new ExceptionResponse(ex.getMessage() == null ? "Entity fields type mismatch" : ex.getMessage(), "40004");
   }
 
 

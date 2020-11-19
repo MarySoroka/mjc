@@ -32,7 +32,7 @@ public interface GiftCertificateService {
    * @return if entity has been saved return generated id
    */
   GiftCertificate createCertificate(GiftCertificateDTO giftCertificate)
-      throws  EntityNotFoundException, RepositorySaveException;
+      throws EntityNotFoundException, RepositorySaveException;
 
   /**
    * delete entity by key parameter
@@ -46,8 +46,7 @@ public interface GiftCertificateService {
    *
    * @param giftCertificate new values for entity
    */
-  void updateCertificate(GiftCertificateDTO giftCertificate)
-      throws GiftCertificateServiceException;
+  void updateCertificate(GiftCertificateDTO giftCertificate) throws GiftCertificateServiceException;
 
   /**
    * method return certificate by tag name

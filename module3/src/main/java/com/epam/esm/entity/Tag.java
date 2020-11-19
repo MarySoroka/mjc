@@ -12,7 +12,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "tag")
-public class Tag  implements Serializable {
+public class Tag implements Serializable {
 
   private static final long serialVersionUID = 7060096489786514736L;
   @Id
@@ -23,14 +23,6 @@ public class Tag  implements Serializable {
   private String name;
 
   public Tag() {
-  }
-
-  @Override
-  public String toString() {
-    return "Tag{" +
-        "id=" + id +
-        ", name='" + name + '\'' +
-        '}';
   }
 
   public Tag(TagDTO tag) {
@@ -45,6 +37,14 @@ public class Tag  implements Serializable {
 
   public Tag(String name) {
     this.name = name;
+  }
+
+  @Override
+  public String toString() {
+    return "Tag{" +
+        "id=" + id +
+        ", name='" + name + '\'' +
+        '}';
   }
 
   @Override

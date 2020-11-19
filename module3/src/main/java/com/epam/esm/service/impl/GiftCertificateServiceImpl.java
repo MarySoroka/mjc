@@ -48,8 +48,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
 
   @Override
   @Transactional
-  public GiftCertificate createCertificate(GiftCertificateDTO giftCertificate)
-      throws RepositorySaveException {
+  public GiftCertificate createCertificate(GiftCertificateDTO giftCertificate) throws RepositorySaveException {
     LocalDateTime currentDateTime = ServiceUtils.getCurrentDateTime();
     giftCertificate.setLastUpdateDate(currentDateTime);
     giftCertificate.setCreateDate(currentDateTime);
@@ -65,8 +64,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
 
   @Override
   @Transactional
-  public void updateCertificate(GiftCertificateDTO giftCertificate)
-      throws GiftCertificateServiceException {
+  public void updateCertificate(GiftCertificateDTO giftCertificate) throws GiftCertificateServiceException {
     try {
       GiftCertificate updateCertificate = new GiftCertificate(giftCertificate);
       GiftCertificate certificateById = getCertificateById(giftCertificate.getId());
@@ -85,8 +83,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
 
 
   @Override
-  public List<GiftCertificate> getCertificateByTagName(String tagName,
-      Integer limit, Integer offset) {
+  public List<GiftCertificate> getCertificateByTagName(String tagName, Integer limit, Integer offset) {
     return giftCertificateRepository
         .getGiftCertificatesByTagName(tagName, limit, offset);
   }

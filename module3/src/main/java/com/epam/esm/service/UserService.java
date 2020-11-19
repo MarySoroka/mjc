@@ -9,4 +9,6 @@ public interface UserService {
   List<User> getAllUsers(Integer limit, Integer offset);
 
   User getById(Long id) throws EntityNotFoundException;
+
+
 }

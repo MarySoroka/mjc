@@ -27,6 +27,7 @@ public class Order implements Serializable {
   private LocalDateTime timestamp;
   @Column(nullable = false, columnDefinition = "decimal(10,2)")
   private BigDecimal cost;
+
   @Column(name = "user_id", nullable = false)
   private Long userId;
 

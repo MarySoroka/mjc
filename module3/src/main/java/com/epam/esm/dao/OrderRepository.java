@@ -2,6 +2,8 @@ package com.epam.esm.dao;
 
 import com.epam.esm.entity.Order;
 import java.util.Set;
+import org.springframework.stereotype.Repository;
+
 
 public interface OrderRepository extends CRUDDao<Order, Long> {
 

@@ -17,6 +17,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Root;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 public class GiftCertificateRepositoryImpl implements GiftCertificateRepository {
@@ -44,6 +45,7 @@ public class GiftCertificateRepositoryImpl implements GiftCertificateRepository 
   }
 
   @Override
+  @Transactional
   public void delete(Long id) throws RepositoryDeleteException {
     GiftCertificate giftCertificate = entityManager.find(GiftCertificate.class, id);
     if (entityManager.contains(giftCertificate)) {
@@ -55,6 +57,7 @@ public class GiftCertificateRepositoryImpl implements GiftCertificateRepository 
 
 
   @Override
+  @Transactional
   public GiftCertificate save(GiftCertificate giftCertificate) {
     entityManager.persist(giftCertificate);
     return giftCertificate;
@@ -62,6 +65,7 @@ public class GiftCertificateRepositoryImpl implements GiftCertificateRepository 
   }
 
   @Override
+  @Transactional
   public void update(GiftCertificate giftCertificate) {
     entityManager.merge(giftCertificate);
   }

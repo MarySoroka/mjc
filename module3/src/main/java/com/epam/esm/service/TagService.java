@@ -6,7 +6,6 @@ import com.epam.esm.exception.EntityNotFoundException;
 import com.epam.esm.exception.RepositoryDeleteException;
 import com.epam.esm.exception.RepositorySaveException;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
@@ -20,7 +19,8 @@ public interface TagService {
    */
 
 
-  List<Tag> getAllTags( Integer limit, Integer offset);
+  List<Tag> getAllTags(Integer limit, Integer offset);
+
   /**
    * method find entity by key parameter
    *
@@ -35,8 +35,7 @@ public interface TagService {
    * @param tag tag, that should be save
    * @return if entity has been saved return generated id
    */
-  Tag createTag(TagDTO tag)
-      throws RepositorySaveException, EntityNotFoundException;
+  Tag createTag(TagDTO tag) throws RepositorySaveException, EntityNotFoundException;
 
   /**
    * delete entity by key parameter

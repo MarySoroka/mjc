@@ -8,6 +8,28 @@ public class OrderDTO {
 
   private Long id;
   private Long orderCertificateId;
+  private LocalDateTime timestamp;
+  private BigDecimal cost;
+  private Long userId;
+
+  public OrderDTO(Long id, Long orderCertificateId, LocalDateTime timestamp,
+      BigDecimal cost, Long userId) {
+    this.id = id;
+    this.orderCertificateId = orderCertificateId;
+    this.timestamp = timestamp;
+    this.cost = cost;
+    this.userId = userId;
+  }
+
+  public OrderDTO() {
+  }
+  public OrderDTO(Order order) {
+    this.id = order.getId();
+    this.orderCertificateId = order.getOrderCertificateId();
+    this.timestamp = order.getTimestamp();
+    this.cost = order.getCost();
+    this.userId = order.getUserId();
+  }
 
   public Long getId() {
     return id;
@@ -25,27 +47,6 @@ public class OrderDTO {
     this.cost = cost;
   }
 
-  private LocalDateTime timestamp;
-  private BigDecimal cost;
-  private Long userId;
-
-  public OrderDTO(Long id, Long orderCertificateId, LocalDateTime timestamp,
-      BigDecimal cost, Long userId) {
-    this.id = id;
-    this.orderCertificateId = orderCertificateId;
-    this.timestamp = timestamp;
-    this.cost = cost;
-    this.userId = userId;
-  }
-  public OrderDTO() {
-  }
-  public OrderDTO(Order order) {
-    this.id = order.getId();
-    this.orderCertificateId = order.getOrderCertificateId();
-    this.timestamp = order.getTimestamp();
-    this.cost = order.getCost();
-    this.userId = order.getUserId();
-  }
   public LocalDateTime getTimestamp() {
     return timestamp;
   }

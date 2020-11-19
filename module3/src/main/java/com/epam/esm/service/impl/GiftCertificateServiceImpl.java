@@ -38,8 +38,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
   }
 
   @Override
-  public GiftCertificate getCertificateById(Long id)
-      throws EntityNotFoundException {
+  public GiftCertificate getCertificateById(Long id) throws EntityNotFoundException {
     Optional<GiftCertificate> giftCertificate = giftCertificateRepository.getById(id);
     if (!giftCertificate.isPresent()) {
       throw new EntityNotFoundException(
@@ -50,8 +49,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
 
   @Override
   @Transactional
-  public GiftCertificate createCertificate(GiftCertificateDTO giftCertificate)
-      throws RepositorySaveException {
+  public GiftCertificate createCertificate(GiftCertificateDTO giftCertificate) throws RepositorySaveException {
     LocalDateTime currentDateTime = ServiceUtils.getCurrentDateTime();
     giftCertificate.setLastUpdateDate(currentDateTime);
     giftCertificate.setCreateDate(currentDateTime);
@@ -61,15 +59,13 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
 
   @Override
   @Transactional
-  public void deleteCertificate(Long certificateId)
-      throws RepositoryDeleteException {
+  public void deleteCertificate(Long certificateId) throws RepositoryDeleteException {
     giftCertificateRepository.delete(certificateId);
   }
 
   @Override
   @Transactional
-  public void updateCertificate(GiftCertificateDTO giftCertificate)
-      throws GiftCertificateServiceException {
+  public void updateCertificate(GiftCertificateDTO giftCertificate) throws GiftCertificateServiceException {
     try {
       GiftCertificate updateCertificate = new GiftCertificate(giftCertificate);
       GiftCertificate certificateById = getCertificateById(giftCertificate.getId());
@@ -88,8 +84,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
 
 
   @Override
-  public List<GiftCertificate> getCertificateByTagName(String tagName,
-      Integer limit, Integer offset) {
+  public List<GiftCertificate> getCertificateByTagName(String tagName, Integer limit, Integer offset) {
     return giftCertificateRepository
         .getGiftCertificatesByTagName(tagName, limit, offset);
   }

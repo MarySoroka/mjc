@@ -1,9 +1,6 @@
 package com.epam.esm.dao;
 
 import com.epam.esm.entity.Tag;
-import com.epam.esm.exception.RepositoryDeleteException;
-import com.epam.esm.exception.RepositorySaveException;
-import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
@@ -18,7 +15,7 @@ public interface TagRepository extends CRUDDao<Tag, Long> {
    * @param certificateId certificate id
    * @return tags, that are in certificate with this id
    */
-  Set<Tag> getTagsByCertificateId(Long certificateId,  Integer limit, Integer offset);
+  Set<Tag> getTagsByCertificateId(Long certificateId, Integer limit, Integer offset);
 
   /**
    * find tag by name
@@ -27,7 +24,6 @@ public interface TagRepository extends CRUDDao<Tag, Long> {
    * @return Optional entity of tag, if tag is presents or Optional.empty()
    */
   Optional<Tag> getTagByName(String tagName);
-
 
 
   Tag getTheMostWidelyUsedTag();

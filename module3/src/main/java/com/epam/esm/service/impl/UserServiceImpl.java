@@ -5,7 +5,6 @@ import com.epam.esm.entity.User;
 import com.epam.esm.exception.EntityNotFoundException;
 import com.epam.esm.service.UserService;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,16 +20,16 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public List<User> getAllUsers( Integer limit, Integer offset) {
+  public List<User> getAllUsers(Integer limit, Integer offset) {
     return userRepository.getAll(limit, offset);
   }
 
   @Override
   public User getById(Long id) throws EntityNotFoundException {
     Optional<User> user = userRepository.getById(id);
-    if (user.isPresent()){
+    if (user.isPresent()) {
       return user.get();
     }
-     throw new EntityNotFoundException("Service exception : Couldn't get user by id: " + id);
+    throw new EntityNotFoundException("Service exception : Couldn't get user by id: " + id);
   }
 }

@@ -31,7 +31,7 @@ public class GiftCertificateRepositoryImpl implements GiftCertificateRepository 
   }
 
   @Override
-  public List<GiftCertificate> getAll( Integer limit, Integer offset) {
+  public List<GiftCertificate> getAll(Integer limit, Integer offset) {
     CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
     CriteriaQuery<GiftCertificate> criteriaQuery = criteriaBuilder
         .createQuery(GiftCertificate.class);
@@ -67,8 +67,7 @@ public class GiftCertificateRepositoryImpl implements GiftCertificateRepository 
   }
 
   @Override
-  public List<GiftCertificate> getGiftCertificatesByTagName(String tagName,
-      Integer limit, Integer offset) {
+  public List<GiftCertificate> getGiftCertificatesByTagName(String tagName, Integer limit, Integer offset) {
     CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
     CriteriaQuery<GiftCertificate> query = criteriaBuilder.createQuery(GiftCertificate.class);
     Root<Tag> from = query.from(Tag.class);

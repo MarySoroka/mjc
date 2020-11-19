@@ -19,7 +19,7 @@ public class Order implements Serializable {
   private static final long serialVersionUID = -6785077151599358812L;
   @Id
   @GeneratedValue(strategy = GenerationType.TABLE)
-  @Column(name = "order_id",nullable = false)
+  @Column(name = "order_id", nullable = false)
   private Long id;
   @Column(name = "order_certificate_id", nullable = false)
   private Long orderCertificateId;
@@ -44,6 +44,14 @@ public class Order implements Serializable {
   public Order() {
   }
 
+  public Order(OrderDTO orderDTO) {
+    this.id = orderDTO.getId();
+    this.orderCertificateId = orderDTO.getOrderCertificateId();
+    this.timestamp = orderDTO.getTimestamp();
+    this.cost = orderDTO.getCost();
+    this.userId = orderDTO.getUserId();
+  }
+
   @Override
   public String toString() {
     return "Order{" +
@@ -54,15 +62,6 @@ public class Order implements Serializable {
         ", userId=" + userId +
         '}';
   }
-
-  public Order(OrderDTO orderDTO) {
-    this.id = orderDTO.getId();
-    this.orderCertificateId = orderDTO.getOrderCertificateId();
-    this.timestamp = orderDTO.getTimestamp();
-    this.cost = orderDTO.getCost();
-    this.userId = orderDTO.getUserId();
-  }
-
 
   public LocalDateTime getTimestamp() {
     return timestamp;

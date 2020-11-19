@@ -8,7 +8,6 @@ import com.epam.esm.exception.RepositoryDeleteException;
 import com.epam.esm.exception.RepositorySaveException;
 import com.epam.esm.service.TagService;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +26,7 @@ public class TagServiceImpl implements TagService {
 
 
   @Override
-  public List<Tag> getAllTags( Integer limit, Integer offset) {
+  public List<Tag> getAllTags(Integer limit, Integer offset) {
     return tagRepository.getAll(limit, offset);
   }
 
@@ -44,8 +43,7 @@ public class TagServiceImpl implements TagService {
 
   @Override
   @Transactional
-  public Tag createTag(TagDTO tag)
-      throws RepositorySaveException {
+  public Tag createTag(TagDTO tag) throws RepositorySaveException {
     return tagRepository.save(new Tag(tag));
 
   }
@@ -58,14 +56,13 @@ public class TagServiceImpl implements TagService {
 
   @Override
   public Set<Tag> getTagsByCertificateId(Long certificateId, Integer limit, Integer offset) {
-    return tagRepository.getTagsByCertificateId(certificateId,limit, offset);
+    return tagRepository.getTagsByCertificateId(certificateId, limit, offset);
   }
 
   @Override
   public Optional<Tag> getTagByName(String tagName) {
     return tagRepository.getTagByName(tagName);
   }
-
 
 
   @Override

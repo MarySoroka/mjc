@@ -11,7 +11,6 @@ import com.epam.esm.service.OrderService;
 import com.epam.esm.service.ServiceUtils;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +27,7 @@ public class OrderServiceImpl implements OrderService {
   }
 
   @Override
-  public List<Order> getAllOrders( Integer limit, Integer offset) {
+  public List<Order> getAllOrders(Integer limit, Integer offset) {
     return orderRepository.getAll(limit, offset);
   }
 

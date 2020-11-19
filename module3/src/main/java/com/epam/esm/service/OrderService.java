@@ -7,14 +7,19 @@ import com.epam.esm.exception.RepositoryDeleteException;
 import com.epam.esm.exception.RepositorySaveException;
 import com.epam.esm.exception.RepositoryUpdateException;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 public interface OrderService {
-   List<Order> getAllOrders( Integer limit, Integer offset);
-   Order getOrderById(Long id) throws EntityNotFoundException;
-   Order createOrder(OrderDTO order) throws RepositorySaveException, EntityNotFoundException;
-   void deleteOrder(Long id) throws RepositoryDeleteException;
-   void updateOrder(OrderDTO order) throws RepositoryUpdateException;
-   Set<Order> getAllUserOrders(Long userId,  Integer limit, Integer offset);
+
+  List<Order> getAllOrders(Integer limit, Integer offset);
+
+  Order getOrderById(Long id) throws EntityNotFoundException;
+
+  Order createOrder(OrderDTO order) throws RepositorySaveException, EntityNotFoundException;
+
+  void deleteOrder(Long id) throws RepositoryDeleteException;
+
+  void updateOrder(OrderDTO order) throws RepositoryUpdateException;
+
+  Set<Order> getAllUserOrders(Long userId, Integer limit, Integer offset);
 }

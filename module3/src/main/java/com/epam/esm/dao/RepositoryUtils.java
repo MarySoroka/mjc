@@ -8,11 +8,6 @@ import java.util.Set;
 
 public class RepositoryUtils {
 
-  private static final String HAVING = " HAVING ";
-  private static final String CERTIFICATE_TABLE_NAME = "gc.";
-  private static final String LIKE_START = " LIKE '%";
-  private static final String LIKE_END = "%' ";
-  private static final String AND = " AND ";
   private static final String ORDER_BY = " ORDER BY gc.";
   private static final String SORT = "sort";
   private static final String ORDER = "order";

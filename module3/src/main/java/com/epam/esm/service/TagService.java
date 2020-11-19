@@ -18,9 +18,7 @@ public interface TagService {
   /**
    * @return all objects in specific db table
    */
-
-
-  List<Tag> getAllTags(Integer limit, Integer offset);
+  List<Tag> getAllTags( Integer limit, Integer offset);
 
   /**
    * method find entity by key parameter
@@ -53,7 +51,7 @@ public interface TagService {
    * @param certificateId certificate id
    * @return certificate tags
    */
-  Set<Tag> getTagsByCertificateId(Long certificateId, Map<String, Integer> pagination);
+  Set<Tag> getTagsByCertificateId(Long certificateId, Integer limit, Integer offset);
 
   /**
    * method finds tag by tag

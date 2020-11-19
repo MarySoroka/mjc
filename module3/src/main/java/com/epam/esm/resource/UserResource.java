@@ -19,7 +19,7 @@ public class UserResource extends RepresentationModel<UserResource> {
     this.user = user;
     final long id = user.getId();
     add(linkTo(UserController.class).withRel("users"));
-    add(linkTo(methodOn(OrderController.class).getAllUserOrders(id, 10,0)).withRel("orders"));
+    add(linkTo(methodOn(OrderController.class).getAllUserOrders(id, 10, 0)).withRel("orders"));
 
   }
 

@@ -11,10 +11,8 @@ import com.epam.esm.exception.RepositorySaveException;
 import com.epam.esm.exception.RepositoryUpdateException;
 import com.epam.esm.service.GiftCertificateService;
 import com.epam.esm.service.ServiceUtils;
-import com.epam.esm.service.TagService;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -27,12 +25,10 @@ import org.springframework.transaction.annotation.Transactional;
 public class GiftCertificateServiceImpl implements GiftCertificateService {
 
   private final GiftCertificateRepository giftCertificateRepository;
-  private final TagService tagService;
 
   @Autowired
-  public GiftCertificateServiceImpl(GiftCertificateRepository giftCertificateRepository, TagService tagService) {
+  public GiftCertificateServiceImpl(GiftCertificateRepository giftCertificateRepository) {
     this.giftCertificateRepository = giftCertificateRepository;
-    this.tagService = tagService;
   }
 
   @Override
@@ -90,9 +86,9 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
 
   @Override
   public List<GiftCertificate> getCertificateByTagName(String tagName,
-      Map<String, Integer> pagination) {
+      Integer limit, Integer offset) {
     return giftCertificateRepository
-        .getGiftCertificatesByTagName(tagName, pagination);
+        .getGiftCertificatesByTagName(tagName, limit, offset);
   }
 
   private void updateCertificateFields(GiftCertificate certificate,

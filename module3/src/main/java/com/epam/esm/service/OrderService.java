@@ -11,10 +11,10 @@ import java.util.Map;
 import java.util.Set;
 
 public interface OrderService {
-   List<Order> getAllOrders(Integer limit, Integer offset);
+   List<Order> getAllOrders( Integer limit, Integer offset);
    Order getOrderById(Long id) throws EntityNotFoundException;
    Order createOrder(OrderDTO order) throws RepositorySaveException, EntityNotFoundException;
    void deleteOrder(Long id) throws RepositoryDeleteException;
    void updateOrder(OrderDTO order) throws RepositoryUpdateException;
-   Set<Order> getAllUserOrders(Long userId, Map<String,Integer> pagination);
+   Set<Order> getAllUserOrders(Long userId,  Integer limit, Integer offset);
 }

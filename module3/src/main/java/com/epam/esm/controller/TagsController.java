@@ -41,7 +41,8 @@ public class TagsController {
 
 
   @GetMapping
-  public ResponseEntity<CollectionModel<TagResource>> getAllTags(@RequestParam(defaultValue = "0") Integer offset, @RequestParam(defaultValue = "10") Integer limit) {
+  public ResponseEntity<CollectionModel<TagResource>> getAllTags(
+    @RequestParam(defaultValue = "0") Integer offset, @RequestParam(defaultValue = "10") Integer limit) {
     final List<TagResource> tagResources =
         tagService.getAllTags(limit, offset).stream().map(TagResource::new)
             .collect(Collectors.toList());

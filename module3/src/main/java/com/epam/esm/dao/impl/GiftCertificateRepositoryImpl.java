@@ -31,9 +31,7 @@ public class GiftCertificateRepositoryImpl implements GiftCertificateRepository 
   }
 
   @Override
-  public List<GiftCertificate> getAll(Map<String, Integer> pagination) {
-    int limit = Integer.parseInt(String.valueOf(pagination.get("limit")));
-    int offset = Integer.parseInt(String.valueOf(pagination.get("offset")));
+  public List<GiftCertificate> getAll( Integer limit, Integer offset) {
     CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
     CriteriaQuery<GiftCertificate> criteriaQuery = criteriaBuilder
         .createQuery(GiftCertificate.class);
@@ -70,7 +68,7 @@ public class GiftCertificateRepositoryImpl implements GiftCertificateRepository 
 
   @Override
   public List<GiftCertificate> getGiftCertificatesByTagName(String tagName,
-      Map<String, Integer> pagination) {
+      Integer limit, Integer offset) {
     CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
     CriteriaQuery<GiftCertificate> query = criteriaBuilder.createQuery(GiftCertificate.class);
     Root<Tag> from = query.from(Tag.class);

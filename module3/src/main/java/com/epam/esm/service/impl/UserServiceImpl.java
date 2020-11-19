@@ -21,7 +21,7 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public List<User> getAllUsers(Integer limit, Integer offset) {
+  public List<User> getAllUsers( Integer limit, Integer offset) {
     return userRepository.getAll(limit, offset);
   }
 

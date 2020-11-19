@@ -18,7 +18,7 @@ public interface TagRepository extends CRUDDao<Tag, Long> {
    * @param certificateId certificate id
    * @return tags, that are in certificate with this id
    */
-  Set<Tag> getTagsByCertificateId(Long certificateId, Map<String, Integer> pagination);
+  Set<Tag> getTagsByCertificateId(Long certificateId,  Integer limit, Integer offset);
 
   /**
    * find tag by name

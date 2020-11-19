@@ -31,9 +31,9 @@ public class UserController {
   }
 
   @GetMapping
-  public ResponseEntity<CollectionModel<UserResource>> getAllUsers(@RequestParam Map<String, Integer> pagination){
+  public ResponseEntity<CollectionModel<UserResource>> getAllUsers(@RequestParam(defaultValue = "0") Integer offset, @RequestParam(defaultValue = "10") Integer limit){
     final List<UserResource> userResources =
-        userService.getAllUsers(pagination).stream().map(UserResource::new).collect(Collectors.toList());
+        userService.getAllUsers(limit, offset).stream().map(UserResource::new).collect(Collectors.toList());
     final CollectionModel<UserResource> resources = CollectionModel.of(userResources);
     final String uriString = ServletUriComponentsBuilder.fromCurrentRequest().build().toUriString();
     resources.add(Link.of(uriString, "self"));

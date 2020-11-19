@@ -57,5 +57,5 @@ public interface GiftCertificateService {
    * @param tagName tag name
    * @return certificates
    */
-  List<GiftCertificate> getCertificateByTagName(String tagName, Map<String, Integer> pagination);
+  List<GiftCertificate> getCertificateByTagName(String tagName, Integer limit, Integer offset);
 }

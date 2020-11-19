@@ -30,9 +30,7 @@ public class OrderRepositoryImpl implements OrderRepository {
   }
 
   @Override
-  public List<Order> getAll(Map<String, Integer> pagination) {
-    int limit = Integer.parseInt(String.valueOf(pagination.get("limit")));
-    int offset = Integer.parseInt(String.valueOf(pagination.get("offset")));
+  public List<Order> getAll( Integer limit, Integer offset) {
     CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
     CriteriaQuery<Order> criteriaQuery = criteriaBuilder
         .createQuery(Order.class);
@@ -67,9 +65,7 @@ public class OrderRepositoryImpl implements OrderRepository {
   }
 
   @Override
-  public Set<Order> getAllUserOrders(Long userId, Map<String, Integer> pagination) {
-    int limit = Integer.parseInt(String.valueOf(pagination.get("limit")));
-    int offset = Integer.parseInt(String.valueOf(pagination.get("offset")));
+  public Set<Order> getAllUserOrders(Long userId, Integer limit, Integer offset) {
     CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
     CriteriaQuery<Order> criteriaQuery = criteriaBuilder
         .createQuery(Order.class);

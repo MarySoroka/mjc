@@ -21,8 +21,8 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public List<User> getAllUsers(Map<String,Integer> pagination) {
-    return userRepository.getAll(pagination);
+  public List<User> getAllUsers( Integer limit, Integer offset) {
+    return userRepository.getAll(limit, offset);
   }
 
   @Override

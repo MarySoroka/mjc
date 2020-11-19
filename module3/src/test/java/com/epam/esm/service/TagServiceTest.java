@@ -17,6 +17,7 @@ import static org.mockito.Mockito.when;
 
 import com.epam.esm.dao.TagRepository;
 import com.epam.esm.entity.Tag;
+import com.epam.esm.entity.dto.TagDTO;
 import com.epam.esm.exception.EntityNotFoundException;
 import com.epam.esm.exception.RepositoryDeleteException;
 import com.epam.esm.exception.RepositorySaveException;
@@ -45,7 +46,6 @@ class TagServiceTest {
   @InjectMocks
   private TagServiceImpl tagsService;
 
-
   @Test
   void whenMockGetAllTagsThenReturnEmptyList() {
     when(tagRepository.getAll(anyInt(),anyInt())).thenReturn(new LinkedList<>());
@@ -55,8 +55,8 @@ class TagServiceTest {
 
   @Test
   void whenMockGetTagsByCertificateIdThenReturnEmptyList() {
-    when(tagRepository.getTagsByCertificateId(anyLong())).thenReturn(new HashSet<>());
-    Set<Tag> tags = tagsService.getTagsByCertificateId(1L);
+    when(tagRepository.getTagsByCertificateId(anyLong(),anyInt(),anyInt())).thenReturn(new HashSet<>());
+    Set<Tag> tags = tagsService.getTagsByCertificateId(1L,10,0);
     assertEquals(0, tags.size());
   }
 
@@ -78,12 +78,11 @@ class TagServiceTest {
 
   @Test
   void whenMockCreateTagThenReturnId()
-      throws RepositorySaveException, EntityNotFoundException {
+      throws RepositorySaveException {
     Tag expectedTag = new Tag(null, "name");
-    when(tagRepository.save(expectedTag)).thenReturn(1L);
-    when(tagRepository.getById(1L)).thenReturn(of(expectedTag));
+    when(tagRepository.save(expectedTag)).thenReturn(tag);
 
-    Tag actualTag = tagsService.createTag(expectedTag);
+    Tag actualTag = tagsService.createTag(new TagDTO(expectedTag));
 
     expectedTag.setId(1L);
 
@@ -97,19 +96,7 @@ class TagServiceTest {
     assertDoesNotThrow(() -> tagsService.deleteTag(1L));
   }
 
-  @Test
-  void whenMockDeleteTagForCertificateThenDoesNotThrowException() throws RepositoryDeleteException {
-    doNothing().when(tagRepository).deleteCertificateTag(anyLong(), anyLong());
-    assertDoesNotThrow(() -> tagsService.deleteTagForCertificate(1L, 1L));
-  }
 
-  @Test
-  void whenMockDeleteTagForCertificateThenThrowsException() throws RepositoryDeleteException {
-    doThrow(RepositoryDeleteException.class).when(tagRepository)
-        .deleteCertificateTag(anyLong(), anyLong());
-    assertThrows(RepositoryDeleteException.class,
-        () -> tagsService.deleteTagForCertificate(1L, 1L));
-  }
 
   @Test
   void whenMockGetTagByNameThenReturnTag() {
@@ -125,26 +112,7 @@ class TagServiceTest {
     assertFalse(tagByName.isPresent());
   }
 
-  @Test
-  void whenMockSaveCertificateTagThenDoesntThrowException()
-      throws RepositorySaveException {
-    when(tagRepository.getTagByName(anyString())).thenReturn(ofNullable(tag));
-    doNothing().when(tagRepository).saveCertificateTag(anyLong(), anyLong());
 
-    assertDoesNotThrow(() -> tagsService.saveCertificateTag(tag, 1L));
-
-  }
-
-  @Test
-  void whenMockSaveCertificateTagThenThrowException()
-      throws RepositorySaveException {
-    when(tagRepository.getTagByName(anyString())).thenReturn(ofNullable(tag));
-    doThrow(RepositorySaveException.class).when(tagRepository)
-        .saveCertificateTag(anyLong(), anyLong());
-
-    assertThrows(RepositorySaveException.class, () -> tagsService.saveCertificateTag(tag, 1L));
-
-  }
 
   @Test
   void whenMockGetTheMostWidelyUsedTagThenReturnTag() {

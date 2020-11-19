@@ -14,6 +14,7 @@ import static org.mockito.Mockito.when;
 
 import com.epam.esm.dao.impl.OrderRepositoryImpl;
 import com.epam.esm.entity.Order;
+import com.epam.esm.entity.dto.OrderDTO;
 import com.epam.esm.exception.EntityNotFoundException;
 import com.epam.esm.exception.RepositoryDeleteException;
 import com.epam.esm.exception.RepositorySaveException;
@@ -30,6 +31,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.dao.DataIntegrityViolationException;
 
 @ExtendWith(MockitoExtension.class)
 class OrderServiceTest {
@@ -41,8 +43,6 @@ class OrderServiceTest {
   @InjectMocks
   OrderServiceImpl orderService;
   Order order = new Order(1L, 1L, ServiceUtils.getCurrentDateTime(), new BigDecimal(13), 1L);
-
-
 
   @Test
   void whenMockGetAllOrdersThenReturnOrder() {
@@ -63,16 +63,15 @@ class OrderServiceTest {
   }
 
   @Test
-  void whenMockCreateOrderThenDoesntThrowException() throws RepositorySaveException {
-    when(orderRepository.save(any(Order.class))).thenReturn(1L);
-    when(orderRepository.getById(anyLong())).thenReturn(ofNullable(order));
-    assertDoesNotThrow(() -> orderService.createOrder(order));
+  void whenMockCreateOrderThenDoesntThrowException() {
+    when(orderRepository.save(any(Order.class))).thenReturn(order);
+    assertDoesNotThrow(() -> orderService.createOrder(new OrderDTO(order)));
   }
 
   @Test
-  void whenMockCreateIncorrectOrderThenThrowsException() throws RepositorySaveException {
-    when(orderRepository.save(any(Order.class))).thenThrow(RepositorySaveException.class);
-    assertThrows(RepositorySaveException.class, () -> orderService.createOrder(order));
+  void whenMockCreateIncorrectOrderThenThrowsException() {
+    when(orderRepository.save(any(Order.class))).thenThrow(DataIntegrityViolationException.class);
+    assertThrows(DataIntegrityViolationException.class, () -> orderService.createOrder(new OrderDTO(order)));
   }
 
   @Test
@@ -89,15 +88,15 @@ class OrderServiceTest {
   }
 
   @Test
-  void whenMockUpdateExistingOrderThenDoesntThrowException() throws RepositoryUpdateException {
+  void whenMockUpdateExistingOrderThenDoesntThrowException() {
     doNothing().when(orderRepository).update(any(Order.class));
-    assertDoesNotThrow(() -> orderService.updateOrder(order));
+    assertDoesNotThrow(() -> orderService.updateOrder(new OrderDTO(order)));
   }
 
   @Test
-  void whenMockUpdateNotExistingOrderThenDoesntThrowException() throws RepositoryUpdateException {
-    doThrow(RepositoryUpdateException.class).when(orderRepository).update(any(Order.class));
-    assertThrows(RepositoryUpdateException.class, () -> orderService.updateOrder(order));
+  void whenMockUpdateNotExistingOrderThenDoesntThrowException() {
+    doThrow(DataIntegrityViolationException.class).when(orderRepository).update(any(Order.class));
+    assertThrows(DataIntegrityViolationException.class, () -> orderService.updateOrder(new OrderDTO(order)));
   }
 
   @Test

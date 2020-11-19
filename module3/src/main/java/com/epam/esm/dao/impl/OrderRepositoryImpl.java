@@ -15,6 +15,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 public class OrderRepositoryImpl implements OrderRepository {
@@ -42,6 +43,7 @@ public class OrderRepositoryImpl implements OrderRepository {
   }
 
   @Override
+  @Transactional
   public void delete(Long id) throws RepositoryDeleteException {
     Order order = entityManager.find(Order.class, id);
     if (entityManager.contains(order)) {
@@ -52,11 +54,13 @@ public class OrderRepositoryImpl implements OrderRepository {
   }
 
   @Override
+  @Transactional
   public void update(Order order) {
     entityManager.merge(order);
   }
 
   @Override
+  @Transactional
   public Order save(Order order) {
     entityManager.persist(order);
     return order;
@@ -70,7 +74,7 @@ public class OrderRepositoryImpl implements OrderRepository {
     Root<User> userRoot = criteriaQuery.from(User.class);
     CriteriaQuery<Order> select = criteriaQuery.select(orderRoot);
     select.where(
-        criteriaBuilder.equal(userRoot.get("user_id"), userId)
+        criteriaBuilder.equal(userRoot.get("id"), userId)
     );
     TypedQuery<Order> typedQuery = entityManager.createQuery(select);
     typedQuery.setFirstResult(offset);

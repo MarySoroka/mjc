@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -29,7 +30,7 @@ public class GiftCertificate implements Serializable {
   @GeneratedValue(strategy = GenerationType.TABLE)
   @Column(name = "certificate_id")
   private Long id;
-  @Column(nullable = false, unique = true)
+  @Column(name="certificate_name",nullable = false, unique = true)
   private String name;
   @Column(nullable = false, columnDefinition = "text")
   private String description;
@@ -41,7 +42,7 @@ public class GiftCertificate implements Serializable {
   private LocalDateTime lastUpdateDate;
   @Column(nullable = false)
   private Integer duration;
-  @ManyToMany(targetEntity = Tag.class, cascade = CascadeType.ALL)
+  @ManyToMany(fetch = FetchType.EAGER,targetEntity = Tag.class, cascade = CascadeType.ALL)
   @JoinTable(name = "certificate_tag",
       joinColumns = @JoinColumn(name = "certificate_id"),
       inverseJoinColumns = @JoinColumn(name = "tag_id", referencedColumnName = "tag_id")

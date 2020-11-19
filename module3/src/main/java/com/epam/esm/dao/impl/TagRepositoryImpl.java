@@ -18,6 +18,7 @@ import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Root;
 import javax.persistence.criteria.Subquery;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 public class TagRepositoryImpl implements TagRepository {
@@ -63,6 +64,7 @@ public class TagRepositoryImpl implements TagRepository {
   }
 
   @Override
+  @Transactional
   public void delete(Long id) throws RepositoryDeleteException {
     Tag tag = entityManager.find(Tag.class, id);
     if (entityManager.contains(tag)) {
@@ -73,12 +75,14 @@ public class TagRepositoryImpl implements TagRepository {
   }
 
   @Override
+  @Transactional
   public void update(Tag tag) {
     throw new UnsupportedOperationException();
   }
 
 
   @Override
+  @Transactional
   public Tag save(Tag tag) {
     entityManager.persist(tag);
     return tag;

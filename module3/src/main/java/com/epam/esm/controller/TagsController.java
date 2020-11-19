@@ -42,9 +42,9 @@ public class TagsController {
 
   @GetMapping
   public ResponseEntity<CollectionModel<TagResource>> getAllTags(
-      @RequestParam Map<String, Integer> pagination) {
+    @RequestParam(defaultValue = "0") Integer offset, @RequestParam(defaultValue = "10") Integer limit) {
     final List<TagResource> tagResources =
-        tagService.getAllTags(pagination).stream().map(TagResource::new)
+        tagService.getAllTags(limit, offset).stream().map(TagResource::new)
             .collect(Collectors.toList());
     final CollectionModel<TagResource> resources = CollectionModel.of(tagResources);
     final String uriString = ServletUriComponentsBuilder.fromCurrentRequest().build().toUriString();

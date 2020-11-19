@@ -27,8 +27,8 @@ public class TagServiceImpl implements TagService {
 
 
   @Override
-  public List<Tag> getAllTags(Map<String, Integer> pagination) {
-    return tagRepository.getAll(pagination);
+  public List<Tag> getAllTags( Integer limit, Integer offset) {
+    return tagRepository.getAll(limit, offset);
   }
 
 
@@ -57,8 +57,8 @@ public class TagServiceImpl implements TagService {
   }
 
   @Override
-  public Set<Tag> getTagsByCertificateId(Long certificateId,Map<String, Integer> pagination) {
-    return tagRepository.getTagsByCertificateId(certificateId, pagination);
+  public Set<Tag> getTagsByCertificateId(Long certificateId, Integer limit, Integer offset) {
+    return tagRepository.getTagsByCertificateId(certificateId,limit, offset);
   }
 
   @Override

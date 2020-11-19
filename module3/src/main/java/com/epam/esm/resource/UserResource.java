@@ -18,11 +18,8 @@ public class UserResource extends RepresentationModel<UserResource> {
   public UserResource(final User user) {
     this.user = user;
     final long id = user.getId();
-    Map<String, Integer> pagination = new HashMap<>();
-    pagination.put("limit", 10);
-    pagination.put("offset", 0);
     add(linkTo(UserController.class).withRel("users"));
-    add(linkTo(methodOn(OrderController.class).getAllUserOrders(id,pagination)).withRel("orders"));
+    add(linkTo(methodOn(OrderController.class).getAllUserOrders(id, 10, 0)).withRel("orders"));
 
   }
 

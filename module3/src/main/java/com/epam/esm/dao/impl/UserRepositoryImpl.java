@@ -25,9 +25,7 @@ public class UserRepositoryImpl implements UserRepository {
   }
 
   @Override
-  public List<User> getAll(Map<String, Integer> pagination) {
-    int limit = Integer.parseInt(String.valueOf(pagination.get("limit")));
-    int offset = Integer.parseInt(String.valueOf(pagination.get("offset")));
+  public List<User> getAll( Integer limit, Integer offset) {
     CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
     CriteriaQuery<User> criteriaQuery = criteriaBuilder.createQuery(User.class);
     Root<User> from = criteriaQuery.from(User.class);

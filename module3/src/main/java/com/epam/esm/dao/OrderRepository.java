@@ -5,5 +5,5 @@ import java.util.Map;
 import java.util.Set;
 
 public interface OrderRepository extends CRUDDao<Order, Long>{
-   Set<Order> getAllUserOrders(Long userId, Map<String,Integer> pagination);
+   Set<Order> getAllUserOrders(Long userId,  Integer limit, Integer offset);
 }

@@ -1,58 +1,59 @@
 package com.epam.esm.exception;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-@ControllerAdvice
+@RestControllerAdvice
 public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
 
   @ExceptionHandler
-  public ResponseEntity<Object> handleControllerEntityNotFoundException(
+  @ResponseStatus(HttpStatus.NOT_FOUND)
+  public ExceptionResponse handleControllerEntityNotFoundException(
       ControllerEntityNotFoundException ex) {
-    ExceptionResponse exceptionResponse = new ExceptionResponse(ex.getMessage(), "404");
-    return new ResponseEntity<>(exceptionResponse, HttpStatus.NOT_FOUND);
+    return new ExceptionResponse(ex.getMessage(), "40401");
   }
 
   @ExceptionHandler
-  public ResponseEntity<Object> handleControllerEntityDeleteException(
+  @ResponseStatus(HttpStatus.NOT_FOUND)
+  public ExceptionResponse handleControllerEntityDeleteException(
       ControllerEntityDeleteException ex) {
-    ExceptionResponse exceptionResponse = new ExceptionResponse(ex.getMessage(), "404");
-    return new ResponseEntity<>(exceptionResponse, HttpStatus.NOT_FOUND);
+    return new ExceptionResponse(ex.getMessage(), "40402");
   }
 
   @ExceptionHandler
-  public ResponseEntity<Object> handleControllerEntityUpdateException(
+  @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+  public ExceptionResponse handleControllerEntityUpdateException(
       ControllerEntityUpdateException ex) {
-    ExceptionResponse exceptionResponse = new ExceptionResponse(ex.getMessage(), "500");
-    return new ResponseEntity<>(exceptionResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+    return new ExceptionResponse(ex.getMessage(), "50001");
   }
 
   @ExceptionHandler
-  public ResponseEntity<Object> handleControllerSaveEntityException(
+  @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+  public ExceptionResponse handleControllerSaveEntityException(
       ControllerSaveEntityException ex) {
-    ExceptionResponse exceptionResponse = new ExceptionResponse(ex.getMessage(), "500");
-    return new ResponseEntity<>(exceptionResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+    return new ExceptionResponse(ex.getMessage(), "50002");
   }
 
   @ExceptionHandler
-  public ResponseEntity<Object> handleNotWatchedException(
+  @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+  public ExceptionResponse handleNotWatchedException(
       Exception ex) {
-    ExceptionResponse exceptionResponse = new ExceptionResponse("Something went wrong", "500");
-    return new ResponseEntity<>(exceptionResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+    return new ExceptionResponse(ex.getMessage() == null ? "Fatal error" :
+        ex.getMessage(), "50003");
   }
 
   @ExceptionHandler
-  protected ResponseEntity<Object> handleMethodArgumentTypeMismatch(
+  @ResponseStatus(HttpStatus.BAD_REQUEST)
+  protected ExceptionResponse handleMethodArgumentTypeMismatch(
       MethodArgumentTypeMismatchException ex) {
-    ExceptionResponse exceptionResponse = new ExceptionResponse(
+    return new ExceptionResponse(
         ex.getMessage() == null ? "Entity fields type mismatch" :
             ex.getMessage(),
-        "400");
-    return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
+        "40004");
   }
 
 

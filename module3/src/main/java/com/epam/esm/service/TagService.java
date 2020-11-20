@@ -1,10 +1,11 @@
 package com.epam.esm.service;
 
 import com.epam.esm.entity.Tag;
-import com.epam.esm.exception.TagNotFoundException;
+import com.epam.esm.exception.EntityNotFoundException;
 import com.epam.esm.exception.TagServiceException;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 /**
  * interface that demonstrate business logic for tag domain
@@ -22,7 +23,7 @@ public interface TagService {
    * @param id tag id, which is using to find entity
    * @return entity or Optional.empty(), if entity is not found by this key
    */
-  Tag getTagById(Long id) throws TagNotFoundException;
+  Tag getTagById(Long id) throws EntityNotFoundException;
 
   /**
    * method save entity
@@ -31,7 +32,7 @@ public interface TagService {
    * @return if entity has been saved return generated id
    * @throws TagServiceException if generated id equals null
    */
-  Long createTag(Tag tag) throws TagServiceException;
+  Tag createTag(Tag tag) throws TagServiceException;
 
   /**
    * delete entity by key parameter
@@ -47,7 +48,7 @@ public interface TagService {
    * @param certificateId certificate id
    * @return certificate tags
    */
-  List<Tag> getTagsByCertificateId(Long certificateId);
+  Set<Tag> getTagsByCertificateId(Long certificateId);
 
   /**
    * method finds tag by tag

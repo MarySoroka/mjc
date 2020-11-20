@@ -1,7 +1,7 @@
 package com.epam.esm.service;
 
 import com.epam.esm.entity.GiftCertificate;
-import com.epam.esm.exception.GiftCertificateNotFoundException;
+import com.epam.esm.exception.EntityNotFoundException;
 import com.epam.esm.exception.GiftCertificateServiceException;
 import java.util.List;
 import java.util.Map;
@@ -21,7 +21,7 @@ public interface GiftCertificateService {
    * @return entity or Optional.empty(), if entity is not found by this key
    */
   GiftCertificate getCertificateById(Long id)
-      throws GiftCertificateNotFoundException;
+      throws EntityNotFoundException;
 
   /**
    * method save entity
@@ -30,7 +30,8 @@ public interface GiftCertificateService {
    * @return if entity has been saved return generated id
    * @throws GiftCertificateServiceException if generated id equals null
    */
-  Long createCertificate(GiftCertificate giftCertificate) throws GiftCertificateServiceException;
+  GiftCertificate createCertificate(GiftCertificate giftCertificate)
+      throws GiftCertificateServiceException;
 
   /**
    * delete entity by key parameter
@@ -49,6 +50,7 @@ public interface GiftCertificateService {
 
   /**
    * method return certificate by tag name
+   *
    * @param tagName tag name
    * @return certificates
    */

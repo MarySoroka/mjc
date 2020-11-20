@@ -1,6 +1,5 @@
 package com.epam.esm.dao;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -37,7 +36,6 @@ class TagRepositoryTest {
 
   @Test
   void whenGetByIdExistingTagFromDatabaseThenReturnCorrectTag() {
-    assertTrue(tagRepository.getById(3L).isPresent());
     Optional<Tag> tagsRepositoryById = tagRepository.getById(3L);
     assertTrue(tagsRepositoryById.isPresent());
     Tag tag = tagsRepositoryById.get();
@@ -59,7 +57,7 @@ class TagRepositoryTest {
   @Test
   void whenDeleteExistingTagThenReturnTrue() throws RepositoryDeleteException {
     tagRepository.delete(1L);
-    assertDoesNotThrow(() -> tagRepository.getById(1L));
+    assertFalse(tagRepository.getById(1L).isPresent());
   }
 
   @Test

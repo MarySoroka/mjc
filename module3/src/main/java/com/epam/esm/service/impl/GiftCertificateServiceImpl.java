@@ -3,7 +3,7 @@ package com.epam.esm.service.impl;
 import com.epam.esm.dao.GiftCertificateRepository;
 import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.entity.Tag;
-import com.epam.esm.exception.GiftCertificateNotFoundException;
+import com.epam.esm.exception.EntityNotFoundException;
 import com.epam.esm.exception.GiftCertificateServiceException;
 import com.epam.esm.exception.RepositoryDeleteException;
 import com.epam.esm.exception.RepositorySaveException;
@@ -49,20 +49,20 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
 
   @Override
   public GiftCertificate getCertificateById(Long id)
-      throws GiftCertificateNotFoundException {
+      throws EntityNotFoundException {
     Optional<GiftCertificate> giftCertificate = giftCertificateRepository.getById(id);
     if (!giftCertificate.isPresent()) {
-      throw new GiftCertificateNotFoundException(
+      throw new EntityNotFoundException(
           "Service exception : Couldn't get certificate by id : " + id);
     }
     giftCertificate.get()
-        .setTags(new HashSet<>(tagService.getTagsByCertificateId(giftCertificate.get().getId())));
+        .setTags(tagService.getTagsByCertificateId(giftCertificate.get().getId()));
     return giftCertificate.get();
   }
 
   @Override
   @Transactional
-  public Long createCertificate(GiftCertificate giftCertificate)
+  public GiftCertificate createCertificate(GiftCertificate giftCertificate)
       throws GiftCertificateServiceException {
     try {
       LocalDateTime currentDateTime = ServiceUtils.getCurrentDateTime();
@@ -75,8 +75,8 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
           tagService.saveCertificateTag(tag, certificateId);
         }
       }
-      return certificateId;
-    } catch (RepositorySaveException e) {
+      return getCertificateById(certificateId);
+    } catch (RepositorySaveException | EntityNotFoundException e) {
       throw new GiftCertificateServiceException("Service exception : Couldn't create certificate ");
     } catch (TagServiceException e) {
       throw new GiftCertificateServiceException(
@@ -118,7 +118,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
 
     } catch (RepositoryUpdateException e) {
       throw new GiftCertificateServiceException("Service exception : Couldn't update certificate ");
-    } catch (GiftCertificateNotFoundException e) {
+    } catch (EntityNotFoundException e) {
       throw new GiftCertificateServiceException("Service exception : Couldn't find certificate ");
     } catch (TagServiceException e) {
       throw new GiftCertificateServiceException(

@@ -4,11 +4,12 @@ import com.epam.esm.dao.TagRepository;
 import com.epam.esm.entity.Tag;
 import com.epam.esm.exception.RepositoryDeleteException;
 import com.epam.esm.exception.RepositorySaveException;
-import com.epam.esm.exception.TagNotFoundException;
+import com.epam.esm.exception.EntityNotFoundException;
 import com.epam.esm.exception.TagServiceException;
 import com.epam.esm.service.TagService;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,23 +31,22 @@ public class TagServiceImpl implements TagService {
   }
 
   @Override
-  public Tag getTagById(Long id) throws TagNotFoundException {
+  public Tag getTagById(Long id) throws EntityNotFoundException {
     Optional<Tag> tagsDaoById = tagRepository.getById(id);
     if (tagsDaoById.isPresent()) {
       return tagsDaoById.get();
     } else {
-      throw new TagNotFoundException("Service exception : Couldn't get tag by id: " + id);
+      throw new EntityNotFoundException("Service exception : Couldn't get tag by id: " + id);
     }
   }
 
   @Override
   @Transactional
-  public Long createTag(Tag tag) throws TagServiceException {
+  public Tag createTag(Tag tag) throws TagServiceException {
     try {
       Long tagId = tagRepository.save(tag);
-      tag.setId(tagId);
-      return tagId;
-    } catch (RepositorySaveException e) {
+      return getTagById(tagId);
+    } catch (RepositorySaveException | EntityNotFoundException e) {
       throw new TagServiceException("Service exception : Couldn't save tag ", e);
     }
   }
@@ -63,7 +63,7 @@ public class TagServiceImpl implements TagService {
   }
 
   @Override
-  public List<Tag> getTagsByCertificateId(Long certificateId) {
+  public Set<Tag> getTagsByCertificateId(Long certificateId) {
     return tagRepository.getTagsByCertificateId(certificateId);
   }
 

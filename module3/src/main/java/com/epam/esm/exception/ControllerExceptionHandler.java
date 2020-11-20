@@ -1,5 +1,9 @@
 package com.epam.esm.exception;
 
+import java.util.Locale;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.support.AbstractResourceBasedMessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -10,11 +14,16 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @RestControllerAdvice
 public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
 
+  @Autowired
+  MessageSource messageSource;
 
   @ExceptionHandler
   @ResponseStatus(HttpStatus.NOT_FOUND)
-  public ExceptionResponse handleControllerEntityNotFoundException(ControllerEntityNotFoundException ex) {
-    return new ExceptionResponse(ex.getMessage(), "40401");
+  public ExceptionResponse handleControllerEntityNotFoundException(ControllerEntityNotFoundException ex,
+      Locale locale) {
+
+    return new ExceptionResponse(messageSource.getMessage("error.ControllerEntityNotFoundException", null, locale),
+        "40401");
   }
 
   @ExceptionHandler
@@ -77,8 +86,9 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
 
   @ExceptionHandler
   @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-  public ExceptionResponse handleNotWatchedException(EntityNotFoundException ex) {
-    return new ExceptionResponse(ex.getMessage(), "50002");
+  public ExceptionResponse handleNotWatchedException(EntityNotFoundException ex, Locale locale) {
+    return new ExceptionResponse(messageSource.getMessage("error.ControllerEntityNotFoundException", null, locale),
+        "50002");
 
   }
 

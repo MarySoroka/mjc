@@ -24,7 +24,7 @@ public class RepositoryUtils {
   }
 
   public static String getFilterStringByParams(Map<String, String> queryParams) {
-    StringBuilder sql = new StringBuilder(HAVING);
+
     Map<String, String> resultFilterMap = new HashMap<>();
     Set<Entry<String, String>> entries = queryParams.entrySet();
     for (Entry<String, String> entry : entries) {
@@ -33,6 +33,10 @@ public class RepositoryUtils {
         resultFilterMap.put(k, entry.getValue());
       }
     }
+    if (resultFilterMap.isEmpty()){
+      return "";
+    }
+    StringBuilder sql = new StringBuilder(HAVING);
     resultFilterMap.forEach(
         (key, value) ->
             sql
@@ -42,6 +46,7 @@ public class RepositoryUtils {
                 .append(value)
                 .append(LIKE_END)
                 .append(AND));
+
     return sql.substring(0, sql.length() - 5);
   }
 

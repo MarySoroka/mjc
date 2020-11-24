@@ -21,22 +21,22 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class TagRepositoryImpl implements TagRepository {
 
-  private static final String INSERT_TAG_QUERY = "INSERT INTO gift_certificates.tag (`name`) values (:name)";
-  private static final String INSERT_TAG_CERTIFICATE_QUERY = "INSERT INTO gift_certificates.certificate_tag (tag_id, certificate_id) values (:tagId, :certificateId)";
-  private static final String DELETE_CERTIFICATE_TAG_QUERY = "DELETE FROM gift_certificates.certificate_tag WHERE tag_id = :tagId AND certificate_id = :certificateId";
+  private static final String INSERT_TAG_QUERY = "INSERT INTO gift_certificates2.tag (`name`) values (:name)";
+  private static final String INSERT_TAG_CERTIFICATE_QUERY = "INSERT INTO gift_certificates2.certificate_tag (tag_id, certificate_id) values (:tagId, :certificateId)";
+  private static final String DELETE_CERTIFICATE_TAG_QUERY = "DELETE FROM gift_certificates2.certificate_tag WHERE tag_id = :tagId AND certificate_id = :certificateId";
 
-  private static final String DELETE_TAG_QUERY = "DELETE FROM gift_certificates.tag WHERE id = :id";
-  private static final String SELECT_ALL_TAGS_QUERY = "SELECT id, name FROM gift_certificates.tag ORDER BY id LIMIT :limit OFFSET :offset";
-  private static final String SELECT_TAG_BY_ID_QUERY = "SELECT id, name FROM gift_certificates.tag WHERE id= :id";
-  private static final String SELECT_TAG_BY_NAME_QUERY = "SELECT id, name FROM gift_certificates.tag WHERE `name`= :name";
-  private static final String SELECT_TAG_BY_CERTIFICATE_ID_QUERY = "SELECT t.id, t.name FROM gift_certificates.tag t JOIN certificate_tag ct on t.id = ct.tag_id JOIN gift_certificate gc on gc.id = ct.certificate_id WHERE gc.id =:id";
+  private static final String DELETE_TAG_QUERY = "DELETE FROM gift_certificates2.tag WHERE id = :id";
+  private static final String SELECT_ALL_TAGS_QUERY = "SELECT id, name FROM gift_certificates2.tag ORDER BY id LIMIT :limit OFFSET :offset";
+  private static final String SELECT_TAG_BY_ID_QUERY = "SELECT id, name FROM gift_certificates2.tag WHERE id= :id";
+  private static final String SELECT_TAG_BY_NAME_QUERY = "SELECT id, name FROM gift_certificates2.tag WHERE `name`= :name";
+  private static final String SELECT_TAG_BY_CERTIFICATE_ID_QUERY = "SELECT t.id, t.name FROM gift_certificates2.tag t JOIN certificate_tag ct on t.id = ct.tag_id JOIN gift_certificate gc on gc.id = ct.certificate_id WHERE gc.id =:id";
 
   private static final String SELECT_THE_MOST_WIDELY_USED_TAG_QUERY =
-      "SELECT t.id, t.name FROM gift_certificates.`order` o " +
+      "SELECT t.id, t.name FROM gift_certificates2.`order` o " +
           "JOIN gift_certificate gc on o.order_certificate_id = gc.id " +
           "JOIN certificate_tag ct on gc.id = ct.certificate_id " +
           "JOIN tag t on t.id = ct.tag_id " +
-          "WHERE o.cost = (SELECT max(cost) FROM gift_certificates.`order`) " +
+          "WHERE o.cost = (SELECT max(cost) FROM gift_certificates2.`order`) " +
           "GROUP BY gc.id " +
           "ORDER BY count(t.id) DESC";
 

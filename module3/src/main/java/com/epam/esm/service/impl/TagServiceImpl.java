@@ -75,8 +75,8 @@ public class TagServiceImpl implements TagService {
   public void saveCertificateTag(Tag tag, Long certificateId) throws RepositorySaveException, EntityNotFoundException {
     Optional<Tag> tagByName = getTagByName(tag.getName());
     if (!tagByName.isPresent()) {
-      createTag(tag);
-      tagRepository.saveCertificateTag(tag.getId(), certificateId);
+      Tag tag1 = createTag(tag);
+      tagRepository.saveCertificateTag(tag1.getId(), certificateId);
     } else {
       tagRepository.saveCertificateTag(tagByName.get().getId(), certificateId);
     }

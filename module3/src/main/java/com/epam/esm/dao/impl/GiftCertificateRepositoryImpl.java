@@ -22,13 +22,13 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class GiftCertificateRepositoryImpl implements GiftCertificateRepository {
 
-  private static final String INSERT_CERTIFICATES_QUERY = "INSERT INTO gift_certificates.gift_certificate (name,description, price, create_date, last_update_date, duration ) values (:name,:description,:price,:createDate,:lastUpdateDate,:duration)";
-  private static final String UPDATE_CERTIFICATES_QUERY = "UPDATE gift_certificates.gift_certificate set name=:name ,description=:description, price=:price, create_date=:createDate, last_update_date=:lastUpdateDate, duration=:duration where id = :id";
+  private static final String INSERT_CERTIFICATES_QUERY = "INSERT INTO gift_certificates2.gift_certificate (name,description, price, create_date, last_update_date, duration ) values (:name,:description,:price,:createDate,:lastUpdateDate,:duration)";
+  private static final String UPDATE_CERTIFICATES_QUERY = "UPDATE gift_certificates2.gift_certificate set name=:name ,description=:description, price=:price, create_date=:createDate, last_update_date=:lastUpdateDate, duration=:duration where id = :id";
 
-  private static final String DELETE_CERTIFICATES_QUERY = "DELETE FROM gift_certificates.gift_certificate WHERE id = :id";
-  private static final String SELECT_ALL_CERTIFICATES_QUERY = "SELECT gc.id,gc.name,gc.description, gc.price, gc.create_date, gc.last_update_date, gc.duration FROM gift_certificates.gift_certificate gc JOIN gift_certificates.certificate_tag ct on gc.id = ct.certificate_id JOIN gift_certificates.tag t on t.id = ct.tag_id ";
-  private static final String SELECT_CERTIFICATE_BY_ID_QUERY = "SELECT gc.id,gc.name,gc.description, gc.price, gc.create_date, gc.last_update_date, gc.duration FROM gift_certificates.gift_certificate gc  WHERE gc.id = :id";
-  private static final String SELECT_CERTIFICATE_BY_TAG_NAME_QUERY = "SELECT gc.id,gc.name,gc.description, gc.price, gc.create_date, gc.last_update_date, gc.duration FROM gift_certificates.gift_certificate gc JOIN gift_certificates.certificate_tag ct on gc.id = ct.certificate_id JOIN gift_certificates.tag t on t.id = ct.tag_id WHERE t.name= :name ORDER BY id LIMIT :limit OFFSET :offset";
+  private static final String DELETE_CERTIFICATES_QUERY = "DELETE FROM gift_certificates2.gift_certificate WHERE id = :id";
+  private static final String SELECT_ALL_CERTIFICATES_QUERY = "SELECT gc.id,gc.name,gc.description, gc.price, gc.create_date, gc.last_update_date, gc.duration FROM gift_certificates2.gift_certificate gc JOIN gift_certificates2.certificate_tag ct on gc.id = ct.certificate_id JOIN gift_certificates2.tag t on t.id = ct.tag_id ";
+  private static final String SELECT_CERTIFICATE_BY_ID_QUERY = "SELECT gc.id,gc.name,gc.description, gc.price, gc.create_date, gc.last_update_date, gc.duration FROM gift_certificates2.gift_certificate gc  WHERE gc.id = :id";
+  private static final String SELECT_CERTIFICATE_BY_TAG_NAME_QUERY = "SELECT gc.id,gc.name,gc.description, gc.price, gc.create_date, gc.last_update_date, gc.duration FROM gift_certificates2.gift_certificate gc JOIN gift_certificates2.certificate_tag ct on gc.id = ct.certificate_id JOIN gift_certificates2.tag t on t.id = ct.tag_id WHERE t.name= :name ORDER BY id LIMIT :limit OFFSET :offset";
 
   private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 

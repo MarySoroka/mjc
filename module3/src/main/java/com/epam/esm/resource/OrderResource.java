@@ -11,7 +11,9 @@ import com.epam.esm.exception.ResourceBuildException;
 import java.util.Objects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.hateoas.Link;
 import org.springframework.hateoas.RepresentationModel;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 public class OrderResource extends RepresentationModel<OrderResource> {
 
@@ -25,6 +27,8 @@ public class OrderResource extends RepresentationModel<OrderResource> {
       add(linkTo(OrderController.class).withRel("orders"));
       add(linkTo(methodOn(GiftCertificatesController.class).getCertificateById(giftCertificateId))
           .withRel("giftCertificate"));
+      final String uriString = ServletUriComponentsBuilder.fromCurrentRequest().build().toUriString();
+      add(Link.of(uriString).withSelfRel());
       LOGGER.info("Created order from db : {}", order);
     } catch (EntityNotFoundException e) {
       LOGGER.error("Resource exception : couldn't build order : {}", order);

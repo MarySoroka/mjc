@@ -9,7 +9,9 @@ import com.epam.esm.entity.User;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import org.springframework.hateoas.Link;
 import org.springframework.hateoas.RepresentationModel;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 public class UserResource extends RepresentationModel<UserResource> {
 
@@ -20,7 +22,8 @@ public class UserResource extends RepresentationModel<UserResource> {
     final long id = user.getId();
     add(linkTo(UserController.class).withRel("users"));
     add(linkTo(methodOn(OrderController.class).getAllUserOrders(id, 10,0)).withRel("orders"));
-
+    final String uriString = ServletUriComponentsBuilder.fromCurrentRequest().build().toUriString();
+    add(Link.of(uriString).withSelfRel());
   }
 
   public User getUser() {

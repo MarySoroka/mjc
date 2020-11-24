@@ -7,7 +7,9 @@ import com.epam.esm.entity.Tag;
 import java.util.Objects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.hateoas.Link;
 import org.springframework.hateoas.RepresentationModel;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 public class TagResource extends RepresentationModel<TagResource> {
 
@@ -18,7 +20,8 @@ public class TagResource extends RepresentationModel<TagResource> {
     this.tag = tag;
     LOGGER.info("Current tag:{} ", tag);
     add(linkTo(TagsController.class).withRel("tags"));
-
+    final String uriString = ServletUriComponentsBuilder.fromCurrentRequest().build().toUriString();
+    add(Link.of(uriString).withSelfRel());
   }
 
   @Override

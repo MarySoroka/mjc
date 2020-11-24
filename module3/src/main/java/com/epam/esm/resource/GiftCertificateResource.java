@@ -10,7 +10,9 @@ import com.epam.esm.entity.Tag;
 import com.epam.esm.exception.EntityNotFoundException;
 import com.epam.esm.exception.ResourceBuildException;
 import java.util.Objects;
+import org.springframework.hateoas.Link;
 import org.springframework.hateoas.RepresentationModel;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 public class GiftCertificateResource extends RepresentationModel<GiftCertificateResource> {
 
@@ -23,6 +25,8 @@ public class GiftCertificateResource extends RepresentationModel<GiftCertificate
       for (Tag tag : giftCertificate.getTags()) {
         add(linkTo(methodOn(TagsController.class).getTagById(tag.getId())).withRel("tag"));
       }
+      final String uriString = ServletUriComponentsBuilder.fromCurrentRequest().build().toUriString();
+      add(Link.of(uriString).withSelfRel());
     } catch (EntityNotFoundException e) {
       throw new ResourceBuildException("Resource exception: couldn't build certificate ", e);
     }

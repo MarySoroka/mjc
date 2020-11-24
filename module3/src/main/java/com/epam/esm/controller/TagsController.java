@@ -1,5 +1,8 @@
 package com.epam.esm.controller;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
 import com.epam.esm.entity.Tag;
 import com.epam.esm.exception.ControllerEntityDeleteException;
 import com.epam.esm.exception.ControllerSaveEntityException;
@@ -47,6 +50,12 @@ public class TagsController {
     final CollectionModel<TagResource> resources = CollectionModel.of(tagResources);
     final String uriString = ServletUriComponentsBuilder.fromCurrentRequest().build().toUriString();
     resources.add(Link.of(uriString).withSelfRel());
+    if (offset >= limit ) {
+      resources
+          .add(linkTo(methodOn(TagsController.class).getAllTags(limit, offset - limit)).withRel("prev"));
+    }
+    resources.add(linkTo(methodOn(TagsController.class).getAllTags(limit,limit+offset)).withRel("next"));
+
     return ResponseEntity.ok(resources);
   }
 

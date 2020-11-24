@@ -1,5 +1,8 @@
 package com.epam.esm.controller;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
 import com.epam.esm.entity.User;
 import com.epam.esm.exception.EntityNotFoundException;
 import com.epam.esm.resource.UserResource;
@@ -38,6 +41,12 @@ public class UserController {
     final CollectionModel<UserResource> resources = CollectionModel.of(userResources);
     final String uriString = ServletUriComponentsBuilder.fromCurrentRequest().build().toUriString();
     resources.add(Link.of(uriString).withSelfRel());
+    if (offset >= limit ) {
+      resources
+          .add(linkTo(methodOn(UserController.class).getAllUsers(limit, offset - limit)).withRel("prev"));
+    }
+    resources.add(linkTo(methodOn(UserController.class).getAllUsers(limit,limit+offset)).withRel("next"));
+
     return ResponseEntity.ok(resources);
 
   }

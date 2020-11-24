@@ -1,5 +1,8 @@
 package com.epam.esm.controller;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
 import com.epam.esm.entity.Order;
 import com.epam.esm.exception.ControllerSaveEntityException;
 import com.epam.esm.exception.EntityNotFoundException;
@@ -52,6 +55,11 @@ public class OrderController {
     CollectionModel<OrderResource> orderResources = CollectionModel.of(userOrders);
     final String uriString = ServletUriComponentsBuilder.fromCurrentRequest().build().toUriString();
     orderResources.add(Link.of(uriString).withSelfRel());
+    if (offset >= limit ) {
+      orderResources
+          .add(linkTo(methodOn(OrderController.class).getAllUserOrders(userId, limit, offset - limit)).withRel("prev"));
+    }
+    orderResources.add(linkTo(methodOn(OrderController.class).getAllUserOrders(userId,limit,limit+offset)).withRel("next"));
     return ResponseEntity.ok(orderResources);
   }
 

@@ -1,5 +1,8 @@
 package com.epam.esm.controller;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
 import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.exception.ControllerEntityDeleteException;
 import com.epam.esm.exception.ControllerSaveEntityException;
@@ -11,7 +14,10 @@ import com.epam.esm.resource.GiftCertificateResource;
 import com.epam.esm.service.GiftCertificateService;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.Link;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -23,6 +29,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 @RestController
 @RequestMapping(value = "/certificates")
@@ -36,11 +43,25 @@ public class GiftCertificatesController {
   }
 
   @GetMapping
-  public ResponseEntity<List<GiftCertificate>> getAllCertificates(
+  public ResponseEntity<CollectionModel<GiftCertificateResource>> getAllCertificates(
       @RequestParam(required = false) Map<String, String> searchParams) {
-    List<GiftCertificate> allCertificates = giftCertificateService.getAllCertificates(searchParams);
-    return new ResponseEntity<>(allCertificates,
-        HttpStatus.OK);
+    final List<GiftCertificateResource> giftCertificateResources =
+        giftCertificateService.getAllCertificates(searchParams).stream().map(GiftCertificateResource::new)
+            .collect(Collectors.toList());
+    final CollectionModel<GiftCertificateResource> resources = CollectionModel.of(giftCertificateResources);
+    final String uriString = ServletUriComponentsBuilder.fromCurrentRequest().build().toUriString();
+    resources.add(Link.of(uriString).withSelfRel());
+    int limit = Integer.parseInt(searchParams.get("limit"));
+    int offset = Integer.parseInt(searchParams.get("offset"));
+    if (offset >= limit) {
+      searchParams.put("offset", String.valueOf(offset-limit));
+      resources.add(linkTo(methodOn(GiftCertificatesController.class).getAllCertificates(searchParams)).withRel("prev"));
+    }
+    searchParams.put("offset", String.valueOf(offset+limit));
+    resources.add(linkTo(methodOn(GiftCertificatesController.class).getAllCertificates(searchParams)).withRel("next"));
+
+    return ResponseEntity.ok(resources);
+
 
   }
 

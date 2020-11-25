@@ -1,13 +1,33 @@
 package com.epam.esm.entity;
 
+import com.epam.esm.entity.dto.TagDTO;
+import java.io.Serializable;
 import java.util.Objects;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
-public class Tag {
+@Entity
+@Table(name = "tag")
+public class Tag implements Serializable {
 
+  private static final long serialVersionUID = 7060096489786514736L;
+  @Id
+  @GeneratedValue(strategy = GenerationType.TABLE)
+  @Column(name = "tag_id")
   private Long id;
+  @Column(name="tag_name",nullable = false, unique = true)
   private String name;
 
   public Tag() {
+  }
+
+  public Tag(TagDTO tag) {
+    this.id = tag.getTagId();
+    this.name = tag.getName();
   }
 
   public Tag(Long id, String name) {
@@ -17,6 +37,14 @@ public class Tag {
 
   public Tag(String name) {
     this.name = name;
+  }
+
+  @Override
+  public String toString() {
+    return "Tag{" +
+        "id=" + id +
+        ", name='" + name + '\'' +
+        '}';
   }
 
   @Override

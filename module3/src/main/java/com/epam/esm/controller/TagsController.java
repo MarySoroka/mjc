@@ -1,14 +1,19 @@
 package com.epam.esm.controller;
 
 import com.epam.esm.entity.Tag;
+import com.epam.esm.entity.dto.TagDTO;
 import com.epam.esm.exception.ControllerEntityDeleteException;
-import com.epam.esm.exception.ControllerEntityNotFoundException;
 import com.epam.esm.exception.ControllerSaveEntityException;
-import com.epam.esm.exception.TagNotFoundException;
-import com.epam.esm.exception.TagServiceException;
+import com.epam.esm.exception.EntityNotFoundException;
+import com.epam.esm.exception.RepositoryDeleteException;
+import com.epam.esm.exception.RepositorySaveException;
+import com.epam.esm.resource.TagResource;
 import com.epam.esm.service.TagService;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.Link;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -17,7 +22,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 @RestController
 @RequestMapping(value = "/tags")
@@ -28,73 +35,53 @@ public class TagsController {
   @Autowired
   public TagsController(TagService tagService) {
     this.tagService = tagService;
+
   }
 
-  /**
-   * @return all tags from database
-   */
+
   @GetMapping
-  public ResponseEntity<List<Tag>> getAllTags() {
-    return new ResponseEntity<>(tagService.getAllTags(), HttpStatus.OK);
+  public ResponseEntity<CollectionModel<TagResource>> getAllTags(
+      @RequestParam(defaultValue = "0") Integer offset, @RequestParam(defaultValue = "10") Integer limit) {
+    final List<TagResource> tagResources =
+        tagService.getAllTags(limit, offset).stream().map(TagResource::new).collect(Collectors.toList());
+    final CollectionModel<TagResource> resources = CollectionModel.of(tagResources);
+    final String uriString = ServletUriComponentsBuilder.fromCurrentRequest().build().toUriString();
+    resources.add(Link.of(uriString, "self"));
+    return ResponseEntity.ok(resources);
   }
 
-  /**
-   * method find tag by id
-   *
-   * @param id tag id
-   * @return tag
-   * @throws ControllerEntityNotFoundException if tag was not found
-   */
   @GetMapping("/{id}")
-  public ResponseEntity<Tag> getTagById(@PathVariable("id") Long id)
-      throws ControllerEntityNotFoundException {
-    try {
-      Tag tagById = tagService.getTagById(id);
-      return new ResponseEntity<>(tagById, HttpStatus.OK);
-    } catch (TagNotFoundException e) {
-      throw new ControllerEntityNotFoundException("Controller exception : Couldn't get by id tag",
-          e);
-    }
-
+  public ResponseEntity<TagResource> getTagById(@PathVariable("id") Long id) throws EntityNotFoundException {
+    Tag tagById = tagService.getTagById(id);
+    TagResource tagResource = new TagResource(tagById);
+    return ResponseEntity.ok(tagResource);
   }
 
-  /**
-   * create tag by ResponseBody parameters
-   *
-   * @param tag ResponseBody tag representation
-   * @return created tag
-   * @throws ControllerSaveEntityException     if tag was not created
-   * @throws ControllerEntityNotFoundException if tag was not found
-   */
+  @GetMapping("/widelyUsedTag")
+  public ResponseEntity<TagResource> getMostWidelyUsedTag() {
+    TagResource tagResource = new TagResource(tagService.getTheMostWidelyUsedTag());
+    return ResponseEntity.ok(tagResource);
+  }
+
   @PostMapping
-  public ResponseEntity<Tag> create(@RequestBody Tag tag)
-      throws ControllerSaveEntityException, ControllerEntityNotFoundException {
+  public ResponseEntity<TagResource> create(@RequestBody TagDTO tag) throws ControllerSaveEntityException {
     try {
-      Long tagId = tagService.createTag(tag);
-      Tag tagById = tagService.getTagById(tagId);
-      return new ResponseEntity<>(tagById, HttpStatus.CREATED);
-    } catch (TagServiceException e) {
+      Tag createdTag = tagService.createTag(tag);
+      TagResource tagResource = new TagResource(createdTag);
+      return ResponseEntity.ok(tagResource);
+    } catch (RepositorySaveException | EntityNotFoundException e) {
       throw new ControllerSaveEntityException("Controller exception : Couldn't create tag", e);
-    } catch (TagNotFoundException e) {
-      throw new ControllerEntityNotFoundException("Controller exception : Couldn't find tag", e);
     }
 
   }
 
-  /**
-   * method delete tag by id
-   *
-   * @param id tag id
-   * @return HTTPStatus.OK
-   * @throws ControllerEntityDeleteException if tag was not deleted
-   */
+
   @DeleteMapping("/{id}")
-  public ResponseEntity<HttpStatus> delete(@PathVariable("id") Long id)
-      throws ControllerEntityDeleteException {
+  public ResponseEntity<HttpStatus> delete(@PathVariable("id") Long id) throws ControllerEntityDeleteException {
     try {
       tagService.deleteTag(id);
-      return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    } catch (TagServiceException e) {
+      return ResponseEntity.noContent().build();
+    } catch (RepositoryDeleteException e) {
       throw new ControllerEntityDeleteException("Controller exception : Couldn't delete tag", e);
     }
 

@@ -1,10 +1,8 @@
 package com.epam.esm.dao;
 
 import com.epam.esm.entity.Tag;
-import com.epam.esm.exception.RepositoryDeleteException;
-import com.epam.esm.exception.RepositorySaveException;
-import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 /**
  * interface with CRD operations for Tag entity
@@ -17,7 +15,7 @@ public interface TagRepository extends CRUDDao<Tag, Long> {
    * @param certificateId certificate id
    * @return tags, that are in certificate with this id
    */
-  List<Tag> getTagsByCertificateId(Long certificateId);
+  Set<Tag> getTagsByCertificateId(Long certificateId, Integer limit, Integer offset);
 
   /**
    * find tag by name
@@ -27,21 +25,7 @@ public interface TagRepository extends CRUDDao<Tag, Long> {
    */
   Optional<Tag> getTagByName(String tagName);
 
-  /**
-   * method save tag for this certificate
-   *
-   * @param tagId         tag id
-   * @param certificateId cartificate id
-   * @throws RepositorySaveException if tag was not save
-   */
-  void saveCertificateTag(Long tagId, Long certificateId) throws RepositorySaveException;
 
-  /**
-   * delete certificate tag
-   *
-   * @param tagId         tag id
-   * @param certificateId certificate id
-   * @throws RepositoryDeleteException if tag was not deleted
-   */
-  void deleteCertificateTag(Long tagId, Long certificateId) throws RepositoryDeleteException;
+  Tag getTheMostWidelyUsedTag();
+
 }

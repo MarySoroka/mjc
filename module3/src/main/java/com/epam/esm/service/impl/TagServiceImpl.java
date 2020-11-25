@@ -2,13 +2,14 @@ package com.epam.esm.service.impl;
 
 import com.epam.esm.dao.TagRepository;
 import com.epam.esm.entity.Tag;
+import com.epam.esm.entity.dto.TagDTO;
+import com.epam.esm.exception.EntityNotFoundException;
 import com.epam.esm.exception.RepositoryDeleteException;
 import com.epam.esm.exception.RepositorySaveException;
-import com.epam.esm.exception.TagNotFoundException;
-import com.epam.esm.exception.TagServiceException;
 import com.epam.esm.service.TagService;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,46 +26,37 @@ public class TagServiceImpl implements TagService {
 
 
   @Override
-  public List<Tag> getAllTags() {
-    return tagRepository.getAll();
+  public List<Tag> getAllTags(Integer limit, Integer offset) {
+    return tagRepository.getAll(limit, offset);
   }
 
+
   @Override
-  public Tag getTagById(Long id) throws TagNotFoundException {
+  public Tag getTagById(Long id) throws EntityNotFoundException {
     Optional<Tag> tagsDaoById = tagRepository.getById(id);
     if (tagsDaoById.isPresent()) {
       return tagsDaoById.get();
     } else {
-      throw new TagNotFoundException("Service exception : Couldn't get tag by id: " + id);
+      throw new EntityNotFoundException("Service exception : Couldn't get tag by id: " + id);
     }
   }
 
   @Override
   @Transactional
-  public Long createTag(Tag tag) throws TagServiceException {
-    try {
-      Long tagId = tagRepository.save(tag);
-      tag.setId(tagId);
-      return tagId;
-    } catch (RepositorySaveException e) {
-      throw new TagServiceException("Service exception : Couldn't save tag ", e);
-    }
+  public Tag createTag(TagDTO tag) throws RepositorySaveException {
+    return tagRepository.save(new Tag(tag));
+
   }
 
   @Override
   @Transactional
-  public void deleteTag(Long tagId) throws TagServiceException {
-    try {
-      tagRepository.delete(tagId);
-    } catch (RepositoryDeleteException e) {
-      throw new TagServiceException("Service exception : Couldn't delete tag ");
-    }
-
+  public void deleteTag(Long tagId) throws RepositoryDeleteException {
+    tagRepository.delete(tagId);
   }
 
   @Override
-  public List<Tag> getTagsByCertificateId(Long certificateId) {
-    return tagRepository.getTagsByCertificateId(certificateId);
+  public Set<Tag> getTagsByCertificateId(Long certificateId, Integer limit, Integer offset) {
+    return tagRepository.getTagsByCertificateId(certificateId, limit, offset);
   }
 
   @Override
@@ -72,30 +64,10 @@ public class TagServiceImpl implements TagService {
     return tagRepository.getTagByName(tagName);
   }
 
-  @Override
-  public void deleteTagForCertificate(Long tagId, Long certificateId) throws TagServiceException {
-    try {
-      tagRepository.deleteCertificateTag(tagId, certificateId);
-    } catch (RepositoryDeleteException e) {
-      throw new TagServiceException("Service exception : Couldn't delete certificate tag");
-    }
-  }
 
   @Override
-  @Transactional
-  public void saveCertificateTag(Tag tag, Long certificateId) throws TagServiceException {
-    try {
-      Optional<Tag> tagByName = getTagByName(tag.getName());
-      if (!tagByName.isPresent()) {
-        createTag(tag);
-        tagRepository.saveCertificateTag(tag.getId(), certificateId);
-      } else {
-        tagRepository.saveCertificateTag(tagByName.get().getId(), certificateId);
-      }
-    } catch (RepositorySaveException e) {
-      throw new TagServiceException(
-          "Service exception : Couldn't save certificate tag. Certificate id " + certificateId);
-    }
+  public Tag getTheMostWidelyUsedTag() {
+    return tagRepository.getTheMostWidelyUsedTag();
   }
 
 

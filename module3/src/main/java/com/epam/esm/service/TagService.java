@@ -1,10 +1,13 @@
 package com.epam.esm.service;
 
 import com.epam.esm.entity.Tag;
-import com.epam.esm.exception.TagNotFoundException;
-import com.epam.esm.exception.TagServiceException;
+import com.epam.esm.entity.dto.TagDTO;
+import com.epam.esm.exception.EntityNotFoundException;
+import com.epam.esm.exception.RepositoryDeleteException;
+import com.epam.esm.exception.RepositorySaveException;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 /**
  * interface that demonstrate business logic for tag domain
@@ -14,7 +17,9 @@ public interface TagService {
   /**
    * @return all objects in specific db table
    */
-  List<Tag> getAllTags();
+
+
+  List<Tag> getAllTags(Integer limit, Integer offset);
 
   /**
    * method find entity by key parameter
@@ -22,16 +27,15 @@ public interface TagService {
    * @param id tag id, which is using to find entity
    * @return entity or Optional.empty(), if entity is not found by this key
    */
-  Tag getTagById(Long id) throws TagNotFoundException;
+  Tag getTagById(Long id) throws EntityNotFoundException;
 
   /**
    * method save entity
    *
    * @param tag tag, that should be save
    * @return if entity has been saved return generated id
-   * @throws TagServiceException if generated id equals null
    */
-  Long createTag(Tag tag) throws TagServiceException;
+  Tag createTag(TagDTO tag) throws RepositorySaveException, EntityNotFoundException;
 
   /**
    * delete entity by key parameter
@@ -39,7 +43,7 @@ public interface TagService {
    * @param tagId tag id
    * @return if entity has been found and deleted - true, else false
    */
-  void deleteTag(Long tagId) throws TagServiceException;
+  void deleteTag(Long tagId) throws RepositoryDeleteException;
 
   /**
    * method find certificate tags
@@ -47,7 +51,7 @@ public interface TagService {
    * @param certificateId certificate id
    * @return certificate tags
    */
-  List<Tag> getTagsByCertificateId(Long certificateId);
+  Set<Tag> getTagsByCertificateId(Long certificateId, Integer limit, Integer offset);
 
   /**
    * method finds tag by tag
@@ -57,21 +61,6 @@ public interface TagService {
    */
   Optional<Tag> getTagByName(String tagName);
 
-  /**
-   * method delete tag for specific certificate
-   *
-   * @param tagId         tag id
-   * @param certificateId certificate id
-   * @throws TagServiceException if tag was not deleted
-   */
-  void deleteTagForCertificate(Long tagId, Long certificateId) throws TagServiceException;
 
-  /**
-   * method save tag certificate
-   *
-   * @param tag           tag
-   * @param certificateId certificate id
-   * @throws TagServiceException if tag was not save
-   */
-  void saveCertificateTag(Tag tag, Long certificateId) throws TagServiceException;
+  Tag getTheMostWidelyUsedTag();
 }
